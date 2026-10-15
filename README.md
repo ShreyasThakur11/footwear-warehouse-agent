@@ -96,7 +96,7 @@ Results are written to `outputs/`.
 ├── v3.ipynb                       # full pipeline, one run reproduces everything
 ├── requirements.txt
 ├── report/
-│   └── <YOUR_REPORT_NAME>.pdf     # written report
+│   └── FootWear_Wearhouse_Optimization.pdf     # written report
 ├── outputs/
 │   ├── 00_Executive_Summary.md
 │   ├── 01_Analysis_Tables.xlsx
