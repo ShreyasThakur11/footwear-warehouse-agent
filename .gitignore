@@ -16,7 +16,6 @@ venv/
 env/
 
 # Data (download separately)
-data/
 
 # Generated outputs (reproducible from notebook)
 outputs/

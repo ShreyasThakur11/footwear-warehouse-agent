@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Footwear Warehouse Optimisation · Dashboard</title>
+    <title>Footwear Warehouse Optimisation · Interactive Dashboard</title>
 
     <meta
       name="description"
-      content="Interactive dashboard for warehouse picking optimisation — slotting and routing analysis on a safety-boot distribution centre. Walking distance cut by 59.5%."
+      content="Interactive operational research dashboard for warehouse slotting and routing optimization in a safety-boot distribution centre. Walking cut by 59.5%, picking time reduced by 26.3%."
     />
     <meta name="theme-color" content="#0b0f19" />
     <meta name="color-scheme" content="dark" />
@@ -18,7 +18,7 @@
     <meta property="og:title" content="Footwear Warehouse Optimisation Dashboard" />
     <meta
       property="og:description"
-      content="Re-slotting and re-routing a safety-boot warehouse cut picker walking by 59.5%. Explore the interactive KPI dashboard."
+      content="Re-slotting and re-routing a safety-boot warehouse cut picker walking by 59.5%. Interactive KPI dashboard with 15 scenarios, CAD floor plans, and 22 operator analytics."
     />
     <meta property="og:url" content="https://shreyasthakur11.github.io/Footwear_Wearhouse-Optimization/" />
 
@@ -27,18 +27,13 @@
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='28' font-size='28'%3E👟%3C/text%3E%3C/svg%3E"
     />
 
-    <!-- Inter font — non-blocking -->
+    <!-- Google Fonts Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-      media="print"
-      onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap"
     />
-    <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
-    </noscript>
 
     <link rel="stylesheet" href="assets/css/style.css" />
 
@@ -47,7 +42,6 @@
       src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
       integrity="sha384-bMBrlAFOzfR9Xqng0MBWjSXjFmTLNjrOD3rDagLOd2PqfOZyUQi3qF9o3K2BuKu"
       crossorigin="anonymous"
-      defer
     ></script>
   </head>
 
@@ -60,19 +54,33 @@
           Footwear Warehouse
         </a>
         <ul class="nav-links">
-          <li><a href="#overview" class="active">Dashboard</a></li>
+          <li><a href="#overview" class="active">Overview</a></li>
           <li><a href="#scenarios">Scenarios</a></li>
-          <li><a href="#methodology">Methodology</a></li>
-          <li><a href="#economics">Economics</a></li>
+          <li><a href="#layouts">Floor Plans</a></li>
+          <li><a href="#operators">Operators</a></li>
+          <li><a href="#gallery">Analytics Gallery</a></li>
+          <li><a href="#downloads">Downloads</a></li>
         </ul>
-        <a
-          href="report/"
-          class="nav-cta"
-          id="nav-report-btn"
-          title="View the full analysis report"
-        >
-          📄 Report
-        </a>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <a
+            href="report/Warehouse_Optimisation_Report.pdf"
+            class="nav-cta"
+            id="nav-report-btn"
+            target="_blank"
+            title="Open the official 3.9 MB analysis report PDF"
+          >
+            📄 PDF Report
+          </a>
+          <a
+            href="https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization"
+            class="btn btn-secondary"
+            style="padding: 6px 12px; font-size: 0.8125rem;"
+            target="_blank"
+            rel="noopener"
+          >
+            ⭐ GitHub
+          </a>
+        </div>
       </div>
     </nav>
 
@@ -80,31 +88,26 @@
     <header class="hero" id="hero">
       <div class="hero-badge">
         <span class="dot"></span>
-        Warehouse Picking Optimisation
+        Operational Research Case Study · Safety-Boot Distribution Centre
       </div>
       <h1>
         <span class="gradient-text">59.5% Less Walking</span><br />
-        per Picking Wave
+        26.3% Faster Wave Picking
       </h1>
       <p class="hero-subtitle">
-        Re-slotting and re-routing a safety-boot warehouse using real WMS data —
-        9,707 waves, 215,192 units. One reproducible Python notebook, zero proprietary tools.
+        Empirical slotting and route optimisation on real WMS order data —
+        <strong>7,341 picking waves</strong>, <strong>161,771 units</strong>, <strong>22 operators</strong>, and <strong>15 benchmarked scenarios</strong>.
+        Verified with out-of-sample testing on 2,549 unseen waves.
       </p>
       <div class="hero-actions">
-        <a href="#overview" class="btn btn-primary" id="hero-dashboard-btn">
-          📊 Explore Dashboard
+        <a href="#scenarios" class="btn btn-primary" id="hero-dashboard-btn">
+          📊 Explore Scenarios
         </a>
-        <a href="report/" class="btn btn-report" id="hero-report-btn">
-          📄 Full Report
+        <a href="report/Warehouse_Optimisation_Report.pdf" class="btn btn-report" target="_blank" id="hero-report-btn">
+          📄 Read Official Report (PDF)
         </a>
-        <a
-          href="https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization"
-          class="btn btn-secondary"
-          target="_blank"
-          rel="noopener"
-          id="hero-github-btn"
-        >
-          ⭐ GitHub
+        <a href="#layouts" class="btn btn-secondary" id="hero-layouts-btn">
+          📐 CAD & Floor Plans
         </a>
       </div>
     </header>
@@ -114,420 +117,1109 @@
       <div class="container">
         <div class="section-header">
           <div class="section-label">Key Performance Indicators</div>
-          <h2 class="section-title">Optimisation at a Glance</h2>
-          <p class="section-subtitle">Headline metrics from the best scenario — Optimised-FAMILY slotting + NN 2-opt routing</p>
+          <h2 class="section-title">Headline Impact Metrics</h2>
+          <p class="section-subtitle">Comparing historical AS-IS recorded picking against Optimised-FAMILY slotting + NN 2-opt routing</p>
         </div>
 
         <div class="kpi-grid">
-          <div class="kpi-card animate-in">
-            <div class="kpi-icon">📏</div>
-            <div class="kpi-label">Walk Distance / Wave</div>
-            <div class="kpi-value" style="color: var(--accent-teal)">67 m</div>
-            <span class="kpi-change positive">↓ 59.5% from 166 m</span>
+          <div class="kpi-card accent-teal animate-in">
+            <div class="kpi-label">Mean Walk per Wave</div>
+            <div class="kpi-value">67.3<span class="kpi-unit">m</span></div>
+            <div class="kpi-change positive">
+              <span class="arrow">↓</span> 59.5% reduction
+            </div>
+            <div class="kpi-desc">Down from 166.4 m baseline (-99.1 m per wave)</div>
           </div>
 
-          <div class="kpi-card animate-in">
-            <div class="kpi-icon">⏱️</div>
-            <div class="kpi-label">Picking Time Saved</div>
-            <div class="kpi-value" style="color: var(--accent-green)">26.3%</div>
-            <span class="kpi-change positive">↓ per wave</span>
+          <div class="kpi-card accent-blue animate-in">
+            <div class="kpi-label">Mean Wave Duration</div>
+            <div class="kpi-value">5.78<span class="kpi-unit">min</span></div>
+            <div class="kpi-change positive">
+              <span class="arrow">↓</span> 26.3% faster
+            </div>
+            <div class="kpi-desc">Down from 7.85 min historical pick cycle</div>
           </div>
 
-          <div class="kpi-card animate-in">
-            <div class="kpi-icon">💰</div>
-            <div class="kpi-label">Annual Savings</div>
-            <div class="kpi-value" style="color: var(--accent-amber)">$8,983</div>
-            <span class="kpi-change neutral">CAD / year</span>
+          <div class="kpi-card accent-amber animate-in">
+            <div class="kpi-label">Labor Productivity</div>
+            <div class="kpi-value">228.8<span class="kpi-unit">u/h</span></div>
+            <div class="kpi-change positive">
+              <span class="arrow">↑</span> +35.8% throughput
+            </div>
+            <div class="kpi-desc">Up from 168.5 units picked per hour</div>
           </div>
 
-          <div class="kpi-card animate-in">
-            <div class="kpi-icon">🧪</div>
-            <div class="kpi-label">Out-of-Sample Saving</div>
-            <div class="kpi-value" style="color: var(--accent-blue)">58.8%</div>
-            <span class="kpi-change positive">↓ on test waves</span>
+          <div class="kpi-card accent-teal animate-in">
+            <div class="kpi-label">Total Distance Saved</div>
+            <div class="kpi-value">727.2<span class="kpi-unit">km</span></div>
+            <div class="kpi-change positive">
+              <span class="arrow">↓</span> 1,221 km → 494 km
+            </div>
+            <div class="kpi-desc">Walking eliminated across 7,341 waves</div>
           </div>
 
-          <div class="kpi-card animate-in">
-            <div class="kpi-icon">🏗️</div>
-            <div class="kpi-label">Stock Moves Required</div>
-            <div class="kpi-value" style="color: var(--accent-purple)">6,738</div>
-            <span class="kpi-change neutral">16% of stock</span>
+          <div class="kpi-card accent-blue animate-in">
+            <div class="kpi-label">Total Labor Hours Saved</div>
+            <div class="kpi-value">253.0<span class="kpi-unit">hrs</span></div>
+            <div class="kpi-change positive">
+              <span class="arrow">↓</span> 960 hrs → 707 hrs
+            </div>
+            <div class="kpi-desc">Direct labor freed across 22 warehouse operators</div>
           </div>
 
-          <div class="kpi-card animate-in">
-            <div class="kpi-icon">🚶</div>
-            <div class="kpi-label">Walking Saved / Year</div>
-            <div class="kpi-value" style="color: var(--accent-red)">1,033 km</div>
-            <span class="kpi-change positive">↓ per year</span>
+          <div class="kpi-card accent-amber animate-in">
+            <div class="kpi-label">Out-of-Sample Validation</div>
+            <div class="kpi-value">58.8<span class="kpi-unit">%</span></div>
+            <div class="kpi-change positive">
+              <span class="arrow">✓</span> Zero overfitting
+            </div>
+            <div class="kpi-desc">Consistent distance cut on 2,549 unseen test waves</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ═══ Charts ═══ -->
-    <section class="section" id="scenarios">
+    <!-- ═══ Interactive Scenario Comparison ═══ -->
+    <section class="section" id="scenarios" style="background: rgba(17, 24, 39, 0.4);">
       <div class="container">
         <div class="section-header">
-          <div class="section-label">Scenario Comparison</div>
-          <h2 class="section-title">Storage Policies Head-to-Head</h2>
-          <p class="section-subtitle">Mean walking distance per wave across six storage policies and three routing methods</p>
+          <div class="section-label">Simulation Benchmarks</div>
+          <h2 class="section-title">Interactive Scenario Engine</h2>
+          <p class="section-subtitle">Evaluate 15 combinations of storage assignment policies and routing algorithms</p>
         </div>
 
+        <!-- Filter Controls -->
+        <div class="filter-bar">
+          <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <span style="font-size:0.8125rem; font-weight:600; color:var(--text-secondary);">DATASET SAMPLE:</span>
+            <div class="pill-group" id="sample-pills">
+              <button class="pill-btn active" data-sample="all">ALL Waves (7,341 waves)</button>
+              <button class="pill-btn" data-sample="test">TEST Out-of-Sample (2,549 waves)</button>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <span style="font-size:0.8125rem; font-weight:600; color:var(--text-secondary);">ROUTING FILTER:</span>
+            <div class="pill-group" id="routing-pills">
+              <button class="pill-btn pill-blue active" data-routing="all">All Routings</button>
+              <button class="pill-btn pill-blue" data-routing="nn2opt">NN 2-opt (Heuristic)</button>
+              <button class="pill-btn pill-blue" data-routing="serpentine">Serpentine (S-Shape)</button>
+              <button class="pill-btn pill-blue" data-routing="recorded">Recorded (Actual)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Grid -->
         <div class="chart-grid">
-          <!-- Walking Distance Bar Chart -->
-          <div class="chart-panel">
+          <div class="chart-card">
             <div class="chart-header">
-              <h3 class="chart-title">Walking Distance by Policy</h3>
-              <span class="chart-badge">NN + 2-opt routing</span>
+              <div>
+                <h3 class="chart-title">Mean Walking Distance per Wave (m)</h3>
+                <p class="chart-subtitle">Lower is better · Highlighted best scenario achieves 67.3 m</p>
+              </div>
             </div>
-            <div class="chart-container">
-              <canvas id="chart-distance" aria-label="Bar chart comparing walking distance across storage policies"></canvas>
+            <div style="position: relative; height: 320px;">
+              <canvas id="chart-scenario-dist"></canvas>
             </div>
           </div>
 
-          <!-- Saving Decomposition -->
-          <div class="chart-panel">
+          <div class="chart-card">
             <div class="chart-header">
-              <h3 class="chart-title">Saving Decomposition</h3>
-              <span class="chart-badge">Routing vs Slotting</span>
+              <div>
+                <h3 class="chart-title">Picker Productivity & Time Saving</h3>
+                <p class="chart-subtitle">Units picked per hour vs percentage time reduction</p>
+              </div>
             </div>
-            <div class="chart-container">
-              <canvas id="chart-decomposition" aria-label="Doughnut chart showing routing vs slotting contribution"></canvas>
-            </div>
-          </div>
-
-          <!-- Time Breakdown -->
-          <div class="chart-panel full-width">
-            <div class="chart-header">
-              <h3 class="chart-title">Picking Time Breakdown</h3>
-              <span class="chart-badge">Per wave (seconds)</span>
-            </div>
-            <div class="chart-container">
-              <canvas id="chart-time" aria-label="Stacked bar chart showing time breakdown per wave"></canvas>
+            <div style="position: relative; height: 320px;">
+              <canvas id="chart-scenario-speed"></canvas>
             </div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- ═══ Results Table ═══ -->
-    <section class="section" id="results">
-      <div class="container">
-        <div class="section-header">
-          <div class="section-label">Detailed Results</div>
-          <h2 class="section-title">Scenario Performance Matrix</h2>
-        </div>
-
-        <div class="data-table-wrapper">
-          <table class="data-table" id="results-table">
+        <!-- Scenario Matrix Table -->
+        <div class="data-table-container">
+          <table class="data-table" id="scenario-table">
             <thead>
               <tr>
-                <th>Scenario</th>
-                <th>Routing</th>
+                <th>Storage Policy</th>
+                <th>Routing Algorithm</th>
                 <th>Mean Walk (m)</th>
-                <th>vs AS-IS</th>
-                <th>Rating</th>
+                <th>Median (m)</th>
+                <th>P90 (m)</th>
+                <th>Wave Time</th>
+                <th>Pick Speed</th>
+                <th>Dist Saving</th>
+                <th>Time Saving</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>AS-IS (Current)</td>
-                <td>WMS Sequence</td>
-                <td>166</td>
-                <td>—</td>
-                <td><span class="value-badge warn">Baseline</span></td>
-              </tr>
-              <tr>
-                <td>AS-IS (Quick Win)</td>
-                <td>NN + 2-opt</td>
-                <td>142</td>
-                <td>−14.6%</td>
-                <td><span class="value-badge good">Quick Win</span></td>
-              </tr>
-              <tr>
-                <td>Random</td>
-                <td>NN + 2-opt</td>
-                <td>162</td>
-                <td>−2.4%</td>
-                <td><span class="value-badge warn">Marginal</span></td>
-              </tr>
-              <tr>
-                <td>Dedicated</td>
-                <td>NN + 2-opt</td>
-                <td>163</td>
-                <td>−1.8%</td>
-                <td><span class="value-badge warn">Marginal</span></td>
-              </tr>
-              <tr>
-                <td>Class-Based</td>
-                <td>NN + 2-opt</td>
-                <td>132</td>
-                <td>−20.5%</td>
-                <td><span class="value-badge good">Good</span></td>
-              </tr>
-              <tr>
-                <td>Hybrid</td>
-                <td>NN + 2-opt</td>
-                <td>122</td>
-                <td>−26.5%</td>
-                <td><span class="value-badge good">Good</span></td>
-              </tr>
-              <tr class="highlight-row">
-                <td>✨ Optimised-FAMILY</td>
-                <td>NN + 2-opt</td>
-                <td>67</td>
-                <td>−59.5%</td>
-                <td><span class="value-badge best">★ Best</span></td>
-              </tr>
+            <tbody id="scenario-table-body">
+              <!-- Dynamically populated via JS -->
             </tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <!-- ═══ Methodology ═══ -->
-    <section class="section" id="methodology">
+    <!-- ═══ Interactive CAD & Floor Plans ═══ -->
+    <section class="section" id="layouts">
       <div class="container">
         <div class="section-header">
-          <div class="section-label">Pipeline</div>
-          <h2 class="section-title">Methodology</h2>
-          <p class="section-subtitle">Eight-step reproducible pipeline from raw WMS data to implementation plan</p>
+          <div class="section-label">Spatial Engineering</div>
+          <h2 class="section-title">Warehouse Floor Plans & Slotting Layouts</h2>
+          <p class="section-subtitle">Visualizing the spatial reallocation of footwear SKUs across picking and reserve levels</p>
         </div>
 
-        <div class="method-grid">
-          <div class="method-card animate-in">
-            <span class="method-step">1</span>
-            <h3>Clean &amp; Load</h3>
-            <p>Robust CSV reader handles mixed delimiters, encodings, and line endings. Logs every fix in a data-quality table.</p>
+        <div class="layout-card">
+          <!-- Level selector -->
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:var(--space-lg);">
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <span style="font-size:0.875rem; font-weight:600; color:var(--text-secondary);">SELECT WAREHOUSE LEVEL:</span>
+              <div class="pill-group" id="level-pills">
+                <button class="pill-btn active" data-level="All_Levels">All Levels (Overview)</button>
+                <button class="pill-btn" data-level="Level_0">Level 0 (Ground Pick)</button>
+                <button class="pill-btn" data-level="Level_1">Level 1 (Manual Pick)</button>
+                <button class="pill-btn" data-level="Level_2">Level 2 (Manual Pick)</button>
+                <button class="pill-btn" data-level="Level_3">Level 3 (Reserve)</button>
+                <button class="pill-btn" data-level="Level_4">Level 4 (Reserve)</button>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:10px; align-items:center;">
+              <a id="floor-pdf-link" href="layouts/floors/Optimised_All_Levels.pdf" target="_blank" class="btn btn-secondary" style="padding:6px 14px; font-size:0.8125rem;">
+                📄 Download Level PDF
+              </a>
+              <a href="layouts/cad/Full layout.dwg" download class="btn btn-primary" style="padding:6px 14px; font-size:0.8125rem;">
+                📐 AutoCAD DWG
+              </a>
+            </div>
           </div>
-          <div class="method-card animate-in">
-            <span class="method-step">2</span>
-            <h3>Rebuild Layout</h3>
-            <p>2,293 locations calibrated to metres. Aisle network built for shortest-path walking distances.</p>
+
+          <div style="font-size:0.875rem; color:var(--text-secondary); margin-bottom:var(--space-md); background:rgba(30,41,59,0.5); padding:10px 16px; border-radius:8px; border:1px solid var(--border-subtle);">
+            ℹ️ <strong id="level-desc-title">All Levels Overview</strong>: <span id="level-desc-text">Levels 0, 1, and 2 serve active manual picking operations. Levels 3 and 4 serve high-bay forklift replenishment. High-velocity Class A footwear has been consolidated into ground-level locations adjacent to the I/O dispatch depot.</span>
           </div>
-          <div class="method-card animate-in">
-            <span class="method-step">3</span>
-            <h3>Demand &amp; ABC</h3>
-            <p>Pick-visit demand per SKU, ABC classes (80/95%), 70/30 train/test split by wave for validation.</p>
-          </div>
-          <div class="method-card animate-in">
-            <span class="method-step">4</span>
-            <h3>Storage Scenarios</h3>
-            <p>Six policies compared: four from the case + Optimised-COI and Optimised-FAMILY designed from scratch.</p>
-          </div>
-          <div class="method-card animate-in">
-            <span class="method-step">5</span>
-            <h3>Route Optimisation</h3>
-            <p>WMS sequence, serpentine, and nearest-neighbour + 2-opt compared side-by-side.</p>
-          </div>
-          <div class="method-card animate-in">
-            <span class="method-step">6</span>
-            <h3>Re-shuffle Plan</h3>
-            <p>Only forward zone re-slotted via swaps. Class A items prioritised. 186 locations touched.</p>
-          </div>
-          <div class="method-card animate-in">
-            <span class="method-step">7</span>
-            <h3>Statistical Testing</h3>
-            <p>Paired Wilcoxon tests, sensitivity to walk speed and pick time, operator performance analysis.</p>
-          </div>
-          <div class="method-card animate-in">
-            <span class="method-step">8</span>
-            <h3>Economics</h3>
-            <p>Labour hours, FTE, and CAD/year. Full cost-benefit analysis with implementation effort.</p>
+
+          <!-- Comparison View -->
+          <div class="layout-viewer-grid">
+            <div class="layout-col">
+              <div class="layout-col-header">
+                <span class="layout-col-title" style="color:#f87171;">
+                  <span>🔴</span> Current Random (AS-IS)
+                </span>
+                <span class="badge-tag badge-red">Historical Layout</span>
+              </div>
+              <div class="layout-img-wrap" onclick="openLightbox(document.getElementById('img-current').src, 'Current Random Layout')">
+                <img id="img-current" src="layouts/floors/Current_Random_All_Levels.png" alt="Current Random Layout" loading="lazy" />
+              </div>
+            </div>
+
+            <div class="layout-col">
+              <div class="layout-col-header">
+                <span class="layout-col-title" style="color:#2dd4bf;">
+                  <span>🟢</span> Optimised Family (Proposed)
+                </span>
+                <span class="badge-tag badge-teal">59.5% Less Walk</span>
+              </div>
+              <div class="layout-img-wrap" onclick="openLightbox(document.getElementById('img-optimised').src, 'Optimised Family Layout')">
+                <img id="img-optimised" src="layouts/floors/Optimised_All_Levels.png" alt="Optimised Family Layout" loading="lazy" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ═══ Economics ═══ -->
-    <section class="section" id="economics">
+    <!-- ═══ Operator Performance Deep-Dive ═══ -->
+    <section class="section" id="operators" style="background: rgba(17, 24, 39, 0.4);">
       <div class="container">
         <div class="section-header">
-          <div class="section-label">Business Impact</div>
-          <h2 class="section-title">Economic Analysis</h2>
+          <div class="section-label">Workforce Analytics</div>
+          <h2 class="section-title">Operator Performance & Route Compliance</h2>
+          <p class="section-subtitle">Empirical breakdown across all 22 warehouse order pickers</p>
+        </div>
+
+        <div class="operator-stat-banner">
+          <div class="operator-stat-card">
+            <div class="operator-stat-num">22</div>
+            <div class="operator-stat-label">Active Warehouse Pickers</div>
+          </div>
+          <div class="operator-stat-card">
+            <div class="operator-stat-num">253.0 <span style="font-size:1rem;">hrs</span></div>
+            <div class="operator-stat-label">Direct Labor Hours Saved</div>
+          </div>
+          <div class="operator-stat-card">
+            <div class="operator-stat-num">0.887</div>
+            <div class="operator-stat-label">Mean Route Efficiency Index</div>
+          </div>
+          <div class="operator-stat-card">
+            <div class="operator-stat-num">31.7 <span style="font-size:1rem;">hrs</span></div>
+            <div class="operator-stat-label">Max Hours Saved (Operator 1)</div>
+          </div>
         </div>
 
         <div class="chart-grid">
-          <div class="chart-panel">
+          <div class="chart-card">
             <div class="chart-header">
-              <h3 class="chart-title">Time Model Assumptions</h3>
+              <div>
+                <h3 class="chart-title">Top 10 Operators: Labor Hours Saved</h3>
+                <p class="chart-subtitle">Direct picking time eliminated under Optimised-FAMILY slotting</p>
+              </div>
             </div>
-            <table class="data-table" id="assumptions-table">
-              <thead>
-                <tr>
-                  <th>Parameter</th>
-                  <th>Value</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>Walk speed</td><td>1.0 m/s</td></tr>
-                <tr><td>Stop time</td><td>10 s / stop</td></tr>
-                <tr><td>Pick time</td><td>6 s / unit</td></tr>
-                <tr><td>Wave setup</td><td>60 s</td></tr>
-                <tr><td>Productive hours / FTE-day</td><td>7.5 h</td></tr>
-                <tr><td>Labour cost</td><td>CAD 25 / h</td></tr>
-                <tr><td>Working days / year</td><td>250</td></tr>
-              </tbody>
-            </table>
+            <div style="position: relative; height: 320px;">
+              <canvas id="chart-operator-hours"></canvas>
+            </div>
           </div>
 
-          <div class="chart-panel">
+          <div class="chart-card">
             <div class="chart-header">
-              <h3 class="chart-title">Labour Savings Breakdown</h3>
-              <span class="chart-badge">Annual</span>
+              <div>
+                <h3 class="chart-title">Pick Speed: AS-IS vs Optimised (Units/Hour)</h3>
+                <p class="chart-subtitle">Throughput surge across top 10 operator work shifts</p>
+              </div>
             </div>
-            <div class="chart-container">
-              <canvas id="chart-economics" aria-label="Bar chart showing labour savings"></canvas>
+            <div style="position: relative; height: 320px;">
+              <canvas id="chart-operator-speed"></canvas>
             </div>
+          </div>
+        </div>
+
+        <!-- Operator Table -->
+        <div class="data-table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Operator</th>
+                <th>Historical Waves</th>
+                <th>Units Picked</th>
+                <th>AS-IS Speed (u/h)</th>
+                <th>Optimised Speed (u/h)</th>
+                <th>Route Efficiency</th>
+                <th>Workload Share</th>
+                <th>Hours Saved</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td style="font-weight:600; color:var(--text-primary);">Operator_1</td>
+                <td>893</td>
+                <td>19,966</td>
+                <td><span class="badge-tag badge-amber">166.5 u/h</span></td>
+                <td><span class="badge-tag badge-teal">226.3 u/h</span></td>
+                <td><span class="badge-tag badge-blue">0.898</span></td>
+                <td>12.3%</td>
+                <td style="font-weight:700; color:#2dd4bf;">+31.7 hrs</td>
+              </tr>
+              
+              <tr>
+                <td style="font-weight:600; color:var(--text-primary);">Operator_8</td>
+                <td>809</td>
+                <td>17,866</td>
+                <td><span class="badge-tag badge-amber">170.1 u/h</span></td>
+                <td><span class="badge-tag badge-teal">228.3 u/h</span></td>
+                <td><span class="badge-tag badge-blue">0.909</span></td>
+                <td>11.0%</td>
+                <td style="font-weight:700; color:#2dd4bf;">+26.8 hrs</td>
+              </tr>
+              
+              <tr>
+                <td style="font-weight:600; color:var(--text-primary);">Operator_2</td>
+                <td>804</td>
+                <td>17,798</td>
+                <td><span class="badge-tag badge-amber">166.7 u/h</span></td>
+                <td><span class="badge-tag badge-teal">231.2 u/h</span></td>
+                <td><span class="badge-tag badge-blue">0.849</span></td>
+                <td>11.0%</td>
+                <td style="font-weight:700; color:#2dd4bf;">+29.8 hrs</td>
+              </tr>
+              
+              <tr>
+                <td style="font-weight:600; color:var(--text-primary);">Operator_17</td>
+                <td>764</td>
+                <td>16,617</td>
+                <td><span class="badge-tag badge-amber">165.1 u/h</span></td>
+                <td><span class="badge-tag badge-teal">225.4 u/h</span></td>
+                <td><span class="badge-tag badge-blue">0.888</span></td>
+                <td>10.3%</td>
+                <td style="font-weight:700; color:#2dd4bf;">+26.9 hrs</td>
+              </tr>
+              
+              <tr>
+                <td style="font-weight:600; color:var(--text-primary);">Operator_4</td>
+                <td>726</td>
+                <td>16,143</td>
+                <td><span class="badge-tag badge-amber">173.8 u/h</span></td>
+                <td><span class="badge-tag badge-teal">232.6 u/h</span></td>
+                <td><span class="badge-tag badge-blue">0.893</span></td>
+                <td>10.0%</td>
+                <td style="font-weight:700; color:#2dd4bf;">+23.5 hrs</td>
+              </tr>
+              
+              <tr>
+                <td style="font-weight:600; color:var(--text-primary);">Operator_3</td>
+                <td>653</td>
+                <td>14,591</td>
+                <td><span class="badge-tag badge-amber">168.3 u/h</span></td>
+                <td><span class="badge-tag badge-teal">227.5 u/h</span></td>
+                <td><span class="badge-tag badge-blue">0.894</span></td>
+                <td>9.0%</td>
+                <td style="font-weight:700; color:#2dd4bf;">+22.6 hrs</td>
+              </tr>
+              
+              <tr>
+                <td style="font-weight:600; color:var(--text-primary);">Operator_6</td>
+                <td>519</td>
+                <td>11,247</td>
+                <td><span class="badge-tag badge-amber">167.2 u/h</span></td>
+                <td><span class="badge-tag badge-teal">228.0 u/h</span></td>
+                <td><span class="badge-tag badge-blue">0.889</span></td>
+                <td>7.0%</td>
+                <td style="font-weight:700; color:#2dd4bf;">+17.9 hrs</td>
+              </tr>
+              
+              <tr>
+                <td style="font-weight:600; color:var(--text-primary);">Operator_14</td>
+                <td>422</td>
+                <td>9,378</td>
+                <td><span class="badge-tag badge-amber">168.7 u/h</span></td>
+                <td><span class="badge-tag badge-teal">230.7 u/h</span></td>
+                <td><span class="badge-tag badge-blue">0.884</span></td>
+                <td>5.8%</td>
+                <td style="font-weight:700; color:#2dd4bf;">+14.9 hrs</td>
+              </tr>
+              
+              <tr>
+                <td style="font-weight:600; color:var(--text-primary);">Operator_19</td>
+                <td>423</td>
+                <td>9,361</td>
+                <td><span class="badge-tag badge-amber">174.9 u/h</span></td>
+                <td><span class="badge-tag badge-teal">237.0 u/h</span></td>
+                <td><span class="badge-tag badge-blue">0.896</span></td>
+                <td>5.8%</td>
+                <td style="font-weight:700; color:#2dd4bf;">+14.0 hrs</td>
+              </tr>
+              
+              <tr>
+                <td style="font-weight:600; color:var(--text-primary);">Operator_5</td>
+                <td>372</td>
+                <td>8,302</td>
+                <td><span class="badge-tag badge-amber">166.9 u/h</span></td>
+                <td><span class="badge-tag badge-teal">225.8 u/h</span></td>
+                <td><span class="badge-tag badge-blue">0.902</span></td>
+                <td>5.1%</td>
+                <td style="font-weight:700; color:#2dd4bf;">+13.0 hrs</td>
+              </tr>
+              
+              <tr>
+                <td style="font-weight:600; color:var(--text-primary);">Operator_18</td>
+                <td>322</td>
+                <td>6,798</td>
+                <td><span class="badge-tag badge-amber">165.9 u/h</span></td>
+                <td><span class="badge-tag badge-teal">223.8 u/h</span></td>
+                <td><span class="badge-tag badge-blue">0.875</span></td>
+                <td>4.2%</td>
+                <td style="font-weight:700; color:#2dd4bf;">+10.6 hrs</td>
+              </tr>
+              
+              <tr>
+                <td style="font-weight:600; color:var(--text-primary);">Operator_11</td>
+                <td>257</td>
+                <td>5,762</td>
+                <td><span class="badge-tag badge-amber">170.9 u/h</span></td>
+                <td><span class="badge-tag badge-teal">232.9 u/h</span></td>
+                <td><span class="badge-tag badge-blue">0.881</span></td>
+                <td>3.6%</td>
+                <td style="font-weight:700; color:#2dd4bf;">+9.0 hrs</td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Comprehensive Analytics Figure Gallery ═══ -->
+    <section class="section" id="gallery">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Research Artifacts</div>
+          <h2 class="section-title">Analytics & Visualisations Gallery</h2>
+          <p class="section-subtitle">26 publication-grade figures documenting every phase of the research pipeline. Click any figure to expand.</p>
+        </div>
+
+        <!-- Category Filters -->
+        <div style="display:flex; justify-content:center; margin-bottom:var(--space-xl);">
+          <div class="pill-group" id="gallery-pills">
+            <button class="pill-btn active" data-cat="all">All Figures (26)</button>
+            <button class="pill-btn" data-cat="eda">Demand & EDA (7)</button>
+            <button class="pill-btn" data-cat="maps">Layout & Routes (6)</button>
+            <button class="pill-btn" data-cat="results">Simulation Results (7)</button>
+            <button class="pill-btn" data-cat="dynamics">Labor Dynamics (6)</button>
+          </div>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="gallery-grid" id="gallery-grid">
+          
+          <div class="gallery-card" data-cat="eda" onclick="openLightbox('report/figures/01_eda_orders_per_day.png', 'Daily Order Volume')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/01_eda_orders_per_day.png" alt="Daily Order Volume" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 01</span>
+                <span class="badge-tag badge-amber">EDA</span>
+              </div>
+              <h4 class="gallery-title">Daily Order Volume</h4>
+              <p class="gallery-desc">Distribution of daily orders and wave arrivals across the 4-month operational period.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="eda" onclick="openLightbox('report/figures/02_eda_order_arrival_heatmap.png', 'Order Arrival Heatmap')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/02_eda_order_arrival_heatmap.png" alt="Order Arrival Heatmap" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 02</span>
+                <span class="badge-tag badge-amber">EDA</span>
+              </div>
+              <h4 class="gallery-title">Order Arrival Heatmap</h4>
+              <p class="gallery-desc">Wave arrival intensity clustered by hour of day and weekday, highlighting peak morning dispatch.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="eda" onclick="openLightbox('report/figures/03_eda_order_profile.png', 'Order Profile (Lines & Units)')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/03_eda_order_profile.png" alt="Order Profile (Lines & Units)" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 03</span>
+                <span class="badge-tag badge-amber">EDA</span>
+              </div>
+              <h4 class="gallery-title">Order Profile (Lines & Units)</h4>
+              <p class="gallery-desc">Distribution of line items and total quantity per customer order across the safety-boot catalog.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="eda" onclick="openLightbox('report/figures/04_eda_wave_profile.png', 'Picking Wave Size Profile')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/04_eda_wave_profile.png" alt="Picking Wave Size Profile" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 04</span>
+                <span class="badge-tag badge-amber">EDA</span>
+              </div>
+              <h4 class="gallery-title">Picking Wave Size Profile</h4>
+              <p class="gallery-desc">Distribution of units per wave, verifying trolley batch capacity limits (cap 27 units).</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="eda" onclick="openLightbox('report/figures/05_eda_pareto_abc.png', 'Pareto ABC Demand Curve')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/05_eda_pareto_abc.png" alt="Pareto ABC Demand Curve" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 05</span>
+                <span class="badge-tag badge-amber">EDA</span>
+              </div>
+              <h4 class="gallery-title">Pareto ABC Demand Curve</h4>
+              <p class="gallery-desc">Classic 80/20 law: top 16.5% of SKUs generate 80% of total warehouse picking demand.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="eda" onclick="openLightbox('report/figures/06_eda_abc_master_vs_demand.png', 'Master Catalog vs Actual Demand')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/06_eda_abc_master_vs_demand.png" alt="Master Catalog vs Actual Demand" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 06</span>
+                <span class="badge-tag badge-amber">EDA</span>
+              </div>
+              <h4 class="gallery-title">Master Catalog vs Actual Demand</h4>
+              <p class="gallery-desc">Discrepancy between static ERP catalog velocity classifications and true empirical pick activity.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="eda" onclick="openLightbox('report/figures/07_eda_size_aisle_operator.png', 'Shoe Size & Aisle Distribution')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/07_eda_size_aisle_operator.png" alt="Shoe Size & Aisle Distribution" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 07</span>
+                <span class="badge-tag badge-amber">EDA</span>
+              </div>
+              <h4 class="gallery-title">Shoe Size & Aisle Distribution</h4>
+              <p class="gallery-desc">Activity heat across footwear sizes (sizes 7–11 peak) and aisle picker concentrations.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="maps" onclick="openLightbox('report/figures/10_map_layout_network.png', 'Warehouse Network Topology')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/10_map_layout_network.png" alt="Warehouse Network Topology" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 10</span>
+                <span class="badge-tag badge-blue">Layout</span>
+              </div>
+              <h4 class="gallery-title">Warehouse Network Topology</h4>
+              <p class="gallery-desc">Graph model with pick aisles, cross-aisles, traversal edges, and I/O depot location.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="maps" onclick="openLightbox('report/figures/11_map_distance_from_io.png', 'Isochrone Distance from I/O Depot')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/11_map_distance_from_io.png" alt="Isochrone Distance from I/O Depot" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 11</span>
+                <span class="badge-tag badge-blue">Spatial</span>
+              </div>
+              <h4 class="gallery-title">Isochrone Distance from I/O Depot</h4>
+              <p class="gallery-desc">Spatial contour heatmap mapping walking distance in meters from the input/output dispatch point.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="maps" onclick="openLightbox('report/figures/12_map_demand_asis.png', 'AS-IS Demand Spatial Heatmap')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/12_map_demand_asis.png" alt="AS-IS Demand Spatial Heatmap" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 12</span>
+                <span class="badge-tag badge-blue">Spatial</span>
+              </div>
+              <h4 class="gallery-title">AS-IS Demand Spatial Heatmap</h4>
+              <p class="gallery-desc">Historical picking activity showing high-velocity items scattered across distant aisles.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="maps" onclick="openLightbox('report/figures/13_map_demand_by_policy.png', 'Demand Density by Storage Policy')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/13_map_demand_by_policy.png" alt="Demand Density by Storage Policy" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 13</span>
+                <span class="badge-tag badge-blue">Spatial</span>
+              </div>
+              <h4 class="gallery-title">Demand Density by Storage Policy</h4>
+              <p class="gallery-desc">Heatmap comparison showing progressive compaction of high-demand stock toward the I/O depot.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="maps" onclick="openLightbox('report/figures/14_map_abc_before_after.png', 'ABC Re-Slotting: Before vs After')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/14_map_abc_before_after.png" alt="ABC Re-Slotting: Before vs After" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 14</span>
+                <span class="badge-tag badge-blue">Layout</span>
+              </div>
+              <h4 class="gallery-title">ABC Re-Slotting: Before vs After</h4>
+              <p class="gallery-desc">Visual confirmation of Class A items shifting from outer perimeter to front-row ground slots.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="maps" onclick="openLightbox('report/figures/15_map_example_route.png', 'Sample Picker Tour: AS-IS vs Optimal')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/15_map_example_route.png" alt="Sample Picker Tour: AS-IS vs Optimal" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 15</span>
+                <span class="badge-tag badge-blue">Routing</span>
+              </div>
+              <h4 class="gallery-title">Sample Picker Tour: AS-IS vs Optimal</h4>
+              <p class="gallery-desc">Side-by-side traversal path showing complete removal of backtracking using NN 2-opt routing.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="results" onclick="openLightbox('report/figures/20_result_distance_by_scenario.png', 'Distance Comparison by Scenario')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/20_result_distance_by_scenario.png" alt="Distance Comparison by Scenario" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 20</span>
+                <span class="badge-tag badge-teal">Results</span>
+              </div>
+              <h4 class="gallery-title">Distance Comparison by Scenario</h4>
+              <p class="gallery-desc">Total kilometers walked and mean wave distance across all 15 simulated scenarios.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="results" onclick="openLightbox('report/figures/21_result_distance_boxplot.png', 'Distance Distribution Boxplots')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/21_result_distance_boxplot.png" alt="Distance Distribution Boxplots" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 21</span>
+                <span class="badge-tag badge-teal">Results</span>
+              </div>
+              <h4 class="gallery-title">Distance Distribution Boxplots</h4>
+              <p class="gallery-desc">Statistical spread, median, and 90th percentile distance showing sharp reduction in variance.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="results" onclick="openLightbox('report/figures/22_result_time_breakdown.png', 'Pick Cycle Time Component Breakdown')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/22_result_time_breakdown.png" alt="Pick Cycle Time Component Breakdown" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 22</span>
+                <span class="badge-tag badge-teal">Results</span>
+              </div>
+              <h4 class="gallery-title">Pick Cycle Time Component Breakdown</h4>
+              <p class="gallery-desc">Walking time vs stop time vs item retrieval pick time vs batch setup time.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="results" onclick="openLightbox('report/figures/23_result_saving_waterfall.png', 'Walking Distance Savings Waterfall')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/23_result_saving_waterfall.png" alt="Walking Distance Savings Waterfall" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 23</span>
+                <span class="badge-tag badge-teal">Economics</span>
+              </div>
+              <h4 class="gallery-title">Walking Distance Savings Waterfall</h4>
+              <p class="gallery-desc">Isolating pure routing heuristic gain (-14.6%) vs pure slotting reallocation (-44.9%).</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="results" onclick="openLightbox('report/figures/24_result_operator_performance.png', 'Operator Productivity & Route Efficiency')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/24_result_operator_performance.png" alt="Operator Productivity & Route Efficiency" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 24</span>
+                <span class="badge-tag badge-teal">Labor</span>
+              </div>
+              <h4 class="gallery-title">Operator Productivity & Route Efficiency</h4>
+              <p class="gallery-desc">Pick speed (units/hr) increase and human route compliance across all 22 operators.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="results" onclick="openLightbox('report/figures/25_result_daily_FTE.png', 'Daily FTE Labor Requirement')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/25_result_daily_FTE.png" alt="Daily FTE Labor Requirement" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 25</span>
+                <span class="badge-tag badge-teal">Labor</span>
+              </div>
+              <h4 class="gallery-title">Daily FTE Labor Requirement</h4>
+              <p class="gallery-desc">Shift labor capacity reduction achievable through streamlined picking cycles.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="results" onclick="openLightbox('report/figures/26_result_order_lead_time.png', 'Order Lead Time Reduction')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/26_result_order_lead_time.png" alt="Order Lead Time Reduction" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 26</span>
+                <span class="badge-tag badge-teal">Results</span>
+              </div>
+              <h4 class="gallery-title">Order Lead Time Reduction</h4>
+              <p class="gallery-desc">Accelerated turnaround time per order, shortening dispatch cycles for customer fulfillment.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="dynamics" onclick="openLightbox('report/figures/30_time_distribution_per_wave.png', 'Wave Completion Time Distribution')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/30_time_distribution_per_wave.png" alt="Wave Completion Time Distribution" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 30</span>
+                <span class="badge-tag badge-amber">Dynamics</span>
+              </div>
+              <h4 class="gallery-title">Wave Completion Time Distribution</h4>
+              <p class="gallery-desc">Probability density shifts leftward from 7.85 min down to 5.78 min per wave.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="dynamics" onclick="openLightbox('report/figures/31_time_components_by_arrangement.png', 'Time Components by Arrangement')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/31_time_components_by_arrangement.png" alt="Time Components by Arrangement" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 31</span>
+                <span class="badge-tag badge-amber">Dynamics</span>
+              </div>
+              <h4 class="gallery-title">Time Components by Arrangement</h4>
+              <p class="gallery-desc">Comparative bar chart of labor hours spent on travel vs manipulation per policy.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="dynamics" onclick="openLightbox('report/figures/32_time_daily_hours.png', 'Daily Warehouse Labor Hours')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/32_time_daily_hours.png" alt="Daily Warehouse Labor Hours" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 32</span>
+                <span class="badge-tag badge-amber">Dynamics</span>
+              </div>
+              <h4 class="gallery-title">Daily Warehouse Labor Hours</h4>
+              <p class="gallery-desc">Longitudinal daily tracking of total hours required under AS-IS vs Optimised-FAMILY.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="dynamics" onclick="openLightbox('report/figures/33_time_by_hour_and_weekday.png', 'Labor Demand Heatmap (Hour & Day)')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/33_time_by_hour_and_weekday.png" alt="Labor Demand Heatmap (Hour & Day)" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 33</span>
+                <span class="badge-tag badge-amber">Dynamics</span>
+              </div>
+              <h4 class="gallery-title">Labor Demand Heatmap (Hour & Day)</h4>
+              <p class="gallery-desc">Heatmap tracking hourly workforce utilization throughout the operating work week.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="dynamics" onclick="openLightbox('report/figures/34_time_cdf.png', 'Cumulative Distribution Function (CDF)')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/34_time_cdf.png" alt="Cumulative Distribution Function (CDF)" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 34</span>
+                <span class="badge-tag badge-amber">Dynamics</span>
+              </div>
+              <h4 class="gallery-title">Cumulative Distribution Function (CDF)</h4>
+              <p class="gallery-desc">90% of waves complete in under 7.2 minutes under optimal slotting (vs 11.5 min historically).</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="dynamics" onclick="openLightbox('report/figures/35_time_vs_wave_size.png', 'Wave Completion Time vs Wave Size')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/35_time_vs_wave_size.png" alt="Wave Completion Time vs Wave Size" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 35</span>
+                <span class="badge-tag badge-amber">Dynamics</span>
+              </div>
+              <h4 class="gallery-title">Wave Completion Time vs Wave Size</h4>
+              <p class="gallery-desc">Scatter regression confirming linear scaling and consistent travel reduction across all wave sizes.</p>
+            </div>
+          </div>
+          
+          <div class="gallery-card" data-cat="dynamics" onclick="openLightbox('report/figures/36_time_monthly.png', 'Monthly Throughput & Efficiency Trend')">
+            <div class="gallery-img-wrap">
+              <img src="report/figures/36_time_monthly.png" alt="Monthly Throughput & Efficiency Trend" loading="lazy" />
+            </div>
+            <div class="gallery-content">
+              <div class="gallery-meta">
+                <span>Fig. 36</span>
+                <span class="badge-tag badge-amber">Dynamics</span>
+              </div>
+              <h4 class="gallery-title">Monthly Throughput & Efficiency Trend</h4>
+              <p class="gallery-desc">Month-over-month performance stability confirming long-term robustness of the slotting plan.</p>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Data Quality Audit Section ═══ -->
+    <section class="section" id="data-quality" style="background: rgba(17, 24, 39, 0.4);">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Industrial Rigor</div>
+          <h2 class="section-title">Data Cleansing & Integrity Audit</h2>
+          <p class="section-subtitle">Automated validation rules applied to the Mendeley safety-boot distribution dataset</p>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:var(--space-lg); margin-top:var(--space-xl);">
+          <div class="method-card">
+            <div class="method-num">01</div>
+            <h3>Duplicate Pick Verification</h3>
+            <p><strong>102,201 exact duplicate rows</strong> confirmed in <code>Picking_Wave.csv</code>. Validated that each row represents exactly 1 picked unit (qty=1). Kept to avoid undercounting pick workload.</p>
+          </div>
+
+          <div class="method-card">
+            <div class="method-num">02</div>
+            <h3>Trolley Capacity Bounds</h3>
+            <p><strong>74 waves</strong> exceeded nominal trolley capacity (27 units, observed max 30). Flagged and handled with dual-trolley trip mechanics during route simulation.</p>
+          </div>
+
+          <div class="method-card">
+            <div class="method-num">03</div>
+            <h3>Shoe Size Decimal Encoding</h3>
+            <p><strong>41,549 size entries</strong> encoded without decimal point (e.g. 85 for size 8.5). Normalized automatically by dividing values > 20 by 10.</p>
+          </div>
+
+          <div class="method-card">
+            <div class="method-num">04</div>
+            <h3>Order-to-Picking Reconciliation</h3>
+            <p><strong>77 waves</strong> present in orders but missing from picking logs. Excluded cleanly from routing benchmarks to guarantee strict comparability.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ═══ Quick Access Panel ═══ -->
-    <section class="section">
+    <!-- ═══ Downloads & Resources ═══ -->
+    <section class="section" id="downloads">
       <div class="container">
         <div class="quick-access">
-          <h2>📦 Quick Access</h2>
-          <p>Jump to the full report, explore the analysis notebook, or browse the source code on GitHub.</p>
+          <div class="section-label" style="display:inline-block; margin-bottom:8px;">Deliverables & Artifacts</div>
+          <h2>Resource Download Center</h2>
+          <p>Access the complete analytical report, datasets, CAD vector blueprints, and reproducible Python code.</p>
+
           <div class="quick-access-btns">
-            <a href="report/" class="btn btn-report" id="qa-report-btn">
-              📄 Full Report (PDF)
-            </a>
             <a
-              href="https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization/blob/main/v3.ipynb"
+              href="report/Warehouse_Optimisation_Report.pdf"
               class="btn btn-primary"
+              id="dl-report-btn"
               target="_blank"
-              rel="noopener"
-              id="qa-notebook-btn"
             >
-              📓 View Notebook
+              📄 Executive Report (PDF)
             </a>
             <a
-              href="https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization"
+              href="data/scenario_summary.csv"
+              download
               class="btn btn-secondary"
-              target="_blank"
-              rel="noopener"
-              id="qa-github-btn"
+              id="dl-scenario-btn"
             >
-              ⭐ Star on GitHub
+              📊 Scenario Results (CSV)
+            </a>
+            <a
+              href="data/operator_performance.csv"
+              download
+              class="btn btn-secondary"
+              id="dl-operator-btn"
+            >
+              👷 Operator Data (CSV)
+            </a>
+            <a
+              href="layouts/cad/Full layout.dwg"
+              download
+              class="btn btn-secondary"
+              id="dl-cad-btn"
+            >
+              📐 AutoCAD DWG Layout
+            </a>
+            <a
+              href="v3.ipynb"
+              class="btn btn-secondary"
+              id="dl-notebook-btn"
+            >
+              📓 Python Notebook (v3.ipynb)
             </a>
           </div>
         </div>
       </div>
     </section>
+
+    <!-- ═══ Lightbox Modal ═══ -->
+    <div class="modal-overlay" id="lightbox-modal" onclick="closeLightbox(event)">
+      <div class="modal-box" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <h3 id="modal-title" style="font-size:1rem; font-weight:600; color:var(--text-primary);">Image Preview</h3>
+          <button class="modal-close-btn" onclick="closeLightbox()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <img id="modal-img" src="" alt="Enlarged visualization" />
+        </div>
+      </div>
+    </div>
 
     <!-- ═══ Footer ═══ -->
     <footer class="footer">
       <ul class="footer-links">
-        <li><a href="https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization" target="_blank" rel="noopener">GitHub</a></li>
-        <li><a href="report/">Report</a></li>
-        <li><a href="docs/">Documentation</a></li>
-        <li><a href="https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization/blob/main/v3.ipynb" target="_blank" rel="noopener">Notebook</a></li>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#scenarios">Scenarios</a></li>
+        <li><a href="#layouts">CAD Layouts</a></li>
+        <li><a href="#operators">Operators</a></li>
+        <li><a href="report/Warehouse_Optimisation_Report.pdf" target="_blank">PDF Report</a></li>
+        <li><a href="https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization" target="_blank">GitHub</a></li>
       </ul>
-      <p>
-        Data: de Assis, de Paula Ferreira &amp; Ouhimmou (2025), CC BY 4.0 ·
-        Analysis: <strong>Shreyas</strong>, MBA (2026–28), IIM Mumbai ·
-        Code: MIT
+      <p style="margin-bottom: 8px;">
+        Warehouse Picking Optimisation Study · Authored by <strong>Shreyas Thakur</strong> · Open-Source Under MIT License
+      </p>
+      <p style="color: var(--text-muted); font-size: 0.75rem;">
+        Dataset source: de Assis, de Paula Ferreira & Ouhimmou (2025), Data in Brief 61:111837 (CC BY 4.0).
       </p>
     </footer>
 
-    <!-- ═══ Charts Script ═══ -->
+    <!-- ═══ Dashboard Logic ═══ -->
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        /* ── Smooth-scroll for nav links ── */
-        document.querySelectorAll('a[href^="#"]').forEach(link => {
-          link.addEventListener('click', e => {
-            const target = document.querySelector(link.getAttribute('href'));
-            if (target) {
-              e.preventDefault();
-              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-          });
-        });
+      /* ── Embedded Data ── */
+      const SCENARIOS_ALL = [{"sample": "ALL waves (fully placed in all scenarios)", "scenario": "AS-IS (historical)", "routing": "nn2opt", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 11.200926304318212, "mean_aisles": 4.552513281569269, "mean_dist_m": 142.10177134813603, "median_dist_m": 145.9821333333333, "p90_dist_m": 220.3533333333333, "total_km": 1043.169103466667, "mean_time_min": 7.438848257427839, "total_hours": 910.1430842962964, "walk_share": 0.3183776269985624, "units_per_hour": 177.7423822596839, "m_per_unit": 6.448430827939907, "dist_saving_vs_asis_%": 14.595686079467397, "time_saving_vs_asis_%": 5.2064241138147}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "AS-IS (historical)", "routing": "recorded", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 11.200926304318212, "mean_aisles": 4.552513281569269, "mean_dist_m": 166.38711187394998, "median_dist_m": 168.03253333333333, "p90_dist_m": 271.80426666666665, "total_km": 1221.4477882666667, "mean_time_min": 7.847418127109536, "total_hours": 960.1316078518518, "walk_share": 0.3533797341131268, "units_per_hour": 168.48836000924703, "m_per_unit": 7.550474363555066, "dist_saving_vs_asis_%": 0.0, "time_saving_vs_asis_%": 0.0}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "AS-IS (historical)", "routing": "serpentine", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 11.200926304318212, "mean_aisles": 4.552513281569269, "mean_dist_m": 159.85784181991554, "median_dist_m": 161.52213333333336, "p90_dist_m": 260.1397333333333, "total_km": 1173.5164168, "mean_time_min": 7.734782765290832, "total_hours": 946.3506713333333, "walk_share": 0.3444566504984552, "units_per_hour": 170.9419192064158, "m_per_unit": 7.254182868375667, "dist_saving_vs_asis_%": 3.924144112183891, "time_saving_vs_asis_%": 1.4353174508389688}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "ClassBased", "routing": "nn2opt", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 10.818144666939109, "mean_aisles": 5.3883667075330335, "mean_dist_m": 131.71422712618627, "median_dist_m": 137.13786666666664, "p90_dist_m": 210.90186666666665, "total_km": 966.9141413333332, "mean_time_min": 7.201925580832159, "total_hours": 881.1555948148148, "walk_share": 0.3048125246687315, "units_per_hour": 183.5895963799652, "m_per_unit": 5.9770548573807, "dist_saving_vs_asis_%": 20.83868417286483, "time_saving_vs_asis_%": 8.225540372921769}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "ClassBased", "routing": "serpentine", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 10.818144666939109, "mean_aisles": 5.3883667075330335, "mean_dist_m": 134.5342845207283, "median_dist_m": 138.16266666666667, "p90_dist_m": 219.86666666666665, "total_km": 987.6161826666664, "mean_time_min": 7.248926537407862, "total_hours": 886.9061618518518, "walk_share": 0.3093200163878709, "units_per_hour": 182.39922886793755, "m_per_unit": 6.1050261336498295, "dist_saving_vs_asis_%": 19.143806869700608, "time_saving_vs_asis_%": 7.626605082175198}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Dedicated", "routing": "nn2opt", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 11.217272851110202, "mean_aisles": 5.517231984743223, "mean_dist_m": 162.62395470190256, "median_dist_m": 171.75706666666662, "p90_dist_m": 266.3442666666667, "total_km": 1193.8224514666665, "mean_time_min": 7.783609071122614, "total_hours": 952.3245698518518, "walk_share": 0.3482188301423512, "units_per_hour": 169.86960656193705, "m_per_unit": 7.379706198680026, "dist_saving_vs_asis_%": 2.2616878973764964, "time_saving_vs_asis_%": 0.8131216529228658}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Dedicated", "routing": "serpentine", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 11.217272851110202, "mean_aisles": 5.517231984743223, "mean_dist_m": 179.0869822276711, "median_dist_m": 186.58666666666664, "p90_dist_m": 302.58266666666674, "total_km": 1314.677536533333, "mean_time_min": 8.057992863218756, "total_hours": 985.8954268148148, "walk_share": 0.3704127178806637, "units_per_hour": 164.08535388245204, "m_per_unit": 8.126781292897572, "dist_saving_vs_asis_%": -7.632724801030366, "time_saving_vs_asis_%": -2.6833632756456893}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Hybrid", "routing": "nn2opt", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 10.696771557008582, "mean_aisles": 4.416292058302684, "mean_dist_m": 122.01765572356172, "median_dist_m": 124.56906666666669, "p90_dist_m": 211.45306666666664, "total_km": 895.7316106666666, "mean_time_min": 7.020087205799997, "total_hours": 858.9076696296296, "walk_share": 0.2896869420243828, "units_per_hour": 188.3450407070616, "m_per_unit": 5.53703451586914, "dist_saving_vs_asis_%": 26.666402013156677, "time_saving_vs_asis_%": 10.542714914749574}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Hybrid", "routing": "serpentine", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 10.696771557008582, "mean_aisles": 4.416292058302684, "mean_dist_m": 123.57637655178677, "median_dist_m": 125.29226666666666, "p90_dist_m": 215.81066666666663, "total_km": 907.1741802666666, "mean_time_min": 7.046065886270415, "total_hours": 862.0861611851853, "walk_share": 0.2923058496907261, "units_per_hour": 187.65061693786993, "m_per_unit": 5.607767648507251, "dist_saving_vs_asis_%": 25.729598188227097, "time_saving_vs_asis_%": 10.211667428179783}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Optimised-COI", "routing": "nn2opt", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 10.326658493393271, "mean_aisles": 3.5015665440675656, "mean_dist_m": 73.08983873223448, "median_dist_m": 77.04506666666667, "p90_dist_m": 107.96986666666666, "total_km": 536.5525061333333, "mean_time_min": 6.142938078675325, "total_hours": 751.5884739259259, "walk_share": 0.1983031512395225, "units_per_hour": 215.23879837457915, "m_per_unit": 3.3167409865385844, "dist_saving_vs_asis_%": 56.07241576041946, "time_saving_vs_asis_%": 21.72026545324439}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Optimised-COI", "routing": "serpentine", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 10.326658493393271, "mean_aisles": 3.5015665440675656, "mean_dist_m": 73.1129436316578, "median_dist_m": 77.04506666666666, "p90_dist_m": 108.02586666666664, "total_km": 536.7221192, "mean_time_min": 6.14332316033238, "total_hours": 751.6355886666666, "walk_share": 0.1983534039680408, "units_per_hour": 215.2253065703915, "m_per_unit": 3.3177894628827165, "dist_saving_vs_asis_%": 56.05852952899018, "time_saving_vs_asis_%": 21.71535834047409}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Optimised-FAMILY", "routing": "nn2opt", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 8.724560686554966, "mean_aisles": 3.275303092221768, "mean_dist_m": 67.32823633474095, "median_dist_m": 69.72506666666668, "p90_dist_m": 104.51226666666666, "total_km": 494.2565829333333, "mean_time_min": 5.779895070910715, "total_hours": 707.170161925926, "walk_share": 0.194144921054574, "units_per_hour": 228.7582377053757, "m_per_unit": 3.055285452481182, "dist_saving_vs_asis_%": 59.53518540201187, "time_saving_vs_asis_%": 26.3465387304443}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Optimised-FAMILY", "routing": "serpentine", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 8.724560686554966, "mean_aisles": 3.275303092221768, "mean_dist_m": 67.35587703764246, "median_dist_m": 69.72506666666668, "p90_dist_m": 104.51226666666663, "total_km": 494.4594933333333, "mean_time_min": 5.780355749292406, "total_hours": 707.2265259259259, "walk_share": 0.1942091454777321, "units_per_hour": 228.7400063059056, "m_per_unit": 3.0565397588772605, "dist_saving_vs_asis_%": 59.518573116005946, "time_saving_vs_asis_%": 26.34066828523253}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Random", "routing": "nn2opt", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 10.853698406211688, "mean_aisles": 5.922898787631113, "mean_dist_m": 161.6716260636607, "median_dist_m": 173.09626666666668, "p90_dist_m": 257.49146666666667, "total_km": 1186.8314069333333, "mean_time_min": 7.707141186335496, "total_hours": 942.968724148148, "walk_share": 0.3496143428432734, "units_per_hour": 171.55500056074445, "m_per_unit": 7.336490513956972, "dist_saving_vs_asis_%": 2.834045111535788, "time_saving_vs_asis_%": 1.7875553271392677}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Random", "routing": "serpentine", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 10.853698406211688, "mean_aisles": 5.922898787631113, "mean_dist_m": 169.72537706942742, "median_dist_m": 180.54106666666664, "p90_dist_m": 275.11546666666663, "total_km": 1245.9539930666667, "mean_time_min": 7.841370369764943, "total_hours": 959.3916647407408, "walk_share": 0.3607476947393894, "units_per_hour": 168.6183088152177, "m_per_unit": 7.701961371733294, "dist_saving_vs_asis_%": -2.0063243828683186, "time_saving_vs_asis_%": 0.0770668421974374}];
+      const SCENARIOS_TEST = [{"sample": "TEST waves only (out-of-sample)", "scenario": "AS-IS (historical)", "routing": "nn2opt", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.616712436249507, "mean_aisles": 4.664182032169478, "mean_dist_m": 146.39565162808944, "median_dist_m": 152.00613333333334, "p90_dist_m": 225.15781333333337, "total_km": 373.162516, "mean_time_min": 7.652389930691775, "total_hours": 325.09903222222226, "walk_share": 0.3188451646130708, "units_per_hour": 178.48099886171778, "m_per_unit": 6.431175306769613, "dist_saving_vs_asis_%": 13.948298619443367, "time_saving_vs_asis_%": 4.941278551647265}, {"sample": "TEST waves only (out-of-sample)", "scenario": "AS-IS (historical)", "routing": "recorded", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.616712436249507, "mean_aisles": 4.664182032169478, "mean_dist_m": 170.12522620635542, "median_dist_m": 173.5053333333333, "p90_dist_m": 274.2826666666668, "total_km": 433.6492016, "mean_time_min": 8.050171319471689, "total_hours": 341.99811155555557, "walk_share": 0.3522186453242676, "units_per_hour": 169.66175554619792, "m_per_unit": 7.473617840893424, "dist_saving_vs_asis_%": 0.0, "time_saving_vs_asis_%": 0.0}, {"sample": "TEST waves only (out-of-sample)", "scenario": "AS-IS (historical)", "routing": "serpentine", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.616712436249507, "mean_aisles": 4.664182032169478, "mean_dist_m": 165.56995914737803, "median_dist_m": 169.93573333333333, "p90_dist_m": 266.91973333333334, "total_km": 422.0378258666666, "mean_time_min": 7.971961722679918, "total_hours": 338.67550718518515, "walk_share": 0.3461505981987219, "units_per_hour": 171.32623637962968, "m_per_unit": 7.273504513075049, "dist_saving_vs_asis_%": 2.677596474406463, "time_saving_vs_asis_%": 0.9715271102690436}, {"sample": "TEST waves only (out-of-sample)", "scenario": "ClassBased", "routing": "nn2opt", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.247155747351902, "mean_aisles": 5.531581012161632, "mean_dist_m": 135.1925533150255, "median_dist_m": 140.88826666666668, "p90_dist_m": 214.26986666666673, "total_km": 344.6058184, "mean_time_min": 7.404078843991107, "total_hours": 314.54994955555554, "walk_share": 0.3043199929922029, "units_per_hour": 184.4667280410797, "m_per_unit": 5.9390221011995035, "dist_saving_vs_asis_%": 20.53350562423819, "time_saving_vs_asis_%": 8.025822679298988}, {"sample": "TEST waves only (out-of-sample)", "scenario": "ClassBased", "routing": "serpentine", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.247155747351902, "mean_aisles": 5.531581012161632, "mean_dist_m": 138.2763074669805, "median_dist_m": 141.56426666666664, "p90_dist_m": 224.7332266666667, "total_km": 352.46630773333334, "mean_time_min": 7.455474746523691, "total_hours": 316.7334188148148, "walk_share": 0.3091158112398218, "units_per_hour": 183.19506737596583, "m_per_unit": 6.07449172296521, "dist_saving_vs_asis_%": 18.720867827528053, "time_saving_vs_asis_%": 7.387377850078181}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Dedicated", "routing": "nn2opt", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.67595135347195, "mean_aisles": 5.651628089446842, "mean_dist_m": 165.78747074669806, "median_dist_m": 177.47973333333331, "p90_dist_m": 269.35674666666665, "total_km": 422.59226293333336, "mean_time_min": 7.985460068872325, "total_hours": 339.2489619259259, "walk_share": 0.3460194514296989, "units_per_hour": 171.03663242061558, "m_per_unit": 7.283059818925502, "dist_saving_vs_asis_%": 2.549742655093268, "time_saving_vs_asis_%": 0.8038493596135066}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Dedicated", "routing": "serpentine", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.67595135347195, "mean_aisles": 5.651628089446842, "mean_dist_m": 183.13260593696873, "median_dist_m": 193.47173333333333, "p90_dist_m": 306.54314666666664, "total_km": 466.8050125333333, "mean_time_min": 8.274545655376835, "total_hours": 351.5302812592592, "walk_share": 0.3688673947875481, "units_per_hour": 165.0611713794476, "m_per_unit": 8.045033305758535, "dist_saving_vs_asis_%": -7.645767779809365, "time_saving_vs_asis_%": -2.7871995141573125}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Hybrid", "routing": "nn2opt", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.139270302079249, "mean_aisles": 4.527657905060808, "mean_dist_m": 125.40946881129854, "median_dist_m": 129.25386666666665, "p90_dist_m": 213.6386666666667, "total_km": 319.668736, "mean_time_min": 7.223046528050216, "total_hours": 306.85909333333336, "walk_share": 0.2893734389505391, "units_per_hour": 189.0900457591132, "m_per_unit": 5.509250241279471, "dist_saving_vs_asis_%": 26.28402523963047, "time_saving_vs_asis_%": 10.27462346572464}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Hybrid", "routing": "serpentine", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.139270302079249, "mean_aisles": 4.527657905060808, "mean_dist_m": 126.91921035700274, "median_dist_m": 129.92986666666664, "p90_dist_m": 218.31914666666663, "total_km": 323.51706720000004, "mean_time_min": 7.248208887145286, "total_hours": 307.9280742222223, "walk_share": 0.2918403988560867, "units_per_hour": 188.43361439699663, "m_per_unit": 5.575573335171654, "dist_saving_vs_asis_%": 25.396595680023037, "time_saving_vs_asis_%": 9.962054228418992}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Optimised-COI", "routing": "nn2opt", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 10.788152216555511, "mean_aisles": 3.619066300510004, "mean_dist_m": 76.71104129724074, "median_dist_m": 79.82666666666667, "p90_dist_m": 111.97866666666664, "total_km": 195.53644426666665, "mean_time_min": 6.352886388561964, "total_hours": 269.8917900740741, "walk_share": 0.201249837751847, "units_per_hour": 214.98986680578471, "m_per_unit": 3.3699235534721264, "dist_saving_vs_asis_%": 54.90907315285908, "time_saving_vs_asis_%": 21.083836151466073}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Optimised-COI", "routing": "serpentine", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 10.788152216555511, "mean_aisles": 3.619066300510004, "mean_dist_m": 76.77758231986398, "median_dist_m": 79.82666666666667, "p90_dist_m": 111.97866666666664, "total_km": 195.7060573333333, "mean_time_min": 6.3539954056056835, "total_hours": 269.93890481481475, "walk_share": 0.2013892504342714, "units_per_hour": 214.9523427895879, "m_per_unit": 3.372846707109701, "dist_saving_vs_asis_%": 54.86996018642427, "time_saving_vs_asis_%": 21.0700598354138}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Optimised-FAMILY", "routing": "nn2opt", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 9.162024323264026, "mean_aisles": 3.370733621027854, "mean_dist_m": 70.01010623774029, "median_dist_m": 72.36026666666666, "p90_dist_m": 107.0578666666667, "total_km": 178.45576079999998, "mean_time_min": 5.970182822021709, "total_hours": 253.6332668888889, "walk_share": 0.1954437809941652, "units_per_hour": 228.77125194077567, "m_per_unit": 3.0755508203501996, "dist_saving_vs_asis_%": 58.84789822244192, "time_saving_vs_asis_%": 25.83781654955493}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Optimised-FAMILY", "routing": "serpentine", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 9.162024323264026, "mean_aisles": 3.370733621027854, "mean_dist_m": 70.0912608866222, "median_dist_m": 72.36026666666666, "p90_dist_m": 107.14746666666665, "total_km": 178.662624, "mean_time_min": 5.971535399503073, "total_hours": 253.69072888888888, "walk_share": 0.19562601630745, "units_per_hour": 228.71943430543445, "m_per_unit": 3.0791159520198534, "dist_saving_vs_asis_%": 58.800195332816685, "time_saving_vs_asis_%": 25.82101470239309}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Random", "routing": "nn2opt", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.31894860729698, "mean_aisles": 6.121224009415457, "mean_dist_m": 166.15077986138354, "median_dist_m": 177.90586666666664, "p90_dist_m": 259.8407466666667, "total_km": 423.5183378666667, "mean_time_min": 7.932014763087921, "total_hours": 336.9784271851852, "walk_share": 0.3491142852182936, "units_per_hour": 172.18906410324342, "m_per_unit": 7.299020023898157, "dist_saving_vs_asis_%": 2.336188720273047, "time_saving_vs_asis_%": 1.4677520725300708}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Random", "routing": "serpentine", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.31894860729698, "mean_aisles": 6.121224009415457, "mean_dist_m": 174.73478603373871, "median_dist_m": 185.68666666666664, "p90_dist_m": 276.96954666666664, "total_km": 445.39896959999993, "mean_time_min": 8.075081532627173, "total_hours": 343.0563804444444, "walk_share": 0.3606460717614779, "units_per_hour": 169.13837872604904, "m_per_unit": 7.676116255342616, "dist_saving_vs_asis_%": -2.709509888787487, "time_saving_vs_asis_%": -0.3094370562677584}];
+      const OPERATORS = [{"operator": "Operator_1", "rank_by_units_per_hour_asis": 16, "AS-IS recorded | waves": 893, "AS-IS recorded | units": 19966.0, "AS-IS recorded | stops": 10562, "AS-IS recorded | dist_km": 152.3879376, "AS-IS recorded | hours": 119.88442711111112, "AS-IS recorded | mean_dist_per_wave_m": 170.64718656215007, "AS-IS recorded | units_per_hour": 166.54373283608504, "AS-IS recorded | m_per_unit": 7.632371912250827, "AS-IS re-routed | waves": 893, "AS-IS re-routed | units": 19966.0, "AS-IS re-routed | stops": 10562, "AS-IS re-routed | dist_km": 132.42407733333332, "AS-IS re-routed | hours": 114.2833548148148, "AS-IS re-routed | mean_dist_per_wave_m": 148.2912400149309, "AS-IS re-routed | units_per_hour": 174.70610687228233, "AS-IS re-routed | m_per_unit": 6.6324790811045435, "Optimised | waves": 893, "Optimised | units": 19966.0, "Optimised | stops": 8232, "Optimised | dist_km": 61.88305813333332, "Optimised | hours": 88.21640503703703, "Optimised | mean_dist_per_wave_m": 69.29793743934303, "Optimised | units_per_hour": 226.3297851643061, "Optimised | m_per_unit": 3.09942192393736, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.898247114707952, "workload_share_%": 12.342137960450266, "hours_saved_with_optimised": 31.668022074074074}, {"operator": "Operator_8", "rank_by_units_per_hour_asis": 7, "AS-IS recorded | waves": 809, "AS-IS recorded | units": 17866.0, "AS-IS recorded | stops": 9104, "AS-IS recorded | dist_km": 131.1392528, "AS-IS recorded | hours": 105.02645911111112, "AS-IS recorded | mean_dist_per_wave_m": 162.10043609394313, "AS-IS recorded | units_per_hour": 170.10951479473323, "AS-IS recorded | m_per_unit": 7.340157438710401, "AS-IS re-routed | waves": 809, "AS-IS re-routed | units": 17866.0, "AS-IS re-routed | stops": 9104, "AS-IS re-routed | dist_km": 115.27470133333333, "AS-IS re-routed | hours": 100.56963925925928, "AS-IS re-routed | mean_dist_per_wave_m": 142.49036011536876, "AS-IS re-routed | units_per_hour": 177.64804698108836, "AS-IS re-routed | m_per_unit": 6.452182991902683, "Optimised | waves": 809, "Optimised | units": 17866.0, "Optimised | stops": 7109, "Optimised | dist_km": 54.88690746666666, "Optimised | hours": 78.2535854074074, "Optimised | mean_dist_per_wave_m": 67.84537387721467, "Optimised | units_per_hour": 228.30902772039408, "Optimised | m_per_unit": 3.07214303518788, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.9088811341597208, "workload_share_%": 11.044006651377565, "hours_saved_with_optimised": 26.77287370370371}, {"operator": "Operator_2", "rank_by_units_per_hour_asis": 14, "AS-IS recorded | waves": 804, "AS-IS recorded | units": 17798.0, "AS-IS recorded | stops": 8872, "AS-IS recorded | dist_km": 140.5482064, "AS-IS recorded | hours": 106.78505733333334, "AS-IS recorded | mean_dist_per_wave_m": 174.81120199004974, "AS-IS recorded | units_per_hour": 166.67125948570606, "AS-IS recorded | m_per_unit": 7.896853938644791, "AS-IS re-routed | waves": 804, "AS-IS re-routed | units": 17798.0, "AS-IS re-routed | stops": 8872, "AS-IS re-routed | dist_km": 111.67297413333334, "AS-IS re-routed | hours": 98.72804837037036, "AS-IS re-routed | mean_dist_per_wave_m": 138.89673399668325, "AS-IS re-routed | units_per_hour": 180.272985172686, "AS-IS re-routed | m_per_unit": 6.274467588118515, "Optimised | waves": 804, "Optimised | units": 17798.0, "Optimised | stops": 6900, "Optimised | dist_km": 53.0903824, "Optimised | hours": 76.97732844444444, "Optimised | mean_dist_per_wave_m": 66.03281393034825, "Optimised | units_per_hour": 231.21093391601727, "Optimised | m_per_unit": 2.982940914709518, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8492704234117002, "workload_share_%": 11.001971923274258, "hours_saved_with_optimised": 29.807728888888903}, {"operator": "Operator_17", "rank_by_units_per_hour_asis": 18, "AS-IS recorded | waves": 764, "AS-IS recorded | units": 16617.0, "AS-IS recorded | stops": 8686, "AS-IS recorded | dist_km": 129.6115296, "AS-IS recorded | hours": 100.62320266666669, "AS-IS recorded | mean_dist_per_wave_m": 169.64859895287958, "AS-IS recorded | units_per_hour": 165.14083789448588, "AS-IS recorded | m_per_unit": 7.799935584040441, "AS-IS re-routed | waves": 764, "AS-IS re-routed | units": 16617.0, "AS-IS re-routed | stops": 8686, "AS-IS re-routed | dist_km": 110.71713226666664, "AS-IS re-routed | hours": 95.31087007407407, "AS-IS re-routed | mean_dist_per_wave_m": 144.91771239092495, "AS-IS re-routed | units_per_hour": 174.3452765365119, "AS-IS re-routed | m_per_unit": 6.662883328318388, "Optimised | waves": 764, "Optimised | units": 16617.0, "Optimised | stops": 6773, "Optimised | dist_km": 52.15191386666667, "Optimised | hours": 73.72886496296296, "Optimised | mean_dist_per_wave_m": 68.26166736474694, "Optimised | units_per_hour": 225.3798428654422, "Optimised | m_per_unit": 3.138467465045837, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8877874130549155, "workload_share_%": 10.27192760136242, "hours_saved_with_optimised": 26.894337703703712}, {"operator": "Operator_4", "rank_by_units_per_hour_asis": 4, "AS-IS recorded | waves": 726, "AS-IS recorded | units": 16143.0, "AS-IS recorded | stops": 7771, "AS-IS recorded | dist_km": 116.02983573333334, "AS-IS recorded | hours": 92.85773214814814, "AS-IS recorded | mean_dist_per_wave_m": 159.82071037649217, "AS-IS recorded | units_per_hour": 173.84658904058685, "AS-IS recorded | m_per_unit": 7.187625331929216, "AS-IS re-routed | waves": 726, "AS-IS re-routed | units": 16143.0, "AS-IS re-routed | stops": 7771, "AS-IS re-routed | dist_km": 99.41425733333334, "AS-IS re-routed | hours": 88.2061825925926, "AS-IS re-routed | mean_dist_per_wave_m": 136.93423875114783, "AS-IS re-routed | units_per_hour": 183.01438204804097, "AS-IS re-routed | m_per_unit": 6.158350822854076, "Optimised | waves": 726, "Optimised | units": 16143.0, "Optimised | stops": 6120, "Optimised | dist_km": 48.23413733333333, "Optimised | hours": 69.40337148148147, "Optimised | mean_dist_per_wave_m": 66.4382056932966, "Optimised | units_per_hour": 232.59676951439383, "Optimised | m_per_unit": 2.9879289681802224, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.892619017478277, "workload_share_%": 9.978920820171725, "hours_saved_with_optimised": 23.454360666666673}, {"operator": "Operator_3", "rank_by_units_per_hour_asis": 10, "AS-IS recorded | waves": 653, "AS-IS recorded | units": 14591.0, "AS-IS recorded | stops": 7584, "AS-IS recorded | dist_km": 109.42794346666668, "AS-IS recorded | hours": 86.69553985185183, "AS-IS recorded | mean_dist_per_wave_m": 167.57724880040837, "AS-IS recorded | units_per_hour": 168.3016222626167, "AS-IS recorded | m_per_unit": 7.499687716172071, "AS-IS re-routed | waves": 653, "AS-IS re-routed | units": 14591.0, "AS-IS re-routed | stops": 7584, "AS-IS re-routed | dist_km": 94.6765432, "AS-IS re-routed | hours": 82.56737311111111, "AS-IS re-routed | mean_dist_per_wave_m": 144.9870493108729, "AS-IS re-routed | units_per_hour": 176.71629180166428, "AS-IS re-routed | m_per_unit": 6.488694619971215, "Optimised | waves": 653, "Optimised | units": 14591.0, "Optimised | stops": 5925, "Optimised | dist_km": 44.9373976, "Optimised | hours": 64.14261044444444, "Optimised | mean_dist_per_wave_m": 68.81684165390504, "Optimised | units_per_hour": 227.47748959543264, "Optimised | m_per_unit": 3.0798024535672677, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8941145102082984, "workload_share_%": 9.019539966990376, "hours_saved_with_optimised": 22.55292940740739}, {"operator": "Operator_6", "rank_by_units_per_hour_asis": 12, "AS-IS recorded | waves": 519, "AS-IS recorded | units": 11247.0, "AS-IS recorded | stops": 5708, "AS-IS recorded | dist_km": 86.37892773333333, "AS-IS recorded | hours": 67.27803548148148, "AS-IS recorded | mean_dist_per_wave_m": 166.43338676942838, "AS-IS recorded | units_per_hour": 167.17194429816217, "AS-IS recorded | m_per_unit": 7.680174956284638, "AS-IS re-routed | waves": 519, "AS-IS re-routed | units": 11247.0, "AS-IS re-routed | stops": 5708, "AS-IS re-routed | dist_km": 73.87162133333334, "AS-IS re-routed | hours": 63.77045037037036, "AS-IS re-routed | mean_dist_per_wave_m": 142.33453050738598, "AS-IS re-routed | units_per_hour": 176.36695263525516, "AS-IS re-routed | m_per_unit": 6.568117838831097, "Optimised | waves": 519, "Optimised | units": 11247.0, "Optimised | stops": 4445, "Optimised | dist_km": 34.51366533333333, "Optimised | hours": 49.32935148148148, "Optimised | mean_dist_per_wave_m": 66.5003185613359, "Optimised | units_per_hour": 227.9981321915855, "Optimised | m_per_unit": 3.068699682878397, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8891494737455815, "workload_share_%": 6.952420396733654, "hours_saved_with_optimised": 17.948684}, {"operator": "Operator_14", "rank_by_units_per_hour_asis": 9, "AS-IS recorded | waves": 422, "AS-IS recorded | units": 9378.0, "AS-IS recorded | stops": 4818, "AS-IS recorded | dist_km": 70.1795104, "AS-IS recorded | hours": 55.58264177777778, "AS-IS recorded | mean_dist_per_wave_m": 166.30215734597155, "AS-IS recorded | units_per_hour": 168.7217393785225, "AS-IS recorded | m_per_unit": 7.483419748347195, "AS-IS re-routed | waves": 422, "AS-IS re-routed | units": 9378.0, "AS-IS re-routed | stops": 4818, "AS-IS re-routed | dist_km": 59.59444293333333, "AS-IS re-routed | hours": 52.600678592592594, "AS-IS re-routed | mean_dist_per_wave_m": 141.21905908372827, "AS-IS re-routed | units_per_hour": 178.28667330768317, "AS-IS re-routed | m_per_unit": 6.354707073292102, "Optimised | waves": 422, "Optimised | units": 9378.0, "Optimised | stops": 3687, "Optimised | dist_km": 27.8536056, "Optimised | hours": 40.64211266666667, "Optimised | mean_dist_per_wave_m": 66.00380473933649, "Optimised | units_per_hour": 230.7458787124403, "Optimised | m_per_unit": 2.970100831733845, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8842650083367241, "workload_share_%": 5.79708353165895, "hours_saved_with_optimised": 14.940529111111111}, {"operator": "Operator_19", "rank_by_units_per_hour_asis": 3, "AS-IS recorded | waves": 423, "AS-IS recorded | units": 9361.0, "AS-IS recorded | stops": 4419, "AS-IS recorded | dist_km": 66.80270746666667, "AS-IS recorded | hours": 53.51630762962963, "AS-IS recorded | mean_dist_per_wave_m": 157.9260223798266, "AS-IS recorded | units_per_hour": 174.91864470143724, "AS-IS recorded | m_per_unit": 7.136278973044191, "AS-IS re-routed | waves": 423, "AS-IS re-routed | units": 9361.0, "AS-IS re-routed | stops": 4419, "AS-IS re-routed | dist_km": 57.543104266666674, "AS-IS re-routed | hours": 50.910862296296294, "AS-IS re-routed | mean_dist_per_wave_m": 136.03570748620962, "AS-IS re-routed | units_per_hour": 183.8703879246807, "AS-IS re-routed | m_per_unit": 6.1471108072499385, "Optimised | waves": 423, "Optimised | units": 9361.0, "Optimised | stops": 3393, "Optimised | dist_km": 26.718821866666666, "Optimised | hours": 39.49856162962963, "Optimised | mean_dist_per_wave_m": 63.16506351457841, "Optimised | units_per_hour": 236.99597184769124, "Optimised | m_per_unit": 2.85427004237439, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.896312967377824, "workload_share_%": 5.786574849633124, "hours_saved_with_optimised": 14.017746000000002}, {"operator": "Operator_5", "rank_by_units_per_hour_asis": 13, "AS-IS recorded | waves": 372, "AS-IS recorded | units": 8302.0, "AS-IS recorded | stops": 4389, "AS-IS recorded | dist_km": 62.951011466666664, "AS-IS recorded | hours": 49.734169851851846, "AS-IS recorded | mean_dist_per_wave_m": 169.22314910394263, "AS-IS recorded | units_per_hour": 166.92748717290343, "AS-IS recorded | m_per_unit": 7.582632072592949, "AS-IS re-routed | waves": 372, "AS-IS re-routed | units": 8302.0, "AS-IS re-routed | stops": 4389, "AS-IS re-routed | dist_km": 55.4255592, "AS-IS re-routed | hours": 47.62432200000001, "AS-IS re-routed | mean_dist_per_wave_m": 148.99343870967743, "AS-IS re-routed | units_per_hour": 174.32269167002522, "AS-IS re-routed | m_per_unit": 6.676169501324982, "Optimised | waves": 372, "Optimised | units": 8302.0, "Optimised | stops": 3380, "Optimised | dist_km": 26.446836799999996, "Optimised | hours": 36.77189911111111, "Optimised | mean_dist_per_wave_m": 71.09364731182797, "Optimised | units_per_hour": 225.77022674065375, "Optimised | m_per_unit": 3.185598265478198, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.9022433160965696, "workload_share_%": 5.131945775200747, "hours_saved_with_optimised": 12.962270740740736}, {"operator": "Operator_18", "rank_by_units_per_hour_asis": 17, "AS-IS recorded | waves": 322, "AS-IS recorded | units": 6798.0, "AS-IS recorded | stops": 3443, "AS-IS recorded | dist_km": 52.865953866666665, "AS-IS recorded | hours": 40.97054274074073, "AS-IS recorded | mean_dist_per_wave_m": 164.17998095238093, "AS-IS recorded | units_per_hour": 165.92408948588644, "AS-IS recorded | m_per_unit": 7.776692242816514, "AS-IS re-routed | waves": 322, "AS-IS re-routed | units": 6798.0, "AS-IS re-routed | stops": 3443, "AS-IS re-routed | dist_km": 44.380796, "AS-IS re-routed | hours": 38.58855444444445, "AS-IS re-routed | mean_dist_per_wave_m": 137.82855900621118, "AS-IS re-routed | units_per_hour": 176.1662259151742, "AS-IS re-routed | m_per_unit": 6.528507796410709, "Optimised | waves": 322, "Optimised | units": 6798.0, "Optimised | stops": 2688, "Optimised | dist_km": 22.383815199999997, "Optimised | hours": 30.38105977777777, "Optimised | mean_dist_per_wave_m": 69.51495403726709, "Optimised | units_per_hour": 223.75782970455816, "Optimised | m_per_unit": 3.292705972344807, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8746283721448106, "workload_share_%": 4.2022364947982025, "hours_saved_with_optimised": 10.58948296296296}, {"operator": "Operator_11", "rank_by_units_per_hour_asis": 6, "AS-IS recorded | waves": 257, "AS-IS recorded | units": 5762.0, "AS-IS recorded | stops": 2838, "AS-IS recorded | dist_km": 42.8913648, "AS-IS recorded | hours": 33.70649022222222, "AS-IS recorded | mean_dist_per_wave_m": 166.89247003891052, "AS-IS recorded | units_per_hour": 170.9463062458278, "AS-IS recorded | m_per_unit": 7.443832835820895, "AS-IS re-routed | waves": 257, "AS-IS re-routed | units": 5762.0, "AS-IS re-routed | stops": 2838, "AS-IS re-routed | dist_km": 36.18874106666667, "AS-IS re-routed | hours": 31.822428074074075, "AS-IS re-routed | mean_dist_per_wave_m": 140.81222204928665, "AS-IS re-routed | units_per_hour": 181.06726446478595, "AS-IS re-routed | m_per_unit": 6.280586786995257, "Optimised | waves": 257, "Optimised | units": 5762.0, "Optimised | stops": 2228, "Optimised | dist_km": 16.783134666666665, "Optimised | hours": 24.737537407407405, "Optimised | mean_dist_per_wave_m": 65.30402594033721, "Optimised | units_per_hour": 232.9253678369225, "Optimised | m_per_unit": 2.912727293763739, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8811485410302196, "workload_share_%": 3.561825048989003, "hours_saved_with_optimised": 8.968952814814816}, {"operator": "Operator_15", "rank_by_units_per_hour_asis": 5, "AS-IS recorded | waves": 201, "AS-IS recorded | units": 4320.0, "AS-IS recorded | stops": 2159, "AS-IS recorded | dist_km": 31.030253600000005, "AS-IS recorded | hours": 25.17784822222222, "AS-IS recorded | mean_dist_per_wave_m": 154.3793711442786, "AS-IS recorded | units_per_hour": 171.57939637538703, "AS-IS recorded | m_per_unit": 7.1829290740740745, "AS-IS re-routed | waves": 201, "AS-IS re-routed | units": 4320.0, "AS-IS re-routed | stops": 2159, "AS-IS re-routed | dist_km": 27.589146399999997, "AS-IS re-routed | hours": 24.210874, "AS-IS re-routed | mean_dist_per_wave_m": 137.25943482587064, "AS-IS re-routed | units_per_hour": 178.4322201668556, "AS-IS re-routed | m_per_unit": 6.386376481481481, "Optimised | waves": 201, "Optimised | units": 4320.0, "Optimised | stops": 1687, "Optimised | dist_km": 12.761312000000002, "Optimised | hours": 18.78092, "Optimised | mean_dist_per_wave_m": 63.4891144278607, "Optimised | units_per_hour": 230.0206805630395, "Optimised | m_per_unit": 2.9540074074074076, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.9192070247734176, "workload_share_%": 2.6704415500924146, "hours_saved_with_optimised": 6.396928222222218}, {"operator": "Operator_16", "rank_by_units_per_hour_asis": 8, "AS-IS recorded | waves": 51, "AS-IS recorded | units": 1065.0, "AS-IS recorded | stops": 509, "AS-IS recorded | dist_km": 8.127986133333334, "AS-IS recorded | hours": 6.296662814814815, "AS-IS recorded | mean_dist_per_wave_m": 159.37227712418303, "AS-IS recorded | units_per_hour": 169.13721304788044, "AS-IS recorded | m_per_unit": 7.63191186228482, "AS-IS re-routed | waves": 51, "AS-IS re-routed | units": 1065.0, "AS-IS re-routed | stops": 509, "AS-IS re-routed | dist_km": 7.116668, "AS-IS re-routed | hours": 6.015741111111112, "AS-IS re-routed | mean_dist_per_wave_m": 139.54250980392158, "AS-IS re-routed | units_per_hour": 177.03554397195356, "AS-IS re-routed | m_per_unit": 6.682317370892019, "Optimised | waves": 51, "Optimised | units": 1065.0, "Optimised | stops": 414, "Optimised | dist_km": 3.225562666666667, "Optimised | hours": 4.670989629629629, "Optimised | mean_dist_per_wave_m": 63.24632679738562, "Optimised | units_per_hour": 228.003075246486, "Optimised | m_per_unit": 3.0286973395931143, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.9119044968284262, "workload_share_%": 0.6583380210297272, "hours_saved_with_optimised": 1.6256731851851862}, {"operator": "Operator_20", "rank_by_units_per_hour_asis": 19, "AS-IS recorded | waves": 27, "AS-IS recorded | units": 546.0, "AS-IS recorded | stops": 280, "AS-IS recorded | dist_km": 4.354301333333333, "AS-IS recorded | hours": 3.3473059259259257, "AS-IS recorded | mean_dist_per_wave_m": 161.2704197530864, "AS-IS recorded | units_per_hour": 163.11625291583303, "AS-IS recorded | m_per_unit": 7.974910866910866, "AS-IS re-routed | waves": 27, "AS-IS re-routed | units": 546.0, "AS-IS re-routed | stops": 280, "AS-IS re-routed | dist_km": 3.4359261333333335, "AS-IS re-routed | hours": 3.0922017037037035, "AS-IS re-routed | mean_dist_per_wave_m": 127.25652345679012, "AS-IS re-routed | units_per_hour": 176.57321621226234, "AS-IS re-routed | m_per_unit": 6.2929050061050065, "Optimised | waves": 27, "Optimised | units": 546.0, "Optimised | stops": 228, "Optimised | dist_km": 1.7271776000000003, "Optimised | hours": 2.47310488888889, "Optimised | mean_dist_per_wave_m": 63.96954074074074, "Optimised | units_per_hour": 220.775108428703, "Optimised | m_per_unit": 3.163328937728938, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8510873949367908, "workload_share_%": 0.3375141403589024, "hours_saved_with_optimised": 0.8742010370370363}, {"operator": "Operator_9", "rank_by_units_per_hour_asis": 21, "AS-IS recorded | waves": 19, "AS-IS recorded | units": 410.0, "AS-IS recorded | stops": 281, "AS-IS recorded | dist_km": 4.410932533333334, "AS-IS recorded | hours": 3.0113701481481483, "AS-IS recorded | mean_dist_per_wave_m": 232.1543438596491, "AS-IS recorded | units_per_hour": 136.15064898353023, "AS-IS recorded | m_per_unit": 10.758372032520326, "AS-IS re-routed | waves": 19, "AS-IS re-routed | units": 410.0, "AS-IS re-routed | stops": 281, "AS-IS re-routed | dist_km": 3.3843120000000004, "AS-IS re-routed | hours": 2.720642222222222, "AS-IS re-routed | mean_dist_per_wave_m": 178.1216842105263, "AS-IS re-routed | units_per_hour": 150.69971224114568, "AS-IS re-routed | m_per_unit": 8.254419512195122, "Optimised | waves": 19, "Optimised | units": 410.0, "Optimised | stops": 216, "Optimised | dist_km": 1.4927013333333334, "Optimised | hours": 2.0146392592592592, "Optimised | mean_dist_per_wave_m": 78.56322807017544, "Optimised | units_per_hour": 203.51037939702832, "Optimised | m_per_unit": 3.6407349593495937, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8053300908815805, "workload_share_%": 0.2534446841522893, "hours_saved_with_optimised": 0.996730888888889}, {"operator": "Operator_10", "rank_by_units_per_hour_asis": 15, "AS-IS recorded | waves": 17, "AS-IS recorded | units": 408.0, "AS-IS recorded | stops": 215, "AS-IS recorded | dist_km": 3.195335733333333, "AS-IS recorded | hours": 2.448148814814815, "AS-IS recorded | mean_dist_per_wave_m": 187.96092549019608, "AS-IS recorded | units_per_hour": 166.65653555495248, "AS-IS recorded | m_per_unit": 7.83170522875817, "AS-IS re-routed | waves": 17, "AS-IS re-routed | units": 408.0, "AS-IS re-routed | stops": 215, "AS-IS re-routed | dist_km": 2.5587720000000003, "AS-IS re-routed | hours": 2.2713255555555554, "AS-IS re-routed | mean_dist_per_wave_m": 150.516, "AS-IS re-routed | units_per_hour": 179.6307882866246, "AS-IS re-routed | m_per_unit": 6.2715000000000005, "Optimised | waves": 17, "Optimised | units": 408.0, "Optimised | stops": 153, "Optimised | dist_km": 1.3021232, "Optimised | hours": 1.7500342222222225, "Optimised | mean_dist_per_wave_m": 76.59548235294118, "Optimised | units_per_hour": 233.1382979939186, "Optimised | m_per_unit": 3.191478431372549, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8377419909052221, "workload_share_%": 0.2522083686198391, "hours_saved_with_optimised": 0.6981145925925927}, {"operator": "Operator_24", "rank_by_units_per_hour_asis": 11, "AS-IS recorded | waves": 22, "AS-IS recorded | units": 390.0, "AS-IS recorded | stops": 171, "AS-IS recorded | dist_km": 3.014260266666667, "AS-IS recorded | hours": 2.331738962962963, "AS-IS recorded | mean_dist_per_wave_m": 137.0118303030303, "AS-IS recorded | units_per_hour": 167.2571442149868, "AS-IS recorded | m_per_unit": 7.728872478632479, "AS-IS re-routed | waves": 22, "AS-IS re-routed | units": 390.0, "AS-IS re-routed | stops": 171, "AS-IS re-routed | dist_km": 2.7439759999999995, "AS-IS re-routed | hours": 2.2538822222222223, "AS-IS re-routed | mean_dist_per_wave_m": 124.72618181818184, "AS-IS re-routed | units_per_hour": 173.03477358079442, "AS-IS re-routed | m_per_unit": 7.035835897435897, "Optimised | waves": 22, "Optimised | units": 390.0, "Optimised | stops": 131, "Optimised | dist_km": 1.2916210666666663, "Optimised | hours": 1.739339185185185, "Optimised | mean_dist_per_wave_m": 58.71004848484848, "Optimised | units_per_hour": 224.2230861707846, "Optimised | m_per_unit": 3.3118488888888886, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.935746379526034, "workload_share_%": 0.2410815288277874, "hours_saved_with_optimised": 0.5923997777777779}, {"operator": "Operator_23", "rank_by_units_per_hour_asis": 2, "AS-IS recorded | waves": 13, "AS-IS recorded | units": 313.0, "AS-IS recorded | stops": 114, "AS-IS recorded | dist_km": 1.6378136, "AS-IS recorded | hours": 1.509948222222222, "AS-IS recorded | mean_dist_per_wave_m": 125.98566153846151, "AS-IS recorded | units_per_hour": 207.291876233578, "AS-IS recorded | m_per_unit": 5.2326313099041535, "AS-IS re-routed | waves": 13, "AS-IS re-routed | units": 313.0, "AS-IS re-routed | stops": 114, "AS-IS re-routed | dist_km": 1.3970674666666665, "AS-IS re-routed | hours": 1.443074296296296, "AS-IS re-routed | mean_dist_per_wave_m": 107.4667282051282, "AS-IS re-routed | units_per_hour": 216.89804939588083, "AS-IS re-routed | m_per_unit": 4.463474334398295, "Optimised | waves": 13, "Optimised | units": 313.0, "Optimised | stops": 96, "Optimised | dist_km": 0.7462645333333333, "Optimised | hours": 1.212295703703704, "Optimised | mean_dist_per_wave_m": 57.404964102564094, "Optimised | units_per_hour": 258.1878324271452, "Optimised | m_per_unit": 2.384231735889244, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8952244904137405, "workload_share_%": 0.193483380828455, "hours_saved_with_optimised": 0.2976525185185181}, {"operator": "Operator_22", "rank_by_units_per_hour_asis": 20, "AS-IS recorded | waves": 12, "AS-IS recorded | units": 231.0, "AS-IS recorded | stops": 132, "AS-IS recorded | dist_km": 1.7439666666666664, "AS-IS recorded | hours": 1.4361018518518518, "AS-IS recorded | mean_dist_per_wave_m": 145.33055555555555, "AS-IS recorded | units_per_hour": 160.85210091618902, "AS-IS recorded | m_per_unit": 7.549639249639249, "AS-IS re-routed | waves": 12, "AS-IS re-routed | units": 231.0, "AS-IS re-routed | stops": 132, "AS-IS re-routed | dist_km": 1.499599466666667, "AS-IS re-routed | hours": 1.368222074074074, "AS-IS re-routed | mean_dist_per_wave_m": 124.96662222222224, "AS-IS re-routed | units_per_hour": 168.83224176625433, "AS-IS re-routed | m_per_unit": 6.491772582972584, "Optimised | waves": 12, "Optimised | units": 231.0, "Optimised | stops": 105, "Optimised | dist_km": 0.7833512, "Optimised | hours": 1.0942642222222223, "Optimised | mean_dist_per_wave_m": 65.27926666666667, "Optimised | units_per_hour": 211.1007518192336, "Optimised | m_per_unit": 3.3911307359307363, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8890179763824623, "workload_share_%": 0.1427944439979971, "hours_saved_with_optimised": 0.3418376296296295}, {"operator": "Operator_7", "rank_by_units_per_hour_asis": 22, "AS-IS recorded | waves": 14, "AS-IS recorded | units": 231.0, "AS-IS recorded | stops": 163, "AS-IS recorded | dist_km": 2.566974933333333, "AS-IS recorded | hours": 1.7841597037037038, "AS-IS recorded | mean_dist_per_wave_m": 183.35535238095235, "AS-IS recorded | units_per_hour": 129.4727145336101, "AS-IS recorded | m_per_unit": 11.112445598845596, "AS-IS re-routed | waves": 14, "AS-IS re-routed | units": 231.0, "AS-IS re-routed | stops": 163, "AS-IS re-routed | dist_km": 2.1125882666666667, "AS-IS re-routed | hours": 1.657941185185185, "AS-IS re-routed | mean_dist_per_wave_m": 150.8991619047619, "AS-IS re-routed | units_per_hour": 139.32942981580993, "AS-IS re-routed | m_per_unit": 9.145403751803752, "Optimised | waves": 14, "Optimised | units": 231.0, "Optimised | stops": 130, "Optimised | dist_km": 0.9857488, "Optimised | hours": 1.2532635555555556, "Optimised | mean_dist_per_wave_m": 70.41062857142857, "Optimised | units_per_hour": 184.31877235718443, "Optimised | m_per_unit": 4.267310822510823, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8651639243821447, "workload_share_%": 0.1427944439979971, "hours_saved_with_optimised": 0.5308961481481482}, {"operator": "Operator_21", "rank_by_units_per_hour_asis": 1, "AS-IS recorded | waves": 1, "AS-IS recorded | units": 28.0, "AS-IS recorded | stops": 8, "AS-IS recorded | dist_km": 0.1517821333333333, "AS-IS recorded | hours": 0.1277172592592592, "AS-IS recorded | mean_dist_per_wave_m": 151.78213333333335, "AS-IS recorded | units_per_hour": 219.23426921620265, "AS-IS recorded | m_per_unit": 5.420790476190477, "AS-IS re-routed | waves": 1, "AS-IS re-routed | units": 28.0, "AS-IS re-routed | stops": 8, "AS-IS re-routed | dist_km": 0.1470973333333333, "AS-IS re-routed | hours": 0.1264159259259259, "AS-IS re-routed | mean_dist_per_wave_m": 147.09733333333332, "AS-IS re-routed | units_per_hour": 221.49108029637617, "AS-IS re-routed | m_per_unit": 5.25347619047619, "Optimised | waves": 1, "Optimised | units": 28.0, "Optimised | stops": 7, "Optimised | dist_km": 0.0570442666666666, "Optimised | hours": 0.0986234074074074, "Optimised | mean_dist_per_wave_m": 57.04426666666667, "Optimised | units_per_hour": 283.90826007799217, "Optimised | m_per_unit": 2.0372952380952385, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.9691347071152862, "workload_share_%": 0.0173084174543026, "hours_saved_with_optimised": 0.0290938518518518}];
 
-        /* ── Active nav on scroll ── */
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.nav-links a');
-        const observer = new IntersectionObserver(
-          entries => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                navLinks.forEach(l => l.classList.remove('active'));
-                const active = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
-                if (active) active.classList.add('active');
-              }
-            });
-          },
-          { rootMargin: '-20% 0px -60% 0px' }
-        );
-        sections.forEach(s => observer.observe(s));
+      let currentSample = 'all';
+      let currentRouting = 'all';
+      let chartDistInstance = null;
+      let chartSpeedInstance = null;
 
-        /* ── Animate-in on scroll ── */
-        const animObserver = new IntersectionObserver(
-          entries => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                entry.target.style.animationPlayState = 'running';
-              }
-            });
-          },
-          { threshold: 0.1 }
-        );
-        document.querySelectorAll('.animate-in').forEach(el => {
-          el.style.animationPlayState = 'paused';
-          animObserver.observe(el);
-        });
+      /* ── Lightbox Helpers ── */
+      function openLightbox(src, title) {
+        const modal = document.getElementById('lightbox-modal');
+        const modalImg = document.getElementById('modal-img');
+        const modalTitle = document.getElementById('modal-title');
+        modalImg.src = src;
+        modalTitle.textContent = title || 'Visualization Preview';
+        modal.classList.add('open');
+      }
 
-        /* ── Wait for Chart.js to load ── */
-        if (typeof Chart === 'undefined') {
-          const check = setInterval(() => {
-            if (typeof Chart !== 'undefined') {
-              clearInterval(check);
-              initCharts();
-            }
-          }, 100);
-        } else {
-          initCharts();
-        }
+      function closeLightbox() {
+        const modal = document.getElementById('lightbox-modal');
+        modal.classList.remove('open');
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLightbox();
       });
 
-      function initCharts() {
-        /* Global chart defaults */
-        Chart.defaults.color = '#94a3b8';
-        Chart.defaults.borderColor = 'rgba(148, 163, 184, 0.08)';
-        Chart.defaults.font.family = "'Inter', sans-serif";
-        Chart.defaults.font.size = 12;
-        Chart.defaults.plugins.legend.labels.usePointStyle = true;
-        Chart.defaults.plugins.legend.labels.pointStyleWidth = 10;
+      /* ── Level Viewer Switcher ── */
+      const levelMeta = {
+        'All_Levels': {
+          title: 'All Levels Overview',
+          desc: 'Levels 0, 1, and 2 serve active manual picking operations. Levels 3 and 4 serve high-bay forklift replenishment. High-velocity Class A footwear has been consolidated into ground-level locations adjacent to the I/O dispatch depot.'
+        },
+        'Level_0': {
+          title: 'Level 0 (Ground Manual Pick)',
+          desc: 'Primary ground picking level. Highest concentration of Class A SKUs placed in front aisles nearest to I/O depot to minimise picker travel.'
+        },
+        'Level_1': {
+          title: 'Level 1 (First Floor Pick)',
+          desc: 'Secondary manual pick face. High-volume medium-sized safety boots slotted to maximize picking density.'
+        },
+        'Level_2': {
+          title: 'Level 2 (Upper Pick Face)',
+          desc: 'Upper manual picking level. Balanced distribution of medium/slow moving SKUs accessed by trolley pickers.'
+        },
+        'Level_3': {
+          title: 'Level 3 (High Reserve / Replenishment)',
+          desc: 'Overhead reserve pallet storage serviced by reach forklifts to replenish pick levels 0-2.'
+        },
+        'Level_4': {
+          title: 'Level 4 (Top Reserve Storage)',
+          desc: 'Top-tier reserve buffer. Holds overflow inventory for seasonal spikes and bulk safety-boot shipments.'
+        }
+      };
 
-        /* ── 1. Walking Distance Bar Chart ── */
-        new Chart(document.getElementById('chart-distance'), {
+      document.getElementById('level-pills').addEventListener('click', (e) => {
+        if (!e.target.classList.contains('pill-btn')) return;
+        document.querySelectorAll('#level-pills .pill-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        const lvl = e.target.dataset.level;
+
+        document.getElementById('img-current').src = `layouts/floors/Current_Random_${lvl}.png`;
+        document.getElementById('img-optimised').src = `layouts/floors/Optimised_${lvl}.png`;
+        document.getElementById('floor-pdf-link').href = `layouts/floors/Optimised_${lvl}.pdf`;
+
+        const meta = levelMeta[lvl] || levelMeta['All_Levels'];
+        document.getElementById('level-desc-title').textContent = meta.title;
+        document.getElementById('level-desc-text').textContent = meta.desc;
+      });
+
+      /* ── Gallery Category Filter ── */
+      document.getElementById('gallery-pills').addEventListener('click', (e) => {
+        if (!e.target.classList.contains('pill-btn')) return;
+        document.querySelectorAll('#gallery-pills .pill-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        const cat = e.target.dataset.cat;
+
+        const cards = document.querySelectorAll('.gallery-card');
+        cards.forEach(c => {
+          if (cat === 'all' || c.dataset.cat === cat) {
+            c.style.display = 'flex';
+          } else {
+            c.style.display = 'none';
+          }
+        });
+      });
+
+      /* ── Scenario Filter & Table Rendering ── */
+      function getFilteredScenarios() {
+        const dataset = currentSample === 'all' ? SCENARIOS_ALL : SCENARIOS_TEST;
+        if (currentRouting === 'all') return dataset;
+        return dataset.filter(s => s.routing.toLowerCase() === currentRouting.toLowerCase());
+      }
+
+      function updateScenarioTable() {
+        const data = getFilteredScenarios();
+        const tbody = document.getElementById('scenario-table-body');
+        tbody.innerHTML = '';
+
+        data.forEach(r => {
+          const tr = document.createElement('tr');
+          const isFamily = r.scenario === 'Optimised-FAMILY';
+          if (isFamily) tr.className = 'highlight-best';
+
+          const distClass = r['dist_saving_vs_asis_%'] >= 50 ? 'badge-teal' : (r['dist_saving_vs_asis_%'] > 0 ? 'badge-green' : 'badge-red');
+          const timeClass = r['time_saving_vs_asis_%'] >= 20 ? 'badge-teal' : (r['time_saving_vs_asis_%'] > 0 ? 'badge-green' : 'badge-red');
+
+          tr.innerHTML = `
+            <td>
+              <strong>${r.scenario}</strong>
+              ${isFamily ? '<span class="badge-tag badge-teal" style="margin-left:6px;">BEST</span>' : ''}
+            </td>
+            <td><span class="badge-tag badge-blue">${r.routing}</span></td>
+            <td style="font-family:var(--font-mono); font-weight:600;">${r.mean_dist_m.toFixed(1)} m</td>
+            <td style="font-family:var(--font-mono);">${r.median_dist_m.toFixed(1)} m</td>
+            <td style="font-family:var(--font-mono);">${r.p90_dist_m.toFixed(1)} m</td>
+            <td style="font-family:var(--font-mono);">${r.mean_time_min.toFixed(2)} min</td>
+            <td style="font-family:var(--font-mono); font-weight:600;">${r.units_per_hour.toFixed(1)} u/h</td>
+            <td><span class="badge-tag ${distClass}">${r['dist_saving_vs_asis_%'] > 0 ? '-' : ''}${r['dist_saving_vs_asis_%'].toFixed(1)}%</span></td>
+            <td><span class="badge-tag ${timeClass}">${r['time_saving_vs_asis_%'] > 0 ? '-' : ''}${r['time_saving_vs_asis_%'].toFixed(1)}%</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      function updateScenarioCharts() {
+        const data = getFilteredScenarios();
+        const labels = data.map(d => `${d.scenario}\n(${d.routing})`);
+        const distances = data.map(d => d.mean_dist_m);
+        const speeds = data.map(d => d.units_per_hour);
+        const timeSavings = data.map(d => d['time_saving_vs_asis_%']);
+
+        const colors = data.map(d => {
+          if (d.scenario.includes('FAMILY')) return 'rgba(20, 184, 166, 0.85)';
+          if (d.scenario.includes('COI')) return 'rgba(45, 212, 191, 0.75)';
+          if (d.scenario.includes('Hybrid')) return 'rgba(34, 197, 94, 0.75)';
+          if (d.scenario.includes('ClassBased')) return 'rgba(59, 130, 246, 0.75)';
+          if (d.scenario.includes('Dedicated')) return 'rgba(245, 158, 11, 0.75)';
+          if (d.scenario.includes('Random')) return 'rgba(239, 68, 68, 0.75)';
+          return 'rgba(148, 163, 184, 0.75)';
+        });
+
+        if (chartDistInstance) chartDistInstance.destroy();
+        chartDistInstance = new Chart(document.getElementById('chart-scenario-dist'), {
           type: 'bar',
           data: {
-            labels: ['AS-IS\n(WMS)', 'Random', 'Dedicated', 'Class-\nBased', 'Hybrid', 'Optimised-\nFAMILY'],
+            labels: labels,
             datasets: [{
               label: 'Mean Walk (m)',
-              data: [166, 162, 163, 132, 122, 67],
-              backgroundColor: [
-                'rgba(239, 68, 68, 0.7)',
-                'rgba(245, 158, 11, 0.7)',
-                'rgba(245, 158, 11, 0.7)',
-                'rgba(59, 130, 246, 0.7)',
-                'rgba(34, 197, 94, 0.7)',
-                'rgba(20, 184, 166, 0.9)'
-              ],
-              borderColor: [
-                'rgba(239, 68, 68, 1)',
-                'rgba(245, 158, 11, 1)',
-                'rgba(245, 158, 11, 1)',
-                'rgba(59, 130, 246, 1)',
-                'rgba(34, 197, 94, 1)',
-                'rgba(20, 184, 166, 1)'
-              ],
-              borderWidth: 2,
-              borderRadius: 8,
-              maxBarThickness: 48
+              data: distances,
+              backgroundColor: colors,
+              borderRadius: 6,
+              maxBarThickness: 40
             }]
           },
           options: {
@@ -536,112 +1228,150 @@
             plugins: {
               legend: { display: false },
               tooltip: {
-                backgroundColor: '#1a2235',
-                titleColor: '#f1f5f9',
-                bodyColor: '#94a3b8',
-                borderColor: 'rgba(148,163,184,0.15)',
-                borderWidth: 1,
-                padding: 12,
-                cornerRadius: 8,
                 callbacks: {
-                  label: ctx => `${ctx.parsed.y} metres`
+                  label: ctx => `Mean Walk: ${ctx.parsed.y.toFixed(1)} metres`
                 }
               }
             },
             scales: {
               y: {
                 beginAtZero: true,
-                max: 200,
                 grid: { color: 'rgba(148,163,184,0.06)' },
                 ticks: { callback: v => v + ' m' }
               },
               x: {
-                grid: { display: false }
+                grid: { display: false },
+                ticks: { maxRotation: 45, minRotation: 0, font: { size: 10 } }
               }
             }
           }
         });
 
-        /* ── 2. Saving Decomposition Doughnut ── */
-        new Chart(document.getElementById('chart-decomposition'), {
-          type: 'doughnut',
+        if (chartSpeedInstance) chartSpeedInstance.destroy();
+        chartSpeedInstance = new Chart(document.getElementById('chart-scenario-speed'), {
+          type: 'bar',
           data: {
-            labels: ['Routing Improvement', 'Slotting Improvement'],
+            labels: labels,
+            datasets: [
+              {
+                type: 'bar',
+                label: 'Pick Speed (Units/Hour)',
+                data: speeds,
+                backgroundColor: 'rgba(59, 130, 246, 0.75)',
+                borderRadius: 6,
+                yAxisID: 'y'
+              },
+              {
+                type: 'line',
+                label: 'Time Saving vs AS-IS (%)',
+                data: timeSavings,
+                borderColor: 'rgba(20, 184, 166, 1)',
+                backgroundColor: 'rgba(20, 184, 166, 0.2)',
+                borderWidth: 2,
+                pointRadius: 4,
+                tension: 0.2,
+                yAxisID: 'y1'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'bottom' }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                position: 'left',
+                grid: { color: 'rgba(148,163,184,0.06)' },
+                ticks: { callback: v => v + ' u/h' }
+              },
+              y1: {
+                position: 'right',
+                grid: { display: false },
+                ticks: { callback: v => v + '%' }
+              },
+              x: {
+                grid: { display: false },
+                ticks: { maxRotation: 45, minRotation: 0, font: { size: 10 } }
+              }
+            }
+          }
+        });
+      }
+
+      /* Sample & Routing Listeners */
+      document.getElementById('sample-pills').addEventListener('click', (e) => {
+        if (!e.target.classList.contains('pill-btn')) return;
+        document.querySelectorAll('#sample-pills .pill-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        currentSample = e.target.dataset.sample;
+        updateScenarioTable();
+        updateScenarioCharts();
+      });
+
+      document.getElementById('routing-pills').addEventListener('click', (e) => {
+        if (!e.target.classList.contains('pill-btn')) return;
+        document.querySelectorAll('#routing-pills .pill-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        currentRouting = e.target.dataset.routing;
+        updateScenarioTable();
+        updateScenarioCharts();
+      });
+
+      /* ── Operator Charts ── */
+      function initOperatorCharts() {
+        const top10 = OPERATORS.slice(0, 10);
+        const opLabels = top10.map(o => o.operator);
+        const hoursSaved = top10.map(o => o.hours_saved_with_optimised);
+        const speedBefore = top10.map(o => o['AS-IS recorded | units_per_hour']);
+        const speedAfter = top10.map(o => o['Optimised | units_per_hour']);
+
+        new Chart(document.getElementById('chart-operator-hours'), {
+          type: 'bar',
+          data: {
+            labels: opLabels,
             datasets: [{
-              data: [14.6, 44.9],
-              backgroundColor: [
-                'rgba(59, 130, 246, 0.8)',
-                'rgba(20, 184, 166, 0.8)'
-              ],
-              borderColor: [
-                'rgba(59, 130, 246, 1)',
-                'rgba(20, 184, 166, 1)'
-              ],
-              borderWidth: 2,
-              hoverOffset: 8
+              label: 'Hours Saved',
+              data: hoursSaved,
+              backgroundColor: 'rgba(20, 184, 166, 0.75)',
+              borderColor: 'rgba(20, 184, 166, 1)',
+              borderWidth: 1,
+              borderRadius: 6
             }]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            cutout: '65%',
-            plugins: {
-              legend: {
-                position: 'bottom',
-                labels: { padding: 20 }
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: {
+              x: {
+                beginAtZero: true,
+                grid: { color: 'rgba(148,163,184,0.06)' },
+                ticks: { callback: v => v + ' hrs' }
               },
-              tooltip: {
-                backgroundColor: '#1a2235',
-                titleColor: '#f1f5f9',
-                bodyColor: '#94a3b8',
-                borderColor: 'rgba(148,163,184,0.15)',
-                borderWidth: 1,
-                padding: 12,
-                cornerRadius: 8,
-                callbacks: {
-                  label: ctx => `${ctx.label}: ${ctx.parsed}% of total saving`
-                }
-              }
+              y: { grid: { display: false } }
             }
           }
         });
 
-        /* ── 3. Time Breakdown Stacked Bar ── */
-        new Chart(document.getElementById('chart-time'), {
+        new Chart(document.getElementById('chart-operator-speed'), {
           type: 'bar',
           data: {
-            labels: ['AS-IS (WMS)', 'AS-IS (Optimised Route)', 'Optimised-FAMILY + Route'],
+            labels: opLabels,
             datasets: [
               {
-                label: 'Walking',
-                data: [166, 142, 67],
-                backgroundColor: 'rgba(239, 68, 68, 0.7)',
-                borderColor: 'rgba(239, 68, 68, 1)',
-                borderWidth: 1,
+                label: 'AS-IS Recorded (u/h)',
+                data: speedBefore,
+                backgroundColor: 'rgba(245, 158, 11, 0.7)',
                 borderRadius: 4
               },
               {
-                label: 'Stop Time',
-                data: [175, 175, 175],
-                backgroundColor: 'rgba(245, 158, 11, 0.6)',
-                borderColor: 'rgba(245, 158, 11, 1)',
-                borderWidth: 1,
-                borderRadius: 4
-              },
-              {
-                label: 'Pick Time',
-                data: [120, 120, 120],
-                backgroundColor: 'rgba(59, 130, 246, 0.6)',
-                borderColor: 'rgba(59, 130, 246, 1)',
-                borderWidth: 1,
-                borderRadius: 4
-              },
-              {
-                label: 'Setup',
-                data: [60, 60, 60],
-                backgroundColor: 'rgba(148, 163, 184, 0.4)',
-                borderColor: 'rgba(148, 163, 184, 0.6)',
-                borderWidth: 1,
+                label: 'Optimised (u/h)',
+                data: speedAfter,
+                backgroundColor: 'rgba(59, 130, 246, 0.8)',
                 borderRadius: 4
               }
             ]
@@ -649,89 +1379,29 @@
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            indexAxis: 'y',
-            plugins: {
-              legend: {
-                position: 'bottom',
-                labels: { padding: 16 }
-              },
-              tooltip: {
-                backgroundColor: '#1a2235',
-                titleColor: '#f1f5f9',
-                bodyColor: '#94a3b8',
-                borderColor: 'rgba(148,163,184,0.15)',
-                borderWidth: 1,
-                padding: 12,
-                cornerRadius: 8,
-                callbacks: {
-                  label: ctx => `${ctx.dataset.label}: ${ctx.parsed.x}s`
-                }
-              }
-            },
-            scales: {
-              x: {
-                stacked: true,
-                grid: { color: 'rgba(148,163,184,0.06)' },
-                ticks: { callback: v => v + 's' }
-              },
-              y: {
-                stacked: true,
-                grid: { display: false }
-              }
-            }
-          }
-        });
-
-        /* ── 4. Economics Bar Chart ── */
-        new Chart(document.getElementById('chart-economics'), {
-          type: 'bar',
-          data: {
-            labels: ['Picker-hours\nsaved/day', 'FTE\nreduction', 'Annual\nCAD saved'],
-            datasets: [{
-              label: 'Value',
-              data: [1.4, 0.19, 8983],
-              backgroundColor: [
-                'rgba(20, 184, 166, 0.7)',
-                'rgba(59, 130, 246, 0.7)',
-                'rgba(245, 158, 11, 0.7)'
-              ],
-              borderColor: [
-                'rgba(20, 184, 166, 1)',
-                'rgba(59, 130, 246, 1)',
-                'rgba(245, 158, 11, 1)'
-              ],
-              borderWidth: 2,
-              borderRadius: 8,
-              maxBarThickness: 56
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { display: false },
-              tooltip: {
-                backgroundColor: '#1a2235',
-                titleColor: '#f1f5f9',
-                bodyColor: '#94a3b8',
-                borderColor: 'rgba(148,163,184,0.15)',
-                borderWidth: 1,
-                padding: 12,
-                cornerRadius: 8
-              }
-            },
+            plugins: { legend: { position: 'bottom' } },
             scales: {
               y: {
                 beginAtZero: true,
-                grid: { color: 'rgba(148,163,184,0.06)' }
+                grid: { color: 'rgba(148,163,184,0.06)' },
+                ticks: { callback: v => v + ' u/h' }
               },
-              x: {
-                grid: { display: false }
-              }
+              x: { grid: { display: false } }
             }
           }
         });
       }
+
+      /* ── Initialize ── */
+      window.addEventListener('DOMContentLoaded', () => {
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.borderColor = 'rgba(148, 163, 184, 0.08)';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+
+        updateScenarioTable();
+        updateScenarioCharts();
+        initOperatorCharts();
+      });
     </script>
   </body>
 </html>
