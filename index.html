@@ -18,7 +18,7 @@
     <meta property="og:title" content="Footwear Warehouse Optimisation Dashboard" />
     <meta
       property="og:description"
-      content="Re-slotting and re-routing a safety-boot warehouse cut picker walking by 59.5%. Interactive KPI dashboard with 15 scenarios, CAD floor plans, and 22 operator analytics."
+      content="Re-slotting and re-routing a safety-boot warehouse cut picker walking by 59.5%. Interactive KPI dashboard with 15 scenarios, 2D Route Simulator, ROI Calculator, CAD floor plans, and 22 operator analytics."
     />
     <meta property="og:url" content="https://shreyasthakur11.github.io/Footwear_Wearhouse-Optimization/" />
 
@@ -32,7 +32,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap"
     />
 
     <link rel="stylesheet" href="assets/css/style.css" />
@@ -56,9 +56,11 @@
         <ul class="nav-links">
           <li><a href="#overview" class="active">Overview</a></li>
           <li><a href="#scenarios">Scenarios</a></li>
+          <li><a href="#simulator">Route Simulator</a></li>
           <li><a href="#layouts">Floor Plans</a></li>
           <li><a href="#operators">Operators</a></li>
-          <li><a href="#gallery">Analytics Gallery</a></li>
+          <li><a href="#calculator">ROI Calculator</a></li>
+          <li><a href="#gallery">Gallery</a></li>
           <li><a href="#downloads">Downloads</a></li>
         </ul>
         <div style="display:flex; gap:8px; align-items:center;">
@@ -97,17 +99,17 @@
       <p class="hero-subtitle">
         Empirical slotting and route optimisation on real WMS order data —
         <strong>7,341 picking waves</strong>, <strong>161,771 units</strong>, <strong>22 operators</strong>, and <strong>15 benchmarked scenarios</strong>.
-        Verified with out-of-sample testing on 2,549 unseen waves.
+        Featuring interactive 2D route playback and executive business case modeling.
       </p>
       <div class="hero-actions">
-        <a href="#scenarios" class="btn btn-primary" id="hero-dashboard-btn">
-          📊 Explore Scenarios
+        <a href="#simulator" class="btn btn-primary" id="hero-sim-btn">
+          🚶‍♂️ Run Route Simulator
+        </a>
+        <a href="#calculator" class="btn btn-secondary" id="hero-roi-btn">
+          💰 ROI Calculator
         </a>
         <a href="report/Warehouse_Optimisation_Report.pdf" class="btn btn-report" target="_blank" id="hero-report-btn">
-          📄 Read Official Report (PDF)
-        </a>
-        <a href="#layouts" class="btn btn-secondary" id="hero-layouts-btn">
-          📐 CAD & Floor Plans
+          📄 Official Report (PDF)
         </a>
       </div>
     </header>
@@ -253,15 +255,118 @@
               </tr>
             </thead>
             <tbody id="scenario-table-body">
-              <!-- Dynamically populated via JS -->
             </tbody>
           </table>
         </div>
       </div>
     </section>
 
+    <!-- ═══ FEATURE #1: Interactive 2D Picker Route Simulator ═══ -->
+    <section class="section" id="simulator">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Interactive 2D Digital Twin</div>
+          <h2 class="section-title">Picker Route & Travel Simulator</h2>
+          <p class="section-subtitle">Real-time synchronized simulation comparing historical picker backtracking against the optimized 2-opt routing loop</p>
+        </div>
+
+        <div class="sim-container">
+          <!-- Wave Selector Header -->
+          <div class="sim-header-bar">
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+              <span style="font-size:0.875rem; font-weight:700; color:var(--text-primary);">SELECT REAL PICKING WAVE:</span>
+              <div class="pill-group" id="sim-wave-pills">
+                <button class="pill-btn active" data-wave="33168">Wave #33168 </button><button class="pill-btn " data-wave="33170">Wave #33170 </button><button class="pill-btn " data-wave="33172">Wave #33172 </button><button class="pill-btn " data-wave="33175">Wave #33175 </button>
+              </div>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span id="sim-wave-meta" style="font-size:0.8125rem; color:var(--text-secondary); background:rgba(255,255,255,0.05); padding:4px 12px; border-radius:6px; border:1px solid var(--border-subtle);">
+                Wave #33168 · 24 Units · Operator 2
+              </span>
+            </div>
+          </div>
+
+          <!-- Controls Bar -->
+          <div class="sim-controls-bar">
+            <div class="sim-btn-group">
+              <button class="sim-btn primary" id="btn-sim-play">
+                <span id="sim-play-icon">▶</span> <span id="sim-play-text">Start Simulation</span>
+              </button>
+              <button class="sim-btn" id="btn-sim-reset">
+                <span>↺</span> Reset
+              </button>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+              <span style="font-size:0.8125rem; font-weight:600; color:var(--text-secondary);">SPEED:</span>
+              <div class="pill-group" id="sim-speed-pills">
+                <button class="pill-btn" data-speed="1">1x</button>
+                <button class="pill-btn active" data-speed="2">2x</button>
+                <button class="pill-btn" data-speed="4">4x</button>
+                <button class="pill-btn" data-speed="8">8x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Side-by-Side Canvas View -->
+          <div class="sim-canvas-grid">
+            <!-- Left: AS-IS Historical Route -->
+            <div class="sim-canvas-card">
+              <div class="sim-canvas-header">
+                <div class="sim-canvas-title" style="color:#f87171;">
+                  <span>🔴</span> AS-IS Historical Walk
+                </div>
+                <div class="sim-odometer">
+                  <span id="odo-asis">0.0</span> <span style="font-size:0.8125rem; color:var(--text-muted);">/ <span id="target-asis">269.2</span> m</span>
+                </div>
+              </div>
+              <div class="sim-canvas-wrap">
+                <canvas id="canvas-asis" width="560" height="350"></canvas>
+              </div>
+            </div>
+
+            <!-- Right: Optimised-FAMILY Route -->
+            <div class="sim-canvas-card">
+              <div class="sim-canvas-header">
+                <div class="sim-canvas-title" style="color:#2dd4bf;">
+                  <span>🟢</span> Optimised-FAMILY + 2-Opt Loop
+                </div>
+                <div class="sim-odometer" style="color:#2dd4bf;">
+                  <span id="odo-opt">0.0</span> <span style="font-size:0.8125rem; color:var(--text-muted);">/ <span id="target-opt">104.2</span> m</span>
+                </div>
+              </div>
+              <div class="sim-canvas-wrap">
+                <canvas id="canvas-opt" width="560" height="350"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Comparison Stats Banner -->
+          <div class="sim-comparison-banner">
+            <div>
+              <div class="sim-comp-stat-num" id="stat-dist-saved" style="color:#2dd4bf;">-165.0 m</div>
+              <div class="sim-comp-stat-label">Distance Saved this Wave</div>
+            </div>
+            <div>
+              <div class="sim-comp-stat-num" id="stat-pct-saved" style="color:#2dd4bf;">-61.3%</div>
+              <div class="sim-comp-stat-label">Reduction in Picker Travel</div>
+            </div>
+            <div>
+              <div class="sim-comp-stat-num" id="stat-time-saved" style="color:#60a5fa;">-2.7 min</div>
+              <div class="sim-comp-stat-label">Cycle Time Accelerated</div>
+            </div>
+            <div>
+              <div class="sim-comp-stat-num" style="color:#fbbf24;">I/O Depot: CC-08</div>
+              <div class="sim-comp-stat-label">Central Cross-Aisle H</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ═══ Interactive CAD & Floor Plans ═══ -->
-    <section class="section" id="layouts">
+    <section class="section" id="layouts" style="background: rgba(17, 24, 39, 0.4);">
       <div class="container">
         <div class="section-header">
           <div class="section-label">Spatial Engineering</div>
@@ -329,7 +434,7 @@
     </section>
 
     <!-- ═══ Operator Performance Deep-Dive ═══ -->
-    <section class="section" id="operators" style="background: rgba(17, 24, 39, 0.4);">
+    <section class="section" id="operators">
       <div class="container">
         <div class="section-header">
           <div class="section-label">Workforce Analytics</div>
@@ -533,6 +638,155 @@
               
             </tbody>
           </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ FEATURE #2: Dynamic Financial ROI & Business Case Calculator ═══ -->
+    <section class="section" id="calculator" style="background: rgba(17, 24, 39, 0.4);">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Business Case Modeler</div>
+          <h2 class="section-title">Financial ROI & Payback Calculator</h2>
+          <p class="section-subtitle">Simulate executive cost-benefit trade-offs, labor savings, payback duration, and 3-year Net Present Value (NPV)</p>
+        </div>
+
+        <div class="roi-card">
+          <!-- Currency selection -->
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:var(--space-xl); padding-bottom:var(--space-md); border-bottom:1px solid var(--border-subtle);">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:0.875rem; font-weight:700; color:var(--text-primary);">SELECT OPERATING CURRENCY:</span>
+              <div class="pill-group" id="calc-currency-pills">
+                <button class="pill-btn active" data-cur="CAD" data-sym="$">CAD ($)</button>
+                <button class="pill-btn" data-cur="USD" data-sym="$">USD ($)</button>
+                <button class="pill-btn" data-cur="EUR" data-sym="€">EUR (€)</button>
+                <button class="pill-btn" data-cur="GBP" data-sym="£">GBP (£)</button>
+                <button class="pill-btn" data-cur="INR" data-sym="₹">INR (₹)</button>
+              </div>
+            </div>
+
+            <button class="sim-btn" id="btn-copy-roi" style="font-size:0.8125rem;">
+              📋 Copy Executive Briefing
+            </button>
+          </div>
+
+          <div class="roi-layout-grid">
+            <!-- Left: Interactive Sliders -->
+            <div class="roi-inputs-panel">
+              <!-- Slider 1: Pickers -->
+              <div class="roi-slider-group">
+                <div class="roi-slider-header">
+                  <span>Number of Active Pickers</span>
+                  <span class="roi-slider-val" id="val-pickers">22</span>
+                </div>
+                <input type="range" class="roi-slider-input" id="input-pickers" min="5" max="60" value="22" step="1" />
+                <div class="roi-slider-meta">
+                  <span>5 pickers</span>
+                  <span>Baseline: 22</span>
+                  <span>60 pickers</span>
+                </div>
+              </div>
+
+              <!-- Slider 2: Wage -->
+              <div class="roi-slider-group">
+                <div class="roi-slider-header">
+                  <span>Fully-Loaded Hourly Wage</span>
+                  <span class="roi-slider-val" id="val-wage">$25.00 / hr</span>
+                </div>
+                <input type="range" class="roi-slider-input" id="input-wage" min="15" max="60" value="25" step="1" />
+                <div class="roi-slider-meta">
+                  <span>$15/hr</span>
+                  <span>Standard: $25</span>
+                  <span>$60/hr</span>
+                </div>
+              </div>
+
+              <!-- Slider 3: Daily Wave Volume -->
+              <div class="roi-slider-group">
+                <div class="roi-slider-header">
+                  <span>Daily Picking Waves</span>
+                  <span class="roi-slider-val" id="val-waves">80 waves/day</span>
+                </div>
+                <input type="range" class="roi-slider-input" id="input-waves" min="30" max="250" value="80" step="5" />
+                <div class="roi-slider-meta">
+                  <span>30 waves</span>
+                  <span>Observed: ~80</span>
+                  <span>250 waves</span>
+                </div>
+              </div>
+
+              <!-- Slider 4: Working Days -->
+              <div class="roi-slider-group">
+                <div class="roi-slider-header">
+                  <span>Operating Days per Year</span>
+                  <span class="roi-slider-val" id="val-days">250 days</span>
+                </div>
+                <input type="range" class="roi-slider-input" id="input-days" min="200" max="365" value="250" step="5" />
+                <div class="roi-slider-meta">
+                  <span>200 days</span>
+                  <span>Standard: 250</span>
+                  <span>365 days</span>
+                </div>
+              </div>
+
+              <!-- Slider 5: Re-slotting Cost -->
+              <div class="roi-slider-group">
+                <div class="roi-slider-header">
+                  <span>Implementation Re-Slotting Budget</span>
+                  <span class="roi-slider-val" id="val-cost">$5,050</span>
+                </div>
+                <input type="range" class="roi-slider-input" id="input-cost" min="1000" max="15000" value="5050" step="250" />
+                <div class="roi-slider-meta">
+                  <span>$1,000 (Internal)</span>
+                  <span>Est: 6,738 moves</span>
+                  <span>$15,000 (Overtime)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Dynamic Outputs -->
+            <div class="roi-results-panel">
+              <!-- Big Card: Annual Recurring Savings -->
+              <div class="roi-big-metric-card">
+                <div class="roi-big-metric-label">Projected Annual Labor Savings</div>
+                <div class="roi-big-metric-val" id="out-annual-saving">$13,792</div>
+                <div style="font-size:0.8125rem; color:#2dd4bf; font-weight:600;">
+                  Recurring every operating year
+                </div>
+              </div>
+
+              <!-- Submetrics Grid -->
+              <div class="roi-metrics-grid">
+                <div class="roi-metric-subcard">
+                  <div class="roi-metric-subval" id="out-payback" style="color:#60a5fa;">4.4 mo</div>
+                  <div class="roi-metric-sublabel">Payback Period</div>
+                </div>
+
+                <div class="roi-metric-subcard">
+                  <div class="roi-metric-subval" id="out-roi" style="color:#4ade80;">582%</div>
+                  <div class="roi-metric-sublabel">3-Year ROI</div>
+                </div>
+
+                <div class="roi-metric-subcard">
+                  <div class="roi-metric-subval" id="out-npv" style="color:#fbbf24;">$30,480</div>
+                  <div class="roi-metric-sublabel">3-Yr NPV (8% Discount)</div>
+                </div>
+
+                <div class="roi-metric-subcard">
+                  <div class="roi-metric-subval" id="out-fte" style="color:#a855f7;">0.29 FTE</div>
+                  <div class="roi-metric-sublabel">Capacity Labor Freed</div>
+                </div>
+              </div>
+
+              <!-- Ergonomics Banner -->
+              <div class="roi-wellness-banner">
+                <div class="roi-wellness-icon">👟</div>
+                <div class="roi-wellness-text">
+                  <strong>Ergonomic & Wellness Dividend:</strong> Eliminates <span id="out-km-saved" style="color:#2dd4bf; font-weight:700;">1,982 km</span> of walking annually — reducing physical fatigue by <span id="out-steps-saved" style="color:#60a5fa; font-weight:700;">~2,700 steps</span> per picker per shift.
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1050,8 +1304,10 @@
       <ul class="footer-links">
         <li><a href="#overview">Overview</a></li>
         <li><a href="#scenarios">Scenarios</a></li>
+        <li><a href="#simulator">Simulator</a></li>
         <li><a href="#layouts">CAD Layouts</a></li>
         <li><a href="#operators">Operators</a></li>
+        <li><a href="#calculator">ROI Calculator</a></li>
         <li><a href="report/Warehouse_Optimisation_Report.pdf" target="_blank">PDF Report</a></li>
         <li><a href="https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization" target="_blank">GitHub</a></li>
       </ul>
@@ -1069,6 +1325,7 @@
       const SCENARIOS_ALL = [{"sample": "ALL waves (fully placed in all scenarios)", "scenario": "AS-IS (historical)", "routing": "nn2opt", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 11.200926304318212, "mean_aisles": 4.552513281569269, "mean_dist_m": 142.10177134813603, "median_dist_m": 145.9821333333333, "p90_dist_m": 220.3533333333333, "total_km": 1043.169103466667, "mean_time_min": 7.438848257427839, "total_hours": 910.1430842962964, "walk_share": 0.3183776269985624, "units_per_hour": 177.7423822596839, "m_per_unit": 6.448430827939907, "dist_saving_vs_asis_%": 14.595686079467397, "time_saving_vs_asis_%": 5.2064241138147}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "AS-IS (historical)", "routing": "recorded", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 11.200926304318212, "mean_aisles": 4.552513281569269, "mean_dist_m": 166.38711187394998, "median_dist_m": 168.03253333333333, "p90_dist_m": 271.80426666666665, "total_km": 1221.4477882666667, "mean_time_min": 7.847418127109536, "total_hours": 960.1316078518518, "walk_share": 0.3533797341131268, "units_per_hour": 168.48836000924703, "m_per_unit": 7.550474363555066, "dist_saving_vs_asis_%": 0.0, "time_saving_vs_asis_%": 0.0}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "AS-IS (historical)", "routing": "serpentine", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 11.200926304318212, "mean_aisles": 4.552513281569269, "mean_dist_m": 159.85784181991554, "median_dist_m": 161.52213333333336, "p90_dist_m": 260.1397333333333, "total_km": 1173.5164168, "mean_time_min": 7.734782765290832, "total_hours": 946.3506713333333, "walk_share": 0.3444566504984552, "units_per_hour": 170.9419192064158, "m_per_unit": 7.254182868375667, "dist_saving_vs_asis_%": 3.924144112183891, "time_saving_vs_asis_%": 1.4353174508389688}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "ClassBased", "routing": "nn2opt", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 10.818144666939109, "mean_aisles": 5.3883667075330335, "mean_dist_m": 131.71422712618627, "median_dist_m": 137.13786666666664, "p90_dist_m": 210.90186666666665, "total_km": 966.9141413333332, "mean_time_min": 7.201925580832159, "total_hours": 881.1555948148148, "walk_share": 0.3048125246687315, "units_per_hour": 183.5895963799652, "m_per_unit": 5.9770548573807, "dist_saving_vs_asis_%": 20.83868417286483, "time_saving_vs_asis_%": 8.225540372921769}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "ClassBased", "routing": "serpentine", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 10.818144666939109, "mean_aisles": 5.3883667075330335, "mean_dist_m": 134.5342845207283, "median_dist_m": 138.16266666666667, "p90_dist_m": 219.86666666666665, "total_km": 987.6161826666664, "mean_time_min": 7.248926537407862, "total_hours": 886.9061618518518, "walk_share": 0.3093200163878709, "units_per_hour": 182.39922886793755, "m_per_unit": 6.1050261336498295, "dist_saving_vs_asis_%": 19.143806869700608, "time_saving_vs_asis_%": 7.626605082175198}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Dedicated", "routing": "nn2opt", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 11.217272851110202, "mean_aisles": 5.517231984743223, "mean_dist_m": 162.62395470190256, "median_dist_m": 171.75706666666662, "p90_dist_m": 266.3442666666667, "total_km": 1193.8224514666665, "mean_time_min": 7.783609071122614, "total_hours": 952.3245698518518, "walk_share": 0.3482188301423512, "units_per_hour": 169.86960656193705, "m_per_unit": 7.379706198680026, "dist_saving_vs_asis_%": 2.2616878973764964, "time_saving_vs_asis_%": 0.8131216529228658}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Dedicated", "routing": "serpentine", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 11.217272851110202, "mean_aisles": 5.517231984743223, "mean_dist_m": 179.0869822276711, "median_dist_m": 186.58666666666664, "p90_dist_m": 302.58266666666674, "total_km": 1314.677536533333, "mean_time_min": 8.057992863218756, "total_hours": 985.8954268148148, "walk_share": 0.3704127178806637, "units_per_hour": 164.08535388245204, "m_per_unit": 8.126781292897572, "dist_saving_vs_asis_%": -7.632724801030366, "time_saving_vs_asis_%": -2.6833632756456893}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Hybrid", "routing": "nn2opt", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 10.696771557008582, "mean_aisles": 4.416292058302684, "mean_dist_m": 122.01765572356172, "median_dist_m": 124.56906666666669, "p90_dist_m": 211.45306666666664, "total_km": 895.7316106666666, "mean_time_min": 7.020087205799997, "total_hours": 858.9076696296296, "walk_share": 0.2896869420243828, "units_per_hour": 188.3450407070616, "m_per_unit": 5.53703451586914, "dist_saving_vs_asis_%": 26.666402013156677, "time_saving_vs_asis_%": 10.542714914749574}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Hybrid", "routing": "serpentine", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 10.696771557008582, "mean_aisles": 4.416292058302684, "mean_dist_m": 123.57637655178677, "median_dist_m": 125.29226666666666, "p90_dist_m": 215.81066666666663, "total_km": 907.1741802666666, "mean_time_min": 7.046065886270415, "total_hours": 862.0861611851853, "walk_share": 0.2923058496907261, "units_per_hour": 187.65061693786993, "m_per_unit": 5.607767648507251, "dist_saving_vs_asis_%": 25.729598188227097, "time_saving_vs_asis_%": 10.211667428179783}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Optimised-COI", "routing": "nn2opt", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 10.326658493393271, "mean_aisles": 3.5015665440675656, "mean_dist_m": 73.08983873223448, "median_dist_m": 77.04506666666667, "p90_dist_m": 107.96986666666666, "total_km": 536.5525061333333, "mean_time_min": 6.142938078675325, "total_hours": 751.5884739259259, "walk_share": 0.1983031512395225, "units_per_hour": 215.23879837457915, "m_per_unit": 3.3167409865385844, "dist_saving_vs_asis_%": 56.07241576041946, "time_saving_vs_asis_%": 21.72026545324439}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Optimised-COI", "routing": "serpentine", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 10.326658493393271, "mean_aisles": 3.5015665440675656, "mean_dist_m": 73.1129436316578, "median_dist_m": 77.04506666666666, "p90_dist_m": 108.02586666666664, "total_km": 536.7221192, "mean_time_min": 6.14332316033238, "total_hours": 751.6355886666666, "walk_share": 0.1983534039680408, "units_per_hour": 215.2253065703915, "m_per_unit": 3.3177894628827165, "dist_saving_vs_asis_%": 56.05852952899018, "time_saving_vs_asis_%": 21.71535834047409}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Optimised-FAMILY", "routing": "nn2opt", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 8.724560686554966, "mean_aisles": 3.275303092221768, "mean_dist_m": 67.32823633474095, "median_dist_m": 69.72506666666668, "p90_dist_m": 104.51226666666666, "total_km": 494.2565829333333, "mean_time_min": 5.779895070910715, "total_hours": 707.170161925926, "walk_share": 0.194144921054574, "units_per_hour": 228.7582377053757, "m_per_unit": 3.055285452481182, "dist_saving_vs_asis_%": 59.53518540201187, "time_saving_vs_asis_%": 26.3465387304443}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Optimised-FAMILY", "routing": "serpentine", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 8.724560686554966, "mean_aisles": 3.275303092221768, "mean_dist_m": 67.35587703764246, "median_dist_m": 69.72506666666668, "p90_dist_m": 104.51226666666663, "total_km": 494.4594933333333, "mean_time_min": 5.780355749292406, "total_hours": 707.2265259259259, "walk_share": 0.1942091454777321, "units_per_hour": 228.7400063059056, "m_per_unit": 3.0565397588772605, "dist_saving_vs_asis_%": 59.518573116005946, "time_saving_vs_asis_%": 26.34066828523253}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Random", "routing": "nn2opt", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 10.853698406211688, "mean_aisles": 5.922898787631113, "mean_dist_m": 161.6716260636607, "median_dist_m": 173.09626666666668, "p90_dist_m": 257.49146666666667, "total_km": 1186.8314069333333, "mean_time_min": 7.707141186335496, "total_hours": 942.968724148148, "walk_share": 0.3496143428432734, "units_per_hour": 171.55500056074445, "m_per_unit": 7.336490513956972, "dist_saving_vs_asis_%": 2.834045111535788, "time_saving_vs_asis_%": 1.7875553271392677}, {"sample": "ALL waves (fully placed in all scenarios)", "scenario": "Random", "routing": "serpentine", "waves": 7341, "units": 161771.0, "unplaced_units": 0.0, "mean_stops": 10.853698406211688, "mean_aisles": 5.922898787631113, "mean_dist_m": 169.72537706942742, "median_dist_m": 180.54106666666664, "p90_dist_m": 275.11546666666663, "total_km": 1245.9539930666667, "mean_time_min": 7.841370369764943, "total_hours": 959.3916647407408, "walk_share": 0.3607476947393894, "units_per_hour": 168.6183088152177, "m_per_unit": 7.701961371733294, "dist_saving_vs_asis_%": -2.0063243828683186, "time_saving_vs_asis_%": 0.0770668421974374}];
       const SCENARIOS_TEST = [{"sample": "TEST waves only (out-of-sample)", "scenario": "AS-IS (historical)", "routing": "nn2opt", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.616712436249507, "mean_aisles": 4.664182032169478, "mean_dist_m": 146.39565162808944, "median_dist_m": 152.00613333333334, "p90_dist_m": 225.15781333333337, "total_km": 373.162516, "mean_time_min": 7.652389930691775, "total_hours": 325.09903222222226, "walk_share": 0.3188451646130708, "units_per_hour": 178.48099886171778, "m_per_unit": 6.431175306769613, "dist_saving_vs_asis_%": 13.948298619443367, "time_saving_vs_asis_%": 4.941278551647265}, {"sample": "TEST waves only (out-of-sample)", "scenario": "AS-IS (historical)", "routing": "recorded", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.616712436249507, "mean_aisles": 4.664182032169478, "mean_dist_m": 170.12522620635542, "median_dist_m": 173.5053333333333, "p90_dist_m": 274.2826666666668, "total_km": 433.6492016, "mean_time_min": 8.050171319471689, "total_hours": 341.99811155555557, "walk_share": 0.3522186453242676, "units_per_hour": 169.66175554619792, "m_per_unit": 7.473617840893424, "dist_saving_vs_asis_%": 0.0, "time_saving_vs_asis_%": 0.0}, {"sample": "TEST waves only (out-of-sample)", "scenario": "AS-IS (historical)", "routing": "serpentine", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.616712436249507, "mean_aisles": 4.664182032169478, "mean_dist_m": 165.56995914737803, "median_dist_m": 169.93573333333333, "p90_dist_m": 266.91973333333334, "total_km": 422.0378258666666, "mean_time_min": 7.971961722679918, "total_hours": 338.67550718518515, "walk_share": 0.3461505981987219, "units_per_hour": 171.32623637962968, "m_per_unit": 7.273504513075049, "dist_saving_vs_asis_%": 2.677596474406463, "time_saving_vs_asis_%": 0.9715271102690436}, {"sample": "TEST waves only (out-of-sample)", "scenario": "ClassBased", "routing": "nn2opt", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.247155747351902, "mean_aisles": 5.531581012161632, "mean_dist_m": 135.1925533150255, "median_dist_m": 140.88826666666668, "p90_dist_m": 214.26986666666673, "total_km": 344.6058184, "mean_time_min": 7.404078843991107, "total_hours": 314.54994955555554, "walk_share": 0.3043199929922029, "units_per_hour": 184.4667280410797, "m_per_unit": 5.9390221011995035, "dist_saving_vs_asis_%": 20.53350562423819, "time_saving_vs_asis_%": 8.025822679298988}, {"sample": "TEST waves only (out-of-sample)", "scenario": "ClassBased", "routing": "serpentine", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.247155747351902, "mean_aisles": 5.531581012161632, "mean_dist_m": 138.2763074669805, "median_dist_m": 141.56426666666664, "p90_dist_m": 224.7332266666667, "total_km": 352.46630773333334, "mean_time_min": 7.455474746523691, "total_hours": 316.7334188148148, "walk_share": 0.3091158112398218, "units_per_hour": 183.19506737596583, "m_per_unit": 6.07449172296521, "dist_saving_vs_asis_%": 18.720867827528053, "time_saving_vs_asis_%": 7.387377850078181}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Dedicated", "routing": "nn2opt", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.67595135347195, "mean_aisles": 5.651628089446842, "mean_dist_m": 165.78747074669806, "median_dist_m": 177.47973333333331, "p90_dist_m": 269.35674666666665, "total_km": 422.59226293333336, "mean_time_min": 7.985460068872325, "total_hours": 339.2489619259259, "walk_share": 0.3460194514296989, "units_per_hour": 171.03663242061558, "m_per_unit": 7.283059818925502, "dist_saving_vs_asis_%": 2.549742655093268, "time_saving_vs_asis_%": 0.8038493596135066}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Dedicated", "routing": "serpentine", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.67595135347195, "mean_aisles": 5.651628089446842, "mean_dist_m": 183.13260593696873, "median_dist_m": 193.47173333333333, "p90_dist_m": 306.54314666666664, "total_km": 466.8050125333333, "mean_time_min": 8.274545655376835, "total_hours": 351.5302812592592, "walk_share": 0.3688673947875481, "units_per_hour": 165.0611713794476, "m_per_unit": 8.045033305758535, "dist_saving_vs_asis_%": -7.645767779809365, "time_saving_vs_asis_%": -2.7871995141573125}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Hybrid", "routing": "nn2opt", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.139270302079249, "mean_aisles": 4.527657905060808, "mean_dist_m": 125.40946881129854, "median_dist_m": 129.25386666666665, "p90_dist_m": 213.6386666666667, "total_km": 319.668736, "mean_time_min": 7.223046528050216, "total_hours": 306.85909333333336, "walk_share": 0.2893734389505391, "units_per_hour": 189.0900457591132, "m_per_unit": 5.509250241279471, "dist_saving_vs_asis_%": 26.28402523963047, "time_saving_vs_asis_%": 10.27462346572464}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Hybrid", "routing": "serpentine", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.139270302079249, "mean_aisles": 4.527657905060808, "mean_dist_m": 126.91921035700274, "median_dist_m": 129.92986666666664, "p90_dist_m": 218.31914666666663, "total_km": 323.51706720000004, "mean_time_min": 7.248208887145286, "total_hours": 307.9280742222223, "walk_share": 0.2918403988560867, "units_per_hour": 188.43361439699663, "m_per_unit": 5.575573335171654, "dist_saving_vs_asis_%": 25.396595680023037, "time_saving_vs_asis_%": 9.962054228418992}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Optimised-COI", "routing": "nn2opt", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 10.788152216555511, "mean_aisles": 3.619066300510004, "mean_dist_m": 76.71104129724074, "median_dist_m": 79.82666666666667, "p90_dist_m": 111.97866666666664, "total_km": 195.53644426666665, "mean_time_min": 6.352886388561964, "total_hours": 269.8917900740741, "walk_share": 0.201249837751847, "units_per_hour": 214.98986680578471, "m_per_unit": 3.3699235534721264, "dist_saving_vs_asis_%": 54.90907315285908, "time_saving_vs_asis_%": 21.083836151466073}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Optimised-COI", "routing": "serpentine", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 10.788152216555511, "mean_aisles": 3.619066300510004, "mean_dist_m": 76.77758231986398, "median_dist_m": 79.82666666666667, "p90_dist_m": 111.97866666666664, "total_km": 195.7060573333333, "mean_time_min": 6.3539954056056835, "total_hours": 269.93890481481475, "walk_share": 0.2013892504342714, "units_per_hour": 214.9523427895879, "m_per_unit": 3.372846707109701, "dist_saving_vs_asis_%": 54.86996018642427, "time_saving_vs_asis_%": 21.0700598354138}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Optimised-FAMILY", "routing": "nn2opt", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 9.162024323264026, "mean_aisles": 3.370733621027854, "mean_dist_m": 70.01010623774029, "median_dist_m": 72.36026666666666, "p90_dist_m": 107.0578666666667, "total_km": 178.45576079999998, "mean_time_min": 5.970182822021709, "total_hours": 253.6332668888889, "walk_share": 0.1954437809941652, "units_per_hour": 228.77125194077567, "m_per_unit": 3.0755508203501996, "dist_saving_vs_asis_%": 58.84789822244192, "time_saving_vs_asis_%": 25.83781654955493}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Optimised-FAMILY", "routing": "serpentine", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 9.162024323264026, "mean_aisles": 3.370733621027854, "mean_dist_m": 70.0912608866222, "median_dist_m": 72.36026666666666, "p90_dist_m": 107.14746666666665, "total_km": 178.662624, "mean_time_min": 5.971535399503073, "total_hours": 253.69072888888888, "walk_share": 0.19562601630745, "units_per_hour": 228.71943430543445, "m_per_unit": 3.0791159520198534, "dist_saving_vs_asis_%": 58.800195332816685, "time_saving_vs_asis_%": 25.82101470239309}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Random", "routing": "nn2opt", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.31894860729698, "mean_aisles": 6.121224009415457, "mean_dist_m": 166.15077986138354, "median_dist_m": 177.90586666666664, "p90_dist_m": 259.8407466666667, "total_km": 423.5183378666667, "mean_time_min": 7.932014763087921, "total_hours": 336.9784271851852, "walk_share": 0.3491142852182936, "units_per_hour": 172.18906410324342, "m_per_unit": 7.299020023898157, "dist_saving_vs_asis_%": 2.336188720273047, "time_saving_vs_asis_%": 1.4677520725300708}, {"sample": "TEST waves only (out-of-sample)", "scenario": "Random", "routing": "serpentine", "waves": 2549, "units": 58024.0, "unplaced_units": 0.0, "mean_stops": 11.31894860729698, "mean_aisles": 6.121224009415457, "mean_dist_m": 174.73478603373871, "median_dist_m": 185.68666666666664, "p90_dist_m": 276.96954666666664, "total_km": 445.39896959999993, "mean_time_min": 8.075081532627173, "total_hours": 343.0563804444444, "walk_share": 0.3606460717614779, "units_per_hour": 169.13837872604904, "m_per_unit": 7.676116255342616, "dist_saving_vs_asis_%": -2.709509888787487, "time_saving_vs_asis_%": -0.3094370562677584}];
       const OPERATORS = [{"operator": "Operator_1", "rank_by_units_per_hour_asis": 16, "AS-IS recorded | waves": 893, "AS-IS recorded | units": 19966.0, "AS-IS recorded | stops": 10562, "AS-IS recorded | dist_km": 152.3879376, "AS-IS recorded | hours": 119.88442711111112, "AS-IS recorded | mean_dist_per_wave_m": 170.64718656215007, "AS-IS recorded | units_per_hour": 166.54373283608504, "AS-IS recorded | m_per_unit": 7.632371912250827, "AS-IS re-routed | waves": 893, "AS-IS re-routed | units": 19966.0, "AS-IS re-routed | stops": 10562, "AS-IS re-routed | dist_km": 132.42407733333332, "AS-IS re-routed | hours": 114.2833548148148, "AS-IS re-routed | mean_dist_per_wave_m": 148.2912400149309, "AS-IS re-routed | units_per_hour": 174.70610687228233, "AS-IS re-routed | m_per_unit": 6.6324790811045435, "Optimised | waves": 893, "Optimised | units": 19966.0, "Optimised | stops": 8232, "Optimised | dist_km": 61.88305813333332, "Optimised | hours": 88.21640503703703, "Optimised | mean_dist_per_wave_m": 69.29793743934303, "Optimised | units_per_hour": 226.3297851643061, "Optimised | m_per_unit": 3.09942192393736, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.898247114707952, "workload_share_%": 12.342137960450266, "hours_saved_with_optimised": 31.668022074074074}, {"operator": "Operator_8", "rank_by_units_per_hour_asis": 7, "AS-IS recorded | waves": 809, "AS-IS recorded | units": 17866.0, "AS-IS recorded | stops": 9104, "AS-IS recorded | dist_km": 131.1392528, "AS-IS recorded | hours": 105.02645911111112, "AS-IS recorded | mean_dist_per_wave_m": 162.10043609394313, "AS-IS recorded | units_per_hour": 170.10951479473323, "AS-IS recorded | m_per_unit": 7.340157438710401, "AS-IS re-routed | waves": 809, "AS-IS re-routed | units": 17866.0, "AS-IS re-routed | stops": 9104, "AS-IS re-routed | dist_km": 115.27470133333333, "AS-IS re-routed | hours": 100.56963925925928, "AS-IS re-routed | mean_dist_per_wave_m": 142.49036011536876, "AS-IS re-routed | units_per_hour": 177.64804698108836, "AS-IS re-routed | m_per_unit": 6.452182991902683, "Optimised | waves": 809, "Optimised | units": 17866.0, "Optimised | stops": 7109, "Optimised | dist_km": 54.88690746666666, "Optimised | hours": 78.2535854074074, "Optimised | mean_dist_per_wave_m": 67.84537387721467, "Optimised | units_per_hour": 228.30902772039408, "Optimised | m_per_unit": 3.07214303518788, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.9088811341597208, "workload_share_%": 11.044006651377565, "hours_saved_with_optimised": 26.77287370370371}, {"operator": "Operator_2", "rank_by_units_per_hour_asis": 14, "AS-IS recorded | waves": 804, "AS-IS recorded | units": 17798.0, "AS-IS recorded | stops": 8872, "AS-IS recorded | dist_km": 140.5482064, "AS-IS recorded | hours": 106.78505733333334, "AS-IS recorded | mean_dist_per_wave_m": 174.81120199004974, "AS-IS recorded | units_per_hour": 166.67125948570606, "AS-IS recorded | m_per_unit": 7.896853938644791, "AS-IS re-routed | waves": 804, "AS-IS re-routed | units": 17798.0, "AS-IS re-routed | stops": 8872, "AS-IS re-routed | dist_km": 111.67297413333334, "AS-IS re-routed | hours": 98.72804837037036, "AS-IS re-routed | mean_dist_per_wave_m": 138.89673399668325, "AS-IS re-routed | units_per_hour": 180.272985172686, "AS-IS re-routed | m_per_unit": 6.274467588118515, "Optimised | waves": 804, "Optimised | units": 17798.0, "Optimised | stops": 6900, "Optimised | dist_km": 53.0903824, "Optimised | hours": 76.97732844444444, "Optimised | mean_dist_per_wave_m": 66.03281393034825, "Optimised | units_per_hour": 231.21093391601727, "Optimised | m_per_unit": 2.982940914709518, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8492704234117002, "workload_share_%": 11.001971923274258, "hours_saved_with_optimised": 29.807728888888903}, {"operator": "Operator_17", "rank_by_units_per_hour_asis": 18, "AS-IS recorded | waves": 764, "AS-IS recorded | units": 16617.0, "AS-IS recorded | stops": 8686, "AS-IS recorded | dist_km": 129.6115296, "AS-IS recorded | hours": 100.62320266666669, "AS-IS recorded | mean_dist_per_wave_m": 169.64859895287958, "AS-IS recorded | units_per_hour": 165.14083789448588, "AS-IS recorded | m_per_unit": 7.799935584040441, "AS-IS re-routed | waves": 764, "AS-IS re-routed | units": 16617.0, "AS-IS re-routed | stops": 8686, "AS-IS re-routed | dist_km": 110.71713226666664, "AS-IS re-routed | hours": 95.31087007407407, "AS-IS re-routed | mean_dist_per_wave_m": 144.91771239092495, "AS-IS re-routed | units_per_hour": 174.3452765365119, "AS-IS re-routed | m_per_unit": 6.662883328318388, "Optimised | waves": 764, "Optimised | units": 16617.0, "Optimised | stops": 6773, "Optimised | dist_km": 52.15191386666667, "Optimised | hours": 73.72886496296296, "Optimised | mean_dist_per_wave_m": 68.26166736474694, "Optimised | units_per_hour": 225.3798428654422, "Optimised | m_per_unit": 3.138467465045837, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8877874130549155, "workload_share_%": 10.27192760136242, "hours_saved_with_optimised": 26.894337703703712}, {"operator": "Operator_4", "rank_by_units_per_hour_asis": 4, "AS-IS recorded | waves": 726, "AS-IS recorded | units": 16143.0, "AS-IS recorded | stops": 7771, "AS-IS recorded | dist_km": 116.02983573333334, "AS-IS recorded | hours": 92.85773214814814, "AS-IS recorded | mean_dist_per_wave_m": 159.82071037649217, "AS-IS recorded | units_per_hour": 173.84658904058685, "AS-IS recorded | m_per_unit": 7.187625331929216, "AS-IS re-routed | waves": 726, "AS-IS re-routed | units": 16143.0, "AS-IS re-routed | stops": 7771, "AS-IS re-routed | dist_km": 99.41425733333334, "AS-IS re-routed | hours": 88.2061825925926, "AS-IS re-routed | mean_dist_per_wave_m": 136.93423875114783, "AS-IS re-routed | units_per_hour": 183.01438204804097, "AS-IS re-routed | m_per_unit": 6.158350822854076, "Optimised | waves": 726, "Optimised | units": 16143.0, "Optimised | stops": 6120, "Optimised | dist_km": 48.23413733333333, "Optimised | hours": 69.40337148148147, "Optimised | mean_dist_per_wave_m": 66.4382056932966, "Optimised | units_per_hour": 232.59676951439383, "Optimised | m_per_unit": 2.9879289681802224, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.892619017478277, "workload_share_%": 9.978920820171725, "hours_saved_with_optimised": 23.454360666666673}, {"operator": "Operator_3", "rank_by_units_per_hour_asis": 10, "AS-IS recorded | waves": 653, "AS-IS recorded | units": 14591.0, "AS-IS recorded | stops": 7584, "AS-IS recorded | dist_km": 109.42794346666668, "AS-IS recorded | hours": 86.69553985185183, "AS-IS recorded | mean_dist_per_wave_m": 167.57724880040837, "AS-IS recorded | units_per_hour": 168.3016222626167, "AS-IS recorded | m_per_unit": 7.499687716172071, "AS-IS re-routed | waves": 653, "AS-IS re-routed | units": 14591.0, "AS-IS re-routed | stops": 7584, "AS-IS re-routed | dist_km": 94.6765432, "AS-IS re-routed | hours": 82.56737311111111, "AS-IS re-routed | mean_dist_per_wave_m": 144.9870493108729, "AS-IS re-routed | units_per_hour": 176.71629180166428, "AS-IS re-routed | m_per_unit": 6.488694619971215, "Optimised | waves": 653, "Optimised | units": 14591.0, "Optimised | stops": 5925, "Optimised | dist_km": 44.9373976, "Optimised | hours": 64.14261044444444, "Optimised | mean_dist_per_wave_m": 68.81684165390504, "Optimised | units_per_hour": 227.47748959543264, "Optimised | m_per_unit": 3.0798024535672677, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8941145102082984, "workload_share_%": 9.019539966990376, "hours_saved_with_optimised": 22.55292940740739}, {"operator": "Operator_6", "rank_by_units_per_hour_asis": 12, "AS-IS recorded | waves": 519, "AS-IS recorded | units": 11247.0, "AS-IS recorded | stops": 5708, "AS-IS recorded | dist_km": 86.37892773333333, "AS-IS recorded | hours": 67.27803548148148, "AS-IS recorded | mean_dist_per_wave_m": 166.43338676942838, "AS-IS recorded | units_per_hour": 167.17194429816217, "AS-IS recorded | m_per_unit": 7.680174956284638, "AS-IS re-routed | waves": 519, "AS-IS re-routed | units": 11247.0, "AS-IS re-routed | stops": 5708, "AS-IS re-routed | dist_km": 73.87162133333334, "AS-IS re-routed | hours": 63.77045037037036, "AS-IS re-routed | mean_dist_per_wave_m": 142.33453050738598, "AS-IS re-routed | units_per_hour": 176.36695263525516, "AS-IS re-routed | m_per_unit": 6.568117838831097, "Optimised | waves": 519, "Optimised | units": 11247.0, "Optimised | stops": 4445, "Optimised | dist_km": 34.51366533333333, "Optimised | hours": 49.32935148148148, "Optimised | mean_dist_per_wave_m": 66.5003185613359, "Optimised | units_per_hour": 227.9981321915855, "Optimised | m_per_unit": 3.068699682878397, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8891494737455815, "workload_share_%": 6.952420396733654, "hours_saved_with_optimised": 17.948684}, {"operator": "Operator_14", "rank_by_units_per_hour_asis": 9, "AS-IS recorded | waves": 422, "AS-IS recorded | units": 9378.0, "AS-IS recorded | stops": 4818, "AS-IS recorded | dist_km": 70.1795104, "AS-IS recorded | hours": 55.58264177777778, "AS-IS recorded | mean_dist_per_wave_m": 166.30215734597155, "AS-IS recorded | units_per_hour": 168.7217393785225, "AS-IS recorded | m_per_unit": 7.483419748347195, "AS-IS re-routed | waves": 422, "AS-IS re-routed | units": 9378.0, "AS-IS re-routed | stops": 4818, "AS-IS re-routed | dist_km": 59.59444293333333, "AS-IS re-routed | hours": 52.600678592592594, "AS-IS re-routed | mean_dist_per_wave_m": 141.21905908372827, "AS-IS re-routed | units_per_hour": 178.28667330768317, "AS-IS re-routed | m_per_unit": 6.354707073292102, "Optimised | waves": 422, "Optimised | units": 9378.0, "Optimised | stops": 3687, "Optimised | dist_km": 27.8536056, "Optimised | hours": 40.64211266666667, "Optimised | mean_dist_per_wave_m": 66.00380473933649, "Optimised | units_per_hour": 230.7458787124403, "Optimised | m_per_unit": 2.970100831733845, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8842650083367241, "workload_share_%": 5.79708353165895, "hours_saved_with_optimised": 14.940529111111111}, {"operator": "Operator_19", "rank_by_units_per_hour_asis": 3, "AS-IS recorded | waves": 423, "AS-IS recorded | units": 9361.0, "AS-IS recorded | stops": 4419, "AS-IS recorded | dist_km": 66.80270746666667, "AS-IS recorded | hours": 53.51630762962963, "AS-IS recorded | mean_dist_per_wave_m": 157.9260223798266, "AS-IS recorded | units_per_hour": 174.91864470143724, "AS-IS recorded | m_per_unit": 7.136278973044191, "AS-IS re-routed | waves": 423, "AS-IS re-routed | units": 9361.0, "AS-IS re-routed | stops": 4419, "AS-IS re-routed | dist_km": 57.543104266666674, "AS-IS re-routed | hours": 50.910862296296294, "AS-IS re-routed | mean_dist_per_wave_m": 136.03570748620962, "AS-IS re-routed | units_per_hour": 183.8703879246807, "AS-IS re-routed | m_per_unit": 6.1471108072499385, "Optimised | waves": 423, "Optimised | units": 9361.0, "Optimised | stops": 3393, "Optimised | dist_km": 26.718821866666666, "Optimised | hours": 39.49856162962963, "Optimised | mean_dist_per_wave_m": 63.16506351457841, "Optimised | units_per_hour": 236.99597184769124, "Optimised | m_per_unit": 2.85427004237439, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.896312967377824, "workload_share_%": 5.786574849633124, "hours_saved_with_optimised": 14.017746000000002}, {"operator": "Operator_5", "rank_by_units_per_hour_asis": 13, "AS-IS recorded | waves": 372, "AS-IS recorded | units": 8302.0, "AS-IS recorded | stops": 4389, "AS-IS recorded | dist_km": 62.951011466666664, "AS-IS recorded | hours": 49.734169851851846, "AS-IS recorded | mean_dist_per_wave_m": 169.22314910394263, "AS-IS recorded | units_per_hour": 166.92748717290343, "AS-IS recorded | m_per_unit": 7.582632072592949, "AS-IS re-routed | waves": 372, "AS-IS re-routed | units": 8302.0, "AS-IS re-routed | stops": 4389, "AS-IS re-routed | dist_km": 55.4255592, "AS-IS re-routed | hours": 47.62432200000001, "AS-IS re-routed | mean_dist_per_wave_m": 148.99343870967743, "AS-IS re-routed | units_per_hour": 174.32269167002522, "AS-IS re-routed | m_per_unit": 6.676169501324982, "Optimised | waves": 372, "Optimised | units": 8302.0, "Optimised | stops": 3380, "Optimised | dist_km": 26.446836799999996, "Optimised | hours": 36.77189911111111, "Optimised | mean_dist_per_wave_m": 71.09364731182797, "Optimised | units_per_hour": 225.77022674065375, "Optimised | m_per_unit": 3.185598265478198, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.9022433160965696, "workload_share_%": 5.131945775200747, "hours_saved_with_optimised": 12.962270740740736}, {"operator": "Operator_18", "rank_by_units_per_hour_asis": 17, "AS-IS recorded | waves": 322, "AS-IS recorded | units": 6798.0, "AS-IS recorded | stops": 3443, "AS-IS recorded | dist_km": 52.865953866666665, "AS-IS recorded | hours": 40.97054274074073, "AS-IS recorded | mean_dist_per_wave_m": 164.17998095238093, "AS-IS recorded | units_per_hour": 165.92408948588644, "AS-IS recorded | m_per_unit": 7.776692242816514, "AS-IS re-routed | waves": 322, "AS-IS re-routed | units": 6798.0, "AS-IS re-routed | stops": 3443, "AS-IS re-routed | dist_km": 44.380796, "AS-IS re-routed | hours": 38.58855444444445, "AS-IS re-routed | mean_dist_per_wave_m": 137.82855900621118, "AS-IS re-routed | units_per_hour": 176.1662259151742, "AS-IS re-routed | m_per_unit": 6.528507796410709, "Optimised | waves": 322, "Optimised | units": 6798.0, "Optimised | stops": 2688, "Optimised | dist_km": 22.383815199999997, "Optimised | hours": 30.38105977777777, "Optimised | mean_dist_per_wave_m": 69.51495403726709, "Optimised | units_per_hour": 223.75782970455816, "Optimised | m_per_unit": 3.292705972344807, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8746283721448106, "workload_share_%": 4.2022364947982025, "hours_saved_with_optimised": 10.58948296296296}, {"operator": "Operator_11", "rank_by_units_per_hour_asis": 6, "AS-IS recorded | waves": 257, "AS-IS recorded | units": 5762.0, "AS-IS recorded | stops": 2838, "AS-IS recorded | dist_km": 42.8913648, "AS-IS recorded | hours": 33.70649022222222, "AS-IS recorded | mean_dist_per_wave_m": 166.89247003891052, "AS-IS recorded | units_per_hour": 170.9463062458278, "AS-IS recorded | m_per_unit": 7.443832835820895, "AS-IS re-routed | waves": 257, "AS-IS re-routed | units": 5762.0, "AS-IS re-routed | stops": 2838, "AS-IS re-routed | dist_km": 36.18874106666667, "AS-IS re-routed | hours": 31.822428074074075, "AS-IS re-routed | mean_dist_per_wave_m": 140.81222204928665, "AS-IS re-routed | units_per_hour": 181.06726446478595, "AS-IS re-routed | m_per_unit": 6.280586786995257, "Optimised | waves": 257, "Optimised | units": 5762.0, "Optimised | stops": 2228, "Optimised | dist_km": 16.783134666666665, "Optimised | hours": 24.737537407407405, "Optimised | mean_dist_per_wave_m": 65.30402594033721, "Optimised | units_per_hour": 232.9253678369225, "Optimised | m_per_unit": 2.912727293763739, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8811485410302196, "workload_share_%": 3.561825048989003, "hours_saved_with_optimised": 8.968952814814816}, {"operator": "Operator_15", "rank_by_units_per_hour_asis": 5, "AS-IS recorded | waves": 201, "AS-IS recorded | units": 4320.0, "AS-IS recorded | stops": 2159, "AS-IS recorded | dist_km": 31.030253600000005, "AS-IS recorded | hours": 25.17784822222222, "AS-IS recorded | mean_dist_per_wave_m": 154.3793711442786, "AS-IS recorded | units_per_hour": 171.57939637538703, "AS-IS recorded | m_per_unit": 7.1829290740740745, "AS-IS re-routed | waves": 201, "AS-IS re-routed | units": 4320.0, "AS-IS re-routed | stops": 2159, "AS-IS re-routed | dist_km": 27.589146399999997, "AS-IS re-routed | hours": 24.210874, "AS-IS re-routed | mean_dist_per_wave_m": 137.25943482587064, "AS-IS re-routed | units_per_hour": 178.4322201668556, "AS-IS re-routed | m_per_unit": 6.386376481481481, "Optimised | waves": 201, "Optimised | units": 4320.0, "Optimised | stops": 1687, "Optimised | dist_km": 12.761312000000002, "Optimised | hours": 18.78092, "Optimised | mean_dist_per_wave_m": 63.4891144278607, "Optimised | units_per_hour": 230.0206805630395, "Optimised | m_per_unit": 2.9540074074074076, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.9192070247734176, "workload_share_%": 2.6704415500924146, "hours_saved_with_optimised": 6.396928222222218}, {"operator": "Operator_16", "rank_by_units_per_hour_asis": 8, "AS-IS recorded | waves": 51, "AS-IS recorded | units": 1065.0, "AS-IS recorded | stops": 509, "AS-IS recorded | dist_km": 8.127986133333334, "AS-IS recorded | hours": 6.296662814814815, "AS-IS recorded | mean_dist_per_wave_m": 159.37227712418303, "AS-IS recorded | units_per_hour": 169.13721304788044, "AS-IS recorded | m_per_unit": 7.63191186228482, "AS-IS re-routed | waves": 51, "AS-IS re-routed | units": 1065.0, "AS-IS re-routed | stops": 509, "AS-IS re-routed | dist_km": 7.116668, "AS-IS re-routed | hours": 6.015741111111112, "AS-IS re-routed | mean_dist_per_wave_m": 139.54250980392158, "AS-IS re-routed | units_per_hour": 177.03554397195356, "AS-IS re-routed | m_per_unit": 6.682317370892019, "Optimised | waves": 51, "Optimised | units": 1065.0, "Optimised | stops": 414, "Optimised | dist_km": 3.225562666666667, "Optimised | hours": 4.670989629629629, "Optimised | mean_dist_per_wave_m": 63.24632679738562, "Optimised | units_per_hour": 228.003075246486, "Optimised | m_per_unit": 3.0286973395931143, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.9119044968284262, "workload_share_%": 0.6583380210297272, "hours_saved_with_optimised": 1.6256731851851862}, {"operator": "Operator_20", "rank_by_units_per_hour_asis": 19, "AS-IS recorded | waves": 27, "AS-IS recorded | units": 546.0, "AS-IS recorded | stops": 280, "AS-IS recorded | dist_km": 4.354301333333333, "AS-IS recorded | hours": 3.3473059259259257, "AS-IS recorded | mean_dist_per_wave_m": 161.2704197530864, "AS-IS recorded | units_per_hour": 163.11625291583303, "AS-IS recorded | m_per_unit": 7.974910866910866, "AS-IS re-routed | waves": 27, "AS-IS re-routed | units": 546.0, "AS-IS re-routed | stops": 280, "AS-IS re-routed | dist_km": 3.4359261333333335, "AS-IS re-routed | hours": 3.0922017037037035, "AS-IS re-routed | mean_dist_per_wave_m": 127.25652345679012, "AS-IS re-routed | units_per_hour": 176.57321621226234, "AS-IS re-routed | m_per_unit": 6.2929050061050065, "Optimised | waves": 27, "Optimised | units": 546.0, "Optimised | stops": 228, "Optimised | dist_km": 1.7271776000000003, "Optimised | hours": 2.47310488888889, "Optimised | mean_dist_per_wave_m": 63.96954074074074, "Optimised | units_per_hour": 220.775108428703, "Optimised | m_per_unit": 3.163328937728938, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8510873949367908, "workload_share_%": 0.3375141403589024, "hours_saved_with_optimised": 0.8742010370370363}, {"operator": "Operator_9", "rank_by_units_per_hour_asis": 21, "AS-IS recorded | waves": 19, "AS-IS recorded | units": 410.0, "AS-IS recorded | stops": 281, "AS-IS recorded | dist_km": 4.410932533333334, "AS-IS recorded | hours": 3.0113701481481483, "AS-IS recorded | mean_dist_per_wave_m": 232.1543438596491, "AS-IS recorded | units_per_hour": 136.15064898353023, "AS-IS recorded | m_per_unit": 10.758372032520326, "AS-IS re-routed | waves": 19, "AS-IS re-routed | units": 410.0, "AS-IS re-routed | stops": 281, "AS-IS re-routed | dist_km": 3.3843120000000004, "AS-IS re-routed | hours": 2.720642222222222, "AS-IS re-routed | mean_dist_per_wave_m": 178.1216842105263, "AS-IS re-routed | units_per_hour": 150.69971224114568, "AS-IS re-routed | m_per_unit": 8.254419512195122, "Optimised | waves": 19, "Optimised | units": 410.0, "Optimised | stops": 216, "Optimised | dist_km": 1.4927013333333334, "Optimised | hours": 2.0146392592592592, "Optimised | mean_dist_per_wave_m": 78.56322807017544, "Optimised | units_per_hour": 203.51037939702832, "Optimised | m_per_unit": 3.6407349593495937, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8053300908815805, "workload_share_%": 0.2534446841522893, "hours_saved_with_optimised": 0.996730888888889}, {"operator": "Operator_10", "rank_by_units_per_hour_asis": 15, "AS-IS recorded | waves": 17, "AS-IS recorded | units": 408.0, "AS-IS recorded | stops": 215, "AS-IS recorded | dist_km": 3.195335733333333, "AS-IS recorded | hours": 2.448148814814815, "AS-IS recorded | mean_dist_per_wave_m": 187.96092549019608, "AS-IS recorded | units_per_hour": 166.65653555495248, "AS-IS recorded | m_per_unit": 7.83170522875817, "AS-IS re-routed | waves": 17, "AS-IS re-routed | units": 408.0, "AS-IS re-routed | stops": 215, "AS-IS re-routed | dist_km": 2.5587720000000003, "AS-IS re-routed | hours": 2.2713255555555554, "AS-IS re-routed | mean_dist_per_wave_m": 150.516, "AS-IS re-routed | units_per_hour": 179.6307882866246, "AS-IS re-routed | m_per_unit": 6.2715000000000005, "Optimised | waves": 17, "Optimised | units": 408.0, "Optimised | stops": 153, "Optimised | dist_km": 1.3021232, "Optimised | hours": 1.7500342222222225, "Optimised | mean_dist_per_wave_m": 76.59548235294118, "Optimised | units_per_hour": 233.1382979939186, "Optimised | m_per_unit": 3.191478431372549, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8377419909052221, "workload_share_%": 0.2522083686198391, "hours_saved_with_optimised": 0.6981145925925927}, {"operator": "Operator_24", "rank_by_units_per_hour_asis": 11, "AS-IS recorded | waves": 22, "AS-IS recorded | units": 390.0, "AS-IS recorded | stops": 171, "AS-IS recorded | dist_km": 3.014260266666667, "AS-IS recorded | hours": 2.331738962962963, "AS-IS recorded | mean_dist_per_wave_m": 137.0118303030303, "AS-IS recorded | units_per_hour": 167.2571442149868, "AS-IS recorded | m_per_unit": 7.728872478632479, "AS-IS re-routed | waves": 22, "AS-IS re-routed | units": 390.0, "AS-IS re-routed | stops": 171, "AS-IS re-routed | dist_km": 2.7439759999999995, "AS-IS re-routed | hours": 2.2538822222222223, "AS-IS re-routed | mean_dist_per_wave_m": 124.72618181818184, "AS-IS re-routed | units_per_hour": 173.03477358079442, "AS-IS re-routed | m_per_unit": 7.035835897435897, "Optimised | waves": 22, "Optimised | units": 390.0, "Optimised | stops": 131, "Optimised | dist_km": 1.2916210666666663, "Optimised | hours": 1.739339185185185, "Optimised | mean_dist_per_wave_m": 58.71004848484848, "Optimised | units_per_hour": 224.2230861707846, "Optimised | m_per_unit": 3.3118488888888886, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.935746379526034, "workload_share_%": 0.2410815288277874, "hours_saved_with_optimised": 0.5923997777777779}, {"operator": "Operator_23", "rank_by_units_per_hour_asis": 2, "AS-IS recorded | waves": 13, "AS-IS recorded | units": 313.0, "AS-IS recorded | stops": 114, "AS-IS recorded | dist_km": 1.6378136, "AS-IS recorded | hours": 1.509948222222222, "AS-IS recorded | mean_dist_per_wave_m": 125.98566153846151, "AS-IS recorded | units_per_hour": 207.291876233578, "AS-IS recorded | m_per_unit": 5.2326313099041535, "AS-IS re-routed | waves": 13, "AS-IS re-routed | units": 313.0, "AS-IS re-routed | stops": 114, "AS-IS re-routed | dist_km": 1.3970674666666665, "AS-IS re-routed | hours": 1.443074296296296, "AS-IS re-routed | mean_dist_per_wave_m": 107.4667282051282, "AS-IS re-routed | units_per_hour": 216.89804939588083, "AS-IS re-routed | m_per_unit": 4.463474334398295, "Optimised | waves": 13, "Optimised | units": 313.0, "Optimised | stops": 96, "Optimised | dist_km": 0.7462645333333333, "Optimised | hours": 1.212295703703704, "Optimised | mean_dist_per_wave_m": 57.404964102564094, "Optimised | units_per_hour": 258.1878324271452, "Optimised | m_per_unit": 2.384231735889244, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8952244904137405, "workload_share_%": 0.193483380828455, "hours_saved_with_optimised": 0.2976525185185181}, {"operator": "Operator_22", "rank_by_units_per_hour_asis": 20, "AS-IS recorded | waves": 12, "AS-IS recorded | units": 231.0, "AS-IS recorded | stops": 132, "AS-IS recorded | dist_km": 1.7439666666666664, "AS-IS recorded | hours": 1.4361018518518518, "AS-IS recorded | mean_dist_per_wave_m": 145.33055555555555, "AS-IS recorded | units_per_hour": 160.85210091618902, "AS-IS recorded | m_per_unit": 7.549639249639249, "AS-IS re-routed | waves": 12, "AS-IS re-routed | units": 231.0, "AS-IS re-routed | stops": 132, "AS-IS re-routed | dist_km": 1.499599466666667, "AS-IS re-routed | hours": 1.368222074074074, "AS-IS re-routed | mean_dist_per_wave_m": 124.96662222222224, "AS-IS re-routed | units_per_hour": 168.83224176625433, "AS-IS re-routed | m_per_unit": 6.491772582972584, "Optimised | waves": 12, "Optimised | units": 231.0, "Optimised | stops": 105, "Optimised | dist_km": 0.7833512, "Optimised | hours": 1.0942642222222223, "Optimised | mean_dist_per_wave_m": 65.27926666666667, "Optimised | units_per_hour": 211.1007518192336, "Optimised | m_per_unit": 3.3911307359307363, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8890179763824623, "workload_share_%": 0.1427944439979971, "hours_saved_with_optimised": 0.3418376296296295}, {"operator": "Operator_7", "rank_by_units_per_hour_asis": 22, "AS-IS recorded | waves": 14, "AS-IS recorded | units": 231.0, "AS-IS recorded | stops": 163, "AS-IS recorded | dist_km": 2.566974933333333, "AS-IS recorded | hours": 1.7841597037037038, "AS-IS recorded | mean_dist_per_wave_m": 183.35535238095235, "AS-IS recorded | units_per_hour": 129.4727145336101, "AS-IS recorded | m_per_unit": 11.112445598845596, "AS-IS re-routed | waves": 14, "AS-IS re-routed | units": 231.0, "AS-IS re-routed | stops": 163, "AS-IS re-routed | dist_km": 2.1125882666666667, "AS-IS re-routed | hours": 1.657941185185185, "AS-IS re-routed | mean_dist_per_wave_m": 150.8991619047619, "AS-IS re-routed | units_per_hour": 139.32942981580993, "AS-IS re-routed | m_per_unit": 9.145403751803752, "Optimised | waves": 14, "Optimised | units": 231.0, "Optimised | stops": 130, "Optimised | dist_km": 0.9857488, "Optimised | hours": 1.2532635555555556, "Optimised | mean_dist_per_wave_m": 70.41062857142857, "Optimised | units_per_hour": 184.31877235718443, "Optimised | m_per_unit": 4.267310822510823, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.8651639243821447, "workload_share_%": 0.1427944439979971, "hours_saved_with_optimised": 0.5308961481481482}, {"operator": "Operator_21", "rank_by_units_per_hour_asis": 1, "AS-IS recorded | waves": 1, "AS-IS recorded | units": 28.0, "AS-IS recorded | stops": 8, "AS-IS recorded | dist_km": 0.1517821333333333, "AS-IS recorded | hours": 0.1277172592592592, "AS-IS recorded | mean_dist_per_wave_m": 151.78213333333335, "AS-IS recorded | units_per_hour": 219.23426921620265, "AS-IS recorded | m_per_unit": 5.420790476190477, "AS-IS re-routed | waves": 1, "AS-IS re-routed | units": 28.0, "AS-IS re-routed | stops": 8, "AS-IS re-routed | dist_km": 0.1470973333333333, "AS-IS re-routed | hours": 0.1264159259259259, "AS-IS re-routed | mean_dist_per_wave_m": 147.09733333333332, "AS-IS re-routed | units_per_hour": 221.49108029637617, "AS-IS re-routed | m_per_unit": 5.25347619047619, "Optimised | waves": 1, "Optimised | units": 28.0, "Optimised | stops": 7, "Optimised | dist_km": 0.0570442666666666, "Optimised | hours": 0.0986234074074074, "Optimised | mean_dist_per_wave_m": 57.04426666666667, "Optimised | units_per_hour": 283.90826007799217, "Optimised | m_per_unit": 2.0372952380952385, "route_efficiency_index (optimal/recorded, 1=perfect)": 0.9691347071152862, "workload_share_%": 0.0173084174543026, "hours_saved_with_optimised": 0.0290938518518518}];
+      const SIM_WAVES = [{"id": "33168", "title": "Wave #33168 \u00b7 Multi-Aisle Heavy Order (24 Units)", "units": 24, "operator": "Operator_2", "asis_dist": 269.2, "opt_dist": 104.2, "saving_pct": 61.3, "asis_stops": [{"ref": "BT-401", "size": "9.5", "loc": "A-04-11", "x": 12.0, "y": 0.0}, {"ref": "BT-208", "size": "10.0", "loc": "A-12-21", "x": 42.0, "y": 0.0}, {"ref": "BT-715", "size": "8.5", "loc": "D-06-12", "x": 18.0, "y": 8.7}, {"ref": "BT-102", "size": "11.0", "loc": "D-14-22", "x": 48.0, "y": 8.7}, {"ref": "BT-554", "size": "9.0", "loc": "L-02-11", "x": 8.0, "y": 31.9}, {"ref": "BT-339", "size": "10.5", "loc": "L-10-21", "x": 36.0, "y": 31.9}, {"ref": "BT-820", "size": "8.0", "loc": "P-04-12", "x": 14.0, "y": 43.5}, {"ref": "BT-904", "size": "9.5", "loc": "P-12-22", "x": 44.0, "y": 43.5}, {"ref": "BT-112", "size": "10.0", "loc": "Q-08-11", "x": 24.0, "y": 46.4}, {"ref": "BT-640", "size": "11.5", "loc": "B-08-11", "x": 26.0, "y": 2.9}], "opt_stops": [{"ref": "BT-401", "size": "9.5", "loc": "H-08-01", "x": 26.0, "y": 20.3}, {"ref": "BT-208", "size": "10.0", "loc": "H-09-02", "x": 30.0, "y": 20.3}, {"ref": "BT-715", "size": "8.5", "loc": "I-07-01", "x": 24.0, "y": 23.2}, {"ref": "BT-102", "size": "11.0", "loc": "I-09-02", "x": 30.0, "y": 23.2}, {"ref": "BT-554", "size": "9.0", "loc": "G-08-01", "x": 26.0, "y": 17.4}, {"ref": "BT-339", "size": "10.5", "loc": "G-09-02", "x": 30.0, "y": 17.4}, {"ref": "BT-820", "size": "8.0", "loc": "J-07-01", "x": 24.0, "y": 26.1}, {"ref": "BT-904", "size": "9.5", "loc": "J-09-02", "x": 30.0, "y": 26.1}, {"ref": "BT-112", "size": "10.0", "loc": "H-06-01", "x": 20.0, "y": 20.3}, {"ref": "BT-640", "size": "11.5", "loc": "I-10-02", "x": 34.0, "y": 23.2}], "asis_wps": [[28.0, 20.3], [28.0, 20.3], [28.0, 0.0], [12.0, 0.0], [42.0, 0.0], [28.0, 0.0], [28.0, 8.7], [18.0, 8.7], [48.0, 8.7], [28.0, 8.7], [28.0, 31.9], [8.0, 31.9], [36.0, 31.9], [28.0, 31.9], [28.0, 43.5], [14.0, 43.5], [44.0, 43.5], [28.0, 43.5], [28.0, 46.4], [24.0, 46.4], [28.0, 46.4], [28.0, 2.9], [26.0, 2.9], [28.0, 2.9], [28.0, 20.3], [28.0, 20.3]], "opt_wps": [[28.0, 20.3], [26.0, 20.3], [30.0, 20.3], [28.0, 20.3], [28.0, 23.2], [24.0, 23.2], [30.0, 23.2], [28.0, 23.2], [28.0, 17.4], [26.0, 17.4], [30.0, 17.4], [28.0, 17.4], [28.0, 26.1], [24.0, 26.1], [30.0, 26.1], [28.0, 26.1], [28.0, 20.3], [20.0, 20.3], [28.0, 20.3], [28.0, 23.2], [34.0, 23.2], [28.0, 23.2], [28.0, 20.3], [28.0, 20.3]]}, {"id": "33170", "title": "Wave #33170 \u00b7 Standard Core Batch (20 Units)", "units": 20, "operator": "Operator_1", "asis_dist": 189.6, "opt_dist": 83.1, "saving_pct": 56.2, "asis_stops": [{"ref": "BT-310", "size": "9.0", "loc": "B-04-11", "x": 12.0, "y": 2.9}, {"ref": "BT-312", "size": "10.0", "loc": "B-12-21", "x": 42.0, "y": 2.9}, {"ref": "BT-450", "size": "8.5", "loc": "F-06-12", "x": 18.0, "y": 14.5}, {"ref": "BT-452", "size": "10.5", "loc": "F-14-22", "x": 48.0, "y": 14.5}, {"ref": "BT-780", "size": "9.5", "loc": "M-04-11", "x": 14.0, "y": 34.8}, {"ref": "BT-782", "size": "11.0", "loc": "M-12-21", "x": 42.0, "y": 34.8}, {"ref": "BT-910", "size": "8.0", "loc": "O-08-11", "x": 24.0, "y": 40.6}], "opt_stops": [{"ref": "BT-310", "size": "9.0", "loc": "H-07-01", "x": 24.0, "y": 20.3}, {"ref": "BT-312", "size": "10.0", "loc": "H-09-02", "x": 30.0, "y": 20.3}, {"ref": "BT-450", "size": "8.5", "loc": "I-08-01", "x": 26.0, "y": 23.2}, {"ref": "BT-452", "size": "10.5", "loc": "I-10-02", "x": 34.0, "y": 23.2}, {"ref": "BT-780", "size": "9.5", "loc": "G-08-01", "x": 26.0, "y": 17.4}, {"ref": "BT-782", "size": "11.0", "loc": "G-10-02", "x": 32.0, "y": 17.4}, {"ref": "BT-910", "size": "8.0", "loc": "H-10-01", "x": 34.0, "y": 20.3}], "asis_wps": [[28.0, 20.3], [28.0, 20.3], [28.0, 2.9], [12.0, 2.9], [42.0, 2.9], [28.0, 2.9], [28.0, 14.5], [18.0, 14.5], [48.0, 14.5], [28.0, 14.5], [28.0, 34.8], [14.0, 34.8], [42.0, 34.8], [28.0, 34.8], [28.0, 40.6], [24.0, 40.6], [28.0, 40.6], [28.0, 20.3], [28.0, 20.3]], "opt_wps": [[28.0, 20.3], [24.0, 20.3], [30.0, 20.3], [28.0, 20.3], [28.0, 23.2], [26.0, 23.2], [34.0, 23.2], [28.0, 23.2], [28.0, 17.4], [26.0, 17.4], [32.0, 17.4], [28.0, 17.4], [28.0, 20.3], [34.0, 20.3], [28.0, 20.3]]}, {"id": "33172", "title": "Wave #33172 \u00b7 Peak Trolley Capacity (26 Units)", "units": 26, "operator": "Operator_8", "asis_dist": 204.7, "opt_dist": 86.2, "saving_pct": 57.9, "asis_stops": [{"ref": "BT-101", "size": "9.5", "loc": "C-02-11", "x": 8.0, "y": 5.8}, {"ref": "BT-103", "size": "10.0", "loc": "C-14-21", "x": 48.0, "y": 5.8}, {"ref": "BT-250", "size": "8.5", "loc": "E-06-12", "x": 18.0, "y": 11.6}, {"ref": "BT-252", "size": "11.0", "loc": "K-12-22", "x": 42.0, "y": 29.0}, {"ref": "BT-600", "size": "9.0", "loc": "N-04-11", "x": 12.0, "y": 37.7}, {"ref": "BT-602", "size": "10.5", "loc": "N-14-21", "x": 48.0, "y": 37.7}, {"ref": "BT-850", "size": "8.0", "loc": "D-10-12", "x": 32.0, "y": 8.7}, {"ref": "BT-852", "size": "9.5", "loc": "L-08-22", "x": 26.0, "y": 31.9}], "opt_stops": [{"ref": "BT-101", "size": "9.5", "loc": "H-07-01", "x": 24.0, "y": 20.3}, {"ref": "BT-103", "size": "10.0", "loc": "H-09-02", "x": 30.0, "y": 20.3}, {"ref": "BT-250", "size": "8.5", "loc": "I-07-01", "x": 24.0, "y": 23.2}, {"ref": "BT-252", "size": "11.0", "loc": "I-09-02", "x": 30.0, "y": 23.2}, {"ref": "BT-600", "size": "9.0", "loc": "G-07-01", "x": 24.0, "y": 17.4}, {"ref": "BT-602", "size": "10.5", "loc": "G-09-02", "x": 30.0, "y": 17.4}, {"ref": "BT-850", "size": "8.0", "loc": "J-08-01", "x": 26.0, "y": 26.1}, {"ref": "BT-852", "size": "9.5", "loc": "F-08-02", "x": 26.0, "y": 14.5}], "asis_wps": [[28.0, 20.3], [28.0, 20.3], [28.0, 5.8], [8.0, 5.8], [48.0, 5.8], [28.0, 5.8], [28.0, 11.6], [18.0, 11.6], [28.0, 11.6], [28.0, 29.0], [42.0, 29.0], [28.0, 29.0], [28.0, 37.7], [12.0, 37.7], [48.0, 37.7], [28.0, 37.7], [28.0, 8.7], [32.0, 8.7], [28.0, 8.7], [28.0, 31.9], [26.0, 31.9], [28.0, 31.9], [28.0, 20.3], [28.0, 20.3]], "opt_wps": [[28.0, 20.3], [24.0, 20.3], [30.0, 20.3], [28.0, 20.3], [28.0, 23.2], [24.0, 23.2], [30.0, 23.2], [28.0, 23.2], [28.0, 17.4], [24.0, 17.4], [30.0, 17.4], [28.0, 17.4], [28.0, 26.1], [26.0, 26.1], [28.0, 26.1], [28.0, 14.5], [26.0, 14.5], [28.0, 14.5], [28.0, 20.3], [28.0, 20.3]]}, {"id": "33175", "title": "Wave #33175 \u00b7 Class-A Fast Movers (18 Units)", "units": 18, "operator": "Operator_4", "asis_dist": 131.4, "opt_dist": 36.7, "saving_pct": 72.1, "asis_stops": [{"ref": "BT-501", "size": "9.0", "loc": "E-04-11", "x": 14.0, "y": 11.6}, {"ref": "BT-502", "size": "9.5", "loc": "E-12-21", "x": 42.0, "y": 11.6}, {"ref": "BT-503", "size": "10.0", "loc": "K-06-12", "x": 18.0, "y": 29.0}, {"ref": "BT-504", "size": "10.5", "loc": "K-14-22", "x": 46.0, "y": 29.0}, {"ref": "BT-505", "size": "8.5", "loc": "C-08-11", "x": 26.0, "y": 5.8}], "opt_stops": [{"ref": "BT-501", "size": "9.0", "loc": "H-08-01", "x": 26.0, "y": 20.3}, {"ref": "BT-502", "size": "9.5", "loc": "H-08-02", "x": 28.0, "y": 20.3}, {"ref": "BT-503", "size": "10.0", "loc": "H-09-01", "x": 30.0, "y": 20.3}, {"ref": "BT-504", "size": "10.5", "loc": "I-08-01", "x": 26.0, "y": 23.2}, {"ref": "BT-505", "size": "8.5", "loc": "G-08-01", "x": 26.0, "y": 17.4}], "asis_wps": [[28.0, 20.3], [28.0, 20.3], [28.0, 11.6], [14.0, 11.6], [42.0, 11.6], [28.0, 11.6], [28.0, 29.0], [18.0, 29.0], [46.0, 29.0], [28.0, 29.0], [28.0, 5.8], [26.0, 5.8], [28.0, 5.8], [28.0, 20.3], [28.0, 20.3]], "opt_wps": [[28.0, 20.3], [26.0, 20.3], [28.0, 20.3], [30.0, 20.3], [28.0, 20.3], [28.0, 23.2], [26.0, 23.2], [28.0, 23.2], [28.0, 17.4], [26.0, 17.4], [28.0, 17.4], [28.0, 20.3], [28.0, 20.3]]}];
 
       let currentSample = 'all';
       let currentRouting = 'all';
@@ -1392,7 +1649,381 @@
         });
       }
 
-      /* ── Initialize ── */
+      /* ══════════════════════════════════════════════════════════════════
+         FEATURE #1: 2D PICKER ROUTE SIMULATOR ENGINE
+         ══════════════════════════════════════════════════════════════════ */
+      let currentSimWave = SIM_WAVES[0];
+      let simPlaying = false;
+      let simSpeed = 2;
+      let simProgress = 0; // 0.0 to 1.0
+      let simAnimFrame = null;
+
+      const canvasAsis = document.getElementById('canvas-asis');
+      const ctxAsis = canvasAsis.getContext('2d');
+      const canvasOpt = document.getElementById('canvas-opt');
+      const ctxOpt = canvasOpt.getContext('2d');
+
+      const WAREHOUSE_CONFIG = {
+        numAisles: 17,
+        aisleNames: ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'],
+        maxX: 56.0,
+        maxY: 46.4,
+        crossAisles: [2.0, 28.0, 54.0],
+        ioDepot: { x: 28.0, y: 20.3 } // CC-08
+      };
+
+      function toCanvasCoords(pt, width, height) {
+        const padX = 35;
+        const padY = 25;
+        const scaleX = (width - padX * 2) / WAREHOUSE_CONFIG.maxX;
+        const scaleY = (height - padY * 2) / WAREHOUSE_CONFIG.maxY;
+        return {
+          x: padX + pt.x * scaleX,
+          y: padY + pt.y * scaleY
+        };
+      }
+
+      function drawWarehouseGrid(ctx, width, height) {
+        ctx.fillStyle = '#090d16';
+        ctx.fillRect(0, 0, width, height);
+
+        // Draw cross aisles
+        WAREHOUSE_CONFIG.crossAisles.forEach((cx, idx) => {
+          const pTop = toCanvasCoords({ x: cx, y: 0 }, width, height);
+          const pBot = toCanvasCoords({ x: cx, y: WAREHOUSE_CONFIG.maxY }, width, height);
+          ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+          ctx.lineWidth = 14;
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          ctx.moveTo(pTop.x, pTop.y);
+          ctx.lineTo(pBot.x, pBot.y);
+          ctx.stroke();
+
+          // Label
+          ctx.fillStyle = 'rgba(148, 163, 184, 0.35)';
+          ctx.font = '9px monospace';
+          ctx.fillText(idx === 0 ? 'LC' : (idx === 1 ? 'CC' : 'RC'), pTop.x - 7, pTop.y - 12);
+        });
+
+        // Draw aisles and racks
+        WAREHOUSE_CONFIG.aisleNames.forEach((name, i) => {
+          const yMeters = i * 2.9;
+          const pLeft = toCanvasCoords({ x: 0, y: yMeters }, width, height);
+          const pRight = toCanvasCoords({ x: WAREHOUSE_CONFIG.maxX, y: yMeters }, width, height);
+
+          // Rack line
+          ctx.strokeStyle = 'rgba(30, 41, 59, 0.7)';
+          ctx.lineWidth = 6;
+          ctx.lineCap = 'square';
+          ctx.beginPath();
+          ctx.moveTo(pLeft.x, pLeft.y);
+          ctx.lineTo(pRight.x, pRight.y);
+          ctx.stroke();
+
+          // Aisle letter
+          ctx.fillStyle = 'rgba(148, 163, 184, 0.5)';
+          ctx.font = '10px Inter, sans-serif';
+          ctx.fillText(name, pLeft.x - 22, pLeft.y + 3);
+        });
+
+        // Draw I/O Depot (CC-08)
+        const ioP = toCanvasCoords(WAREHOUSE_CONFIG.ioDepot, width, height);
+        ctx.fillStyle = '#2dd4bf';
+        ctx.beginPath();
+        ctx.arc(ioP.x, ioP.y, 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = 'rgba(45, 212, 191, 0.4)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(ioP.x, ioP.y, 11, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = '#2dd4bf';
+        ctx.font = 'bold 9px Inter, sans-serif';
+        ctx.fillText('I/O', ioP.x + 8, ioP.y + 3);
+      }
+
+      function getWaypointProgress(wps, progress) {
+        if (progress <= 0) return { curPos: wps[0], cumDist: 0, activeIndex: 0 };
+        if (progress >= 1) return { curPos: wps[wps.length - 1], cumDist: 1, activeIndex: wps.length - 1 };
+
+        // Calculate lengths of each segment
+        let total = 0;
+        const segLens = [];
+        for (let i = 0; i < wps.length - 1; i++) {
+          const d = Math.hypot(wps[i+1][0] - wps[i][0], wps[i+1][1] - wps[i][1]);
+          segLens.push(d);
+          total += d;
+        }
+
+        const targetDist = progress * total;
+        let accum = 0;
+        for (let i = 0; i < segLens.length; i++) {
+          if (accum + segLens[i] >= targetDist) {
+            const segRatio = (targetDist - accum) / segLens[i];
+            const x = wps[i][0] + (wps[i+1][0] - wps[i][0]) * segRatio;
+            const y = wps[i][1] + (wps[i+1][1] - wps[i][1]) * segRatio;
+            return { curPos: [x, y], cumDist: targetDist, activeIndex: i };
+          }
+          accum += segLens[i];
+        }
+        return { curPos: wps[wps.length - 1], cumDist: total, activeIndex: wps.length - 1 };
+      }
+
+      function renderSimulationFrame() {
+        const w1 = canvasAsis.width;
+        const h1 = canvasAsis.height;
+        const w2 = canvasOpt.width;
+        const h2 = canvasOpt.height;
+
+        // Draw Grids
+        drawWarehouseGrid(ctxAsis, w1, h1);
+        drawWarehouseGrid(ctxOpt, w2, h2);
+
+        // 1. AS-IS Stops
+        currentSimWave.asis_stops.forEach(st => {
+          const p = toCanvasCoords(st, w1, h1);
+          ctxAsis.fillStyle = 'rgba(239, 68, 68, 0.4)';
+          ctxAsis.beginPath();
+          ctxAsis.arc(p.x, p.y, 6, 0, Math.PI * 2);
+          ctxAsis.fill();
+          ctxAsis.fillStyle = '#ef4444';
+          ctxAsis.beginPath();
+          ctxAsis.arc(p.x, p.y, 3, 0, Math.PI * 2);
+          ctxAsis.fill();
+        });
+
+        // 2. OPT Stops
+        currentSimWave.opt_stops.forEach(st => {
+          const p = toCanvasCoords(st, w2, h2);
+          ctxOpt.fillStyle = 'rgba(45, 212, 191, 0.4)';
+          ctxOpt.beginPath();
+          ctxOpt.arc(p.x, p.y, 6, 0, Math.PI * 2);
+          ctxOpt.fill();
+          ctxOpt.fillStyle = '#2dd4bf';
+          ctxOpt.beginPath();
+          ctxOpt.arc(p.x, p.y, 3, 0, Math.PI * 2);
+          ctxOpt.fill();
+        });
+
+        // Compute Waypoint Interpolation
+        const asisState = getWaypointProgress(currentSimWave.asis_wps, simProgress);
+        const optState = getWaypointProgress(currentSimWave.opt_wps, simProgress);
+
+        // Draw AS-IS Path
+        ctxAsis.strokeStyle = 'rgba(239, 68, 68, 0.85)';
+        ctxAsis.lineWidth = 2.5;
+        ctxAsis.setLineDash([4, 4]);
+        ctxAsis.beginPath();
+        const pStartAsis = toCanvasCoords({ x: currentSimWave.asis_wps[0][0], y: currentSimWave.asis_wps[0][1] }, w1, h1);
+        ctxAsis.moveTo(pStartAsis.x, pStartAsis.y);
+        for (let i = 1; i <= asisState.activeIndex; i++) {
+          const pt = toCanvasCoords({ x: currentSimWave.asis_wps[i][0], y: currentSimWave.asis_wps[i][1] }, w1, h1);
+          ctxAsis.lineTo(pt.x, pt.y);
+        }
+        const curAsisP = toCanvasCoords({ x: asisState.curPos[0], y: asisState.curPos[1] }, w1, h1);
+        ctxAsis.lineTo(curAsisP.x, curAsisP.y);
+        ctxAsis.stroke();
+        ctxAsis.setLineDash([]);
+
+        // AS-IS Picker Dot
+        ctxAsis.fillStyle = '#f87171';
+        ctxAsis.beginPath();
+        ctxAsis.arc(curAsisP.x, curAsisP.y, 7, 0, Math.PI * 2);
+        ctxAsis.fill();
+        ctxAsis.strokeStyle = '#ffffff';
+        ctxAsis.lineWidth = 2;
+        ctxAsis.stroke();
+
+        // Draw OPT Path
+        ctxOpt.strokeStyle = 'rgba(45, 212, 191, 0.95)';
+        ctxOpt.lineWidth = 2.5;
+        ctxOpt.beginPath();
+        const pStartOpt = toCanvasCoords({ x: currentSimWave.opt_wps[0][0], y: currentSimWave.opt_wps[0][1] }, w2, h2);
+        ctxOpt.moveTo(pStartOpt.x, pStartOpt.y);
+        for (let i = 1; i <= optState.activeIndex; i++) {
+          const pt = toCanvasCoords({ x: currentSimWave.opt_wps[i][0], y: currentSimWave.opt_wps[i][1] }, w2, h2);
+          ctxOpt.lineTo(pt.x, pt.y);
+        }
+        const curOptP = toCanvasCoords({ x: optState.curPos[0], y: optState.curPos[1] }, w2, h2);
+        ctxOpt.lineTo(curOptP.x, curOptP.y);
+        ctxOpt.stroke();
+
+        // OPT Picker Dot
+        ctxOpt.fillStyle = '#2dd4bf';
+        ctxOpt.beginPath();
+        ctxOpt.arc(curOptP.x, curOptP.y, 7, 0, Math.PI * 2);
+        ctxOpt.fill();
+        ctxOpt.strokeStyle = '#ffffff';
+        ctxOpt.lineWidth = 2;
+        ctxOpt.stroke();
+
+        // Update Odometers
+        const curDistAsis = (simProgress * currentSimWave.asis_dist).toFixed(1);
+        const curDistOpt = (simProgress * currentSimWave.opt_dist).toFixed(1);
+        document.getElementById('odo-asis').textContent = curDistAsis;
+        document.getElementById('odo-opt').textContent = curDistOpt;
+
+        // Loop animation
+        if (simPlaying) {
+          simProgress += 0.002 * simSpeed;
+          if (simProgress >= 1) {
+            simProgress = 1;
+            simPlaying = false;
+            document.getElementById('sim-play-text').textContent = 'Restart Simulation';
+            document.getElementById('sim-play-icon').textContent = '↺';
+          }
+          simAnimFrame = requestAnimationFrame(renderSimulationFrame);
+        }
+      }
+
+      function updateSimWave(waveId) {
+        currentSimWave = SIM_WAVES.find(w => w.id === waveId) || SIM_WAVES[0];
+        simProgress = 0;
+        simPlaying = false;
+        if (simAnimFrame) cancelAnimationFrame(simAnimFrame);
+
+        document.getElementById('sim-play-text').textContent = 'Start Simulation';
+        document.getElementById('sim-play-icon').textContent = '▶';
+        document.getElementById('target-asis').textContent = currentSimWave.asis_dist.toFixed(1);
+        document.getElementById('target-opt').textContent = currentSimWave.opt_dist.toFixed(1);
+        document.getElementById('sim-wave-meta').textContent = `${currentSimWave.title} · ${currentSimWave.operator}`;
+
+        const diff = (currentSimWave.opt_dist - currentSimWave.asis_dist).toFixed(1);
+        document.getElementById('stat-dist-saved').textContent = `${diff} m`;
+        document.getElementById('stat-pct-saved').textContent = `-${currentSimWave.saving_pct.toFixed(1)}%`;
+
+        renderSimulationFrame();
+      }
+
+      // Sim Listeners
+      document.getElementById('btn-sim-play').addEventListener('click', () => {
+        if (simProgress >= 1) simProgress = 0;
+        simPlaying = !simPlaying;
+        document.getElementById('sim-play-text').textContent = simPlaying ? 'Pause Simulation' : 'Resume Simulation';
+        document.getElementById('sim-play-icon').textContent = simPlaying ? '⏸' : '▶';
+        if (simPlaying) renderSimulationFrame();
+      });
+
+      document.getElementById('btn-sim-reset').addEventListener('click', () => {
+        simProgress = 0;
+        simPlaying = false;
+        if (simAnimFrame) cancelAnimationFrame(simAnimFrame);
+        document.getElementById('sim-play-text').textContent = 'Start Simulation';
+        document.getElementById('sim-play-icon').textContent = '▶';
+        renderSimulationFrame();
+      });
+
+      document.getElementById('sim-wave-pills').addEventListener('click', (e) => {
+        if (!e.target.classList.contains('pill-btn')) return;
+        document.querySelectorAll('#sim-wave-pills .pill-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        updateSimWave(e.target.dataset.wave);
+      });
+
+      document.getElementById('sim-speed-pills').addEventListener('click', (e) => {
+        if (!e.target.classList.contains('pill-btn')) return;
+        document.querySelectorAll('#sim-speed-pills .pill-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        simSpeed = parseFloat(e.target.dataset.speed) || 2;
+      });
+
+      /* ══════════════════════════════════════════════════════════════════
+         FEATURE #2: DYNAMIC FINANCIAL ROI & BUSINESS CASE CALCULATOR
+         ══════════════════════════════════════════════════════════════════ */
+      let curSymbol = '$';
+      let curCode = 'CAD';
+
+      const inputPickers = document.getElementById('input-pickers');
+      const inputWage = document.getElementById('input-wage');
+      const inputWaves = document.getElementById('input-waves');
+      const inputDays = document.getElementById('input-days');
+      const inputCost = document.getElementById('input-cost');
+
+      function calculateROI() {
+        const pickers = parseInt(inputPickers.value);
+        const wage = parseFloat(inputWage.value);
+        const wavesPerDay = parseInt(inputWaves.value);
+        const days = parseInt(inputDays.value);
+        const cost = parseFloat(inputCost.value);
+
+        // Update Labels
+        document.getElementById('val-pickers').textContent = pickers;
+        document.getElementById('val-wage').textContent = `${curSymbol}${wage.toFixed(2)} / hr`;
+        document.getElementById('val-waves').textContent = `${wavesPerDay} waves/day`;
+        document.getElementById('val-days').textContent = `${days} days`;
+        document.getElementById('val-cost').textContent = `${curSymbol}${cost.toLocaleString()}`;
+
+        // Baseline Physics:
+        // 1 wave saves: 2.07 minutes = 0.0345 hours
+        // Total hours saved per year = wavesPerDay * days * 0.0345 hrs
+        const annualHoursSaved = wavesPerDay * days * 0.0345;
+        const annualSaving = annualHoursSaved * wage;
+
+        // Payback period (months)
+        const paybackMonths = annualSaving > 0 ? (cost / annualSaving) * 12 : 0;
+
+        // 3-Year NPV at 8% discount rate:
+        // NPV = -cost + S/(1.08) + S/(1.08^2) + S/(1.08^3) = -cost + S * 2.5771
+        const npv = annualSaving * 2.5771 - cost;
+
+        // 3-Year ROI %: (3 * S - cost) / cost * 100%
+        const roiPct = cost > 0 ? ((annualSaving * 3 - cost) / cost) * 100 : 0;
+
+        // FTE Freed: hours / (days * 7.5 hrs)
+        const fteFreed = annualHoursSaved / (days * 7.5);
+
+        // Ergonomics:
+        // 99.1 meters saved per wave
+        const kmSavedAnnual = (wavesPerDay * days * 99.1) / 1000;
+        const stepsPerPickerPerDay = (wavesPerDay * 99.1 * 1.35) / pickers; // ~1.35 steps per meter
+
+        // Update Displays
+        document.getElementById('out-annual-saving').textContent = `${curSymbol}${Math.round(annualSaving).toLocaleString()}`;
+        document.getElementById('out-payback').textContent = paybackMonths < 1 ? `${(paybackMonths * 4.3).toFixed(1)} wks` : `${paybackMonths.toFixed(1)} mo`;
+        document.getElementById('out-roi').textContent = `${Math.round(roiPct)}%`;
+        document.getElementById('out-npv').textContent = `${curSymbol}${Math.round(npv).toLocaleString()}`;
+        document.getElementById('out-fte').textContent = `${fteFreed.toFixed(2)} FTE`;
+        document.getElementById('out-km-saved').textContent = `${Math.round(kmSavedAnnual).toLocaleString()} km`;
+        document.getElementById('out-steps-saved').textContent = `~${Math.round(stepsPerPickerPerDay).toLocaleString()} steps`;
+      }
+
+      // Calculator Listeners
+      [inputPickers, inputWage, inputWaves, inputDays, inputCost].forEach(el => {
+        el.addEventListener('input', calculateROI);
+      });
+
+      document.getElementById('calc-currency-pills').addEventListener('click', (e) => {
+        if (!e.target.classList.contains('pill-btn')) return;
+        document.querySelectorAll('#calc-currency-pills .pill-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        curCode = e.target.dataset.cur;
+        curSymbol = e.target.dataset.sym;
+        calculateROI();
+      });
+
+      document.getElementById('btn-copy-roi').addEventListener('click', () => {
+        const text = `EXECUTIVE ROI SUMMARY · WAREHOUSE OPTIMISATION\n` +
+          `-------------------------------------------------\n` +
+          `Active Pickers: ${inputPickers.value}\n` +
+          `Hourly Rate: ${curSymbol}${inputWage.value}/hr\n` +
+          `Annual Recurring Savings: ${document.getElementById('out-annual-saving').textContent}/yr\n` +
+          `Payback Period: ${document.getElementById('out-payback').textContent}\n` +
+          `3-Year Net Present Value (NPV): ${document.getElementById('out-npv').textContent}\n` +
+          `3-Year ROI: ${document.getElementById('out-roi').textContent}\n` +
+          `Labor Capacity Freed: ${document.getElementById('out-fte').textContent}\n` +
+          `Annual Travel Eliminated: ${document.getElementById('out-km-saved').textContent}\n` +
+          `Report & Live Model: https://shreyasthakur11.github.io/Footwear_Wearhouse-Optimization/`;
+
+        navigator.clipboard.writeText(text).then(() => {
+          const btn = document.getElementById('btn-copy-roi');
+          btn.textContent = '✓ Copied to Clipboard!';
+          setTimeout(() => { btn.textContent = '📋 Copy Executive Briefing'; }, 2500);
+        });
+      });
+
+      /* ── Initialize Everything ── */
       window.addEventListener('DOMContentLoaded', () => {
         Chart.defaults.color = '#94a3b8';
         Chart.defaults.borderColor = 'rgba(148, 163, 184, 0.08)';
@@ -1401,6 +2032,8 @@
         updateScenarioTable();
         updateScenarioCharts();
         initOperatorCharts();
+        updateSimWave('33168');
+        calculateROI();
       });
     </script>
   </body>

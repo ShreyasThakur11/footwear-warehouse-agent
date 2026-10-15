@@ -22,13 +22,32 @@ Everything is reproducible from one notebook. Zero proprietary tools, zero black
 
 | Resource | Description | Direct Link |
 |---|---|---|
-| **Live Dashboard** | Interactive KPI analytics, scenario matrix, CAD viewer, and 26-figure gallery | [**shreyasthakur11.github.io**](https://shreyasthakur11.github.io/Footwear_Wearhouse-Optimization/) |
+| **Live Dashboard** | Interactive KPI analytics, 2D Route Simulator, ROI Calculator, CAD viewer, and 26-figure gallery | [**shreyasthakur11.github.io**](https://shreyasthakur11.github.io/Footwear_Wearhouse-Optimization/) |
 | **Written Report** | Complete 3.9 MB PDF report with formal methodology and industrial findings | [**`Warehouse_Optimisation_Report.pdf`**](report/Warehouse_Optimisation_Report.pdf) |
 | **Data Directory** | CSV outputs: scenario benchmarks, operator logs, data quality checks | [**`data/`**](data/) |
 | **CAD Blueprints** | AutoCAD `.dwg` master layout, 12 `.dxf` vector files, and PDF/PNG level plans | [**`layouts/`**](layouts/) |
 | **Python Pipeline** | End-to-end reproducible research code | [**`v3.ipynb`**](v3.ipynb) |
 
 ---
+
+
+---
+
+## 🚶‍♂️ Interactive 2D Route Simulator
+
+The [live dashboard](https://shreyasthakur11.github.io/Footwear_Wearhouse-Optimization/) features an interactive **2D Warehouse Digital Twin Simulator**:
+- **Synchronized Playback**: Side-by-side comparison of historical AS-IS picker travel vs the proposed Optimised-FAMILY 2-opt tour.
+- **Selectable Real Waves**: Test across Wave #33168 (24 units), #33170 (20 units), #33172 (26 units), and #33175 (18 units).
+- **Live Odometer & Metrics**: Real-time meters walked counter, distance reduction percentage, and cycle time acceleration.
+
+---
+
+## 💰 Dynamic Financial ROI & Business Case Calculator
+
+Evaluate the executive investment decision with the interactive **ROI Modeler**:
+- **Configurable Parameters**: Customize picker headcount, hourly wage, operating schedule, and re-slotting labor budget across 5 currencies (CAD, USD, EUR, GBP, INR).
+- **Executive Metrics**: Live computation of annual recurring savings, payback duration in months, 3-year Net Present Value (NPV), 3-year ROI %, labor FTE capacity freed, and ergonomic step reduction.
+- **1-Click Executive Summary**: Copy a clean business case briefing directly to your clipboard.
 
 ## 📌 Headline Results
 
