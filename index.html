@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Footwear Warehouse Optimisation · Dashboard</title>
+
+    <meta
+      name="description"
+      content="Interactive dashboard for warehouse picking optimisation — slotting and routing analysis on a safety-boot distribution centre. Walking distance cut by 59.5%."
+    />
+    <meta name="theme-color" content="#0b0f19" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="author" content="Shreyas Thakur" />
+    <link rel="canonical" href="https://shreyasthakur11.github.io/Footwear_Wearhouse-Optimization/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Footwear Warehouse Optimisation Dashboard" />
+    <meta
+      property="og:description"
+      content="Re-slotting and re-routing a safety-boot warehouse cut picker walking by 59.5%. Explore the interactive KPI dashboard."
+    />
+    <meta property="og:url" content="https://shreyasthakur11.github.io/Footwear_Wearhouse-Optimization/" />
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='28' font-size='28'%3E👟%3C/text%3E%3C/svg%3E"
+    />
+
+    <!-- Inter font — non-blocking -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
+    </noscript>
+
+    <link rel="stylesheet" href="assets/css/style.css" />
+
+    <!-- Chart.js -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
+      integrity="sha384-bMBrlAFOzfR9Xqng0MBWjSXjFmTLNjrOD3rDagLOd2PqfOZyUQi3qF9o3K2BuKu"
+      crossorigin="anonymous"
+      defer
+    ></script>
+  </head>
+
+  <body>
+    <!-- ═══ Navigation ═══ -->
+    <nav class="nav" id="main-nav">
+      <div class="nav-inner">
+        <a href="#" class="nav-brand">
+          <span class="nav-brand-icon">👟</span>
+          Footwear Warehouse
+        </a>
+        <ul class="nav-links">
+          <li><a href="#overview" class="active">Dashboard</a></li>
+          <li><a href="#scenarios">Scenarios</a></li>
+          <li><a href="#methodology">Methodology</a></li>
+          <li><a href="#economics">Economics</a></li>
+        </ul>
+        <a
+          href="report/"
+          class="nav-cta"
+          id="nav-report-btn"
+          title="View the full analysis report"
+        >
+          📄 Report
+        </a>
+      </div>
+    </nav>
+
+    <!-- ═══ Hero ═══ -->
+    <header class="hero" id="hero">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Warehouse Picking Optimisation
+      </div>
+      <h1>
+        <span class="gradient-text">59.5% Less Walking</span><br />
+        per Picking Wave
+      </h1>
+      <p class="hero-subtitle">
+        Re-slotting and re-routing a safety-boot warehouse using real WMS data —
+        9,707 waves, 215,192 units. One reproducible Python notebook, zero proprietary tools.
+      </p>
+      <div class="hero-actions">
+        <a href="#overview" class="btn btn-primary" id="hero-dashboard-btn">
+          📊 Explore Dashboard
+        </a>
+        <a href="report/" class="btn btn-report" id="hero-report-btn">
+          📄 Full Report
+        </a>
+        <a
+          href="https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization"
+          class="btn btn-secondary"
+          target="_blank"
+          rel="noopener"
+          id="hero-github-btn"
+        >
+          ⭐ GitHub
+        </a>
+      </div>
+    </header>
+
+    <!-- ═══ KPI Overview ═══ -->
+    <section class="section" id="overview">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Key Performance Indicators</div>
+          <h2 class="section-title">Optimisation at a Glance</h2>
+          <p class="section-subtitle">Headline metrics from the best scenario — Optimised-FAMILY slotting + NN 2-opt routing</p>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card animate-in">
+            <div class="kpi-icon">📏</div>
+            <div class="kpi-label">Walk Distance / Wave</div>
+            <div class="kpi-value" style="color: var(--accent-teal)">67 m</div>
+            <span class="kpi-change positive">↓ 59.5% from 166 m</span>
+          </div>
+
+          <div class="kpi-card animate-in">
+            <div class="kpi-icon">⏱️</div>
+            <div class="kpi-label">Picking Time Saved</div>
+            <div class="kpi-value" style="color: var(--accent-green)">26.3%</div>
+            <span class="kpi-change positive">↓ per wave</span>
+          </div>
+
+          <div class="kpi-card animate-in">
+            <div class="kpi-icon">💰</div>
+            <div class="kpi-label">Annual Savings</div>
+            <div class="kpi-value" style="color: var(--accent-amber)">$8,983</div>
+            <span class="kpi-change neutral">CAD / year</span>
+          </div>
+
+          <div class="kpi-card animate-in">
+            <div class="kpi-icon">🧪</div>
+            <div class="kpi-label">Out-of-Sample Saving</div>
+            <div class="kpi-value" style="color: var(--accent-blue)">58.8%</div>
+            <span class="kpi-change positive">↓ on test waves</span>
+          </div>
+
+          <div class="kpi-card animate-in">
+            <div class="kpi-icon">🏗️</div>
+            <div class="kpi-label">Stock Moves Required</div>
+            <div class="kpi-value" style="color: var(--accent-purple)">6,738</div>
+            <span class="kpi-change neutral">16% of stock</span>
+          </div>
+
+          <div class="kpi-card animate-in">
+            <div class="kpi-icon">🚶</div>
+            <div class="kpi-label">Walking Saved / Year</div>
+            <div class="kpi-value" style="color: var(--accent-red)">1,033 km</div>
+            <span class="kpi-change positive">↓ per year</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Charts ═══ -->
+    <section class="section" id="scenarios">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Scenario Comparison</div>
+          <h2 class="section-title">Storage Policies Head-to-Head</h2>
+          <p class="section-subtitle">Mean walking distance per wave across six storage policies and three routing methods</p>
+        </div>
+
+        <div class="chart-grid">
+          <!-- Walking Distance Bar Chart -->
+          <div class="chart-panel">
+            <div class="chart-header">
+              <h3 class="chart-title">Walking Distance by Policy</h3>
+              <span class="chart-badge">NN + 2-opt routing</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="chart-distance" aria-label="Bar chart comparing walking distance across storage policies"></canvas>
+            </div>
+          </div>
+
+          <!-- Saving Decomposition -->
+          <div class="chart-panel">
+            <div class="chart-header">
+              <h3 class="chart-title">Saving Decomposition</h3>
+              <span class="chart-badge">Routing vs Slotting</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="chart-decomposition" aria-label="Doughnut chart showing routing vs slotting contribution"></canvas>
+            </div>
+          </div>
+
+          <!-- Time Breakdown -->
+          <div class="chart-panel full-width">
+            <div class="chart-header">
+              <h3 class="chart-title">Picking Time Breakdown</h3>
+              <span class="chart-badge">Per wave (seconds)</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="chart-time" aria-label="Stacked bar chart showing time breakdown per wave"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Results Table ═══ -->
+    <section class="section" id="results">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Detailed Results</div>
+          <h2 class="section-title">Scenario Performance Matrix</h2>
+        </div>
+
+        <div class="data-table-wrapper">
+          <table class="data-table" id="results-table">
+            <thead>
+              <tr>
+                <th>Scenario</th>
+                <th>Routing</th>
+                <th>Mean Walk (m)</th>
+                <th>vs AS-IS</th>
+                <th>Rating</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>AS-IS (Current)</td>
+                <td>WMS Sequence</td>
+                <td>166</td>
+                <td>—</td>
+                <td><span class="value-badge warn">Baseline</span></td>
+              </tr>
+              <tr>
+                <td>AS-IS (Quick Win)</td>
+                <td>NN + 2-opt</td>
+                <td>142</td>
+                <td>−14.6%</td>
+                <td><span class="value-badge good">Quick Win</span></td>
+              </tr>
+              <tr>
+                <td>Random</td>
+                <td>NN + 2-opt</td>
+                <td>162</td>
+                <td>−2.4%</td>
+                <td><span class="value-badge warn">Marginal</span></td>
+              </tr>
+              <tr>
+                <td>Dedicated</td>
+                <td>NN + 2-opt</td>
+                <td>163</td>
+                <td>−1.8%</td>
+                <td><span class="value-badge warn">Marginal</span></td>
+              </tr>
+              <tr>
+                <td>Class-Based</td>
+                <td>NN + 2-opt</td>
+                <td>132</td>
+                <td>−20.5%</td>
+                <td><span class="value-badge good">Good</span></td>
+              </tr>
+              <tr>
+                <td>Hybrid</td>
+                <td>NN + 2-opt</td>
+                <td>122</td>
+                <td>−26.5%</td>
+                <td><span class="value-badge good">Good</span></td>
+              </tr>
+              <tr class="highlight-row">
+                <td>✨ Optimised-FAMILY</td>
+                <td>NN + 2-opt</td>
+                <td>67</td>
+                <td>−59.5%</td>
+                <td><span class="value-badge best">★ Best</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Methodology ═══ -->
+    <section class="section" id="methodology">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Pipeline</div>
+          <h2 class="section-title">Methodology</h2>
+          <p class="section-subtitle">Eight-step reproducible pipeline from raw WMS data to implementation plan</p>
+        </div>
+
+        <div class="method-grid">
+          <div class="method-card animate-in">
+            <span class="method-step">1</span>
+            <h3>Clean &amp; Load</h3>
+            <p>Robust CSV reader handles mixed delimiters, encodings, and line endings. Logs every fix in a data-quality table.</p>
+          </div>
+          <div class="method-card animate-in">
+            <span class="method-step">2</span>
+            <h3>Rebuild Layout</h3>
+            <p>2,293 locations calibrated to metres. Aisle network built for shortest-path walking distances.</p>
+          </div>
+          <div class="method-card animate-in">
+            <span class="method-step">3</span>
+            <h3>Demand &amp; ABC</h3>
+            <p>Pick-visit demand per SKU, ABC classes (80/95%), 70/30 train/test split by wave for validation.</p>
+          </div>
+          <div class="method-card animate-in">
+            <span class="method-step">4</span>
+            <h3>Storage Scenarios</h3>
+            <p>Six policies compared: four from the case + Optimised-COI and Optimised-FAMILY designed from scratch.</p>
+          </div>
+          <div class="method-card animate-in">
+            <span class="method-step">5</span>
+            <h3>Route Optimisation</h3>
+            <p>WMS sequence, serpentine, and nearest-neighbour + 2-opt compared side-by-side.</p>
+          </div>
+          <div class="method-card animate-in">
+            <span class="method-step">6</span>
+            <h3>Re-shuffle Plan</h3>
+            <p>Only forward zone re-slotted via swaps. Class A items prioritised. 186 locations touched.</p>
+          </div>
+          <div class="method-card animate-in">
+            <span class="method-step">7</span>
+            <h3>Statistical Testing</h3>
+            <p>Paired Wilcoxon tests, sensitivity to walk speed and pick time, operator performance analysis.</p>
+          </div>
+          <div class="method-card animate-in">
+            <span class="method-step">8</span>
+            <h3>Economics</h3>
+            <p>Labour hours, FTE, and CAD/year. Full cost-benefit analysis with implementation effort.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Economics ═══ -->
+    <section class="section" id="economics">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Business Impact</div>
+          <h2 class="section-title">Economic Analysis</h2>
+        </div>
+
+        <div class="chart-grid">
+          <div class="chart-panel">
+            <div class="chart-header">
+              <h3 class="chart-title">Time Model Assumptions</h3>
+            </div>
+            <table class="data-table" id="assumptions-table">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Walk speed</td><td>1.0 m/s</td></tr>
+                <tr><td>Stop time</td><td>10 s / stop</td></tr>
+                <tr><td>Pick time</td><td>6 s / unit</td></tr>
+                <tr><td>Wave setup</td><td>60 s</td></tr>
+                <tr><td>Productive hours / FTE-day</td><td>7.5 h</td></tr>
+                <tr><td>Labour cost</td><td>CAD 25 / h</td></tr>
+                <tr><td>Working days / year</td><td>250</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="chart-panel">
+            <div class="chart-header">
+              <h3 class="chart-title">Labour Savings Breakdown</h3>
+              <span class="chart-badge">Annual</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="chart-economics" aria-label="Bar chart showing labour savings"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Quick Access Panel ═══ -->
+    <section class="section">
+      <div class="container">
+        <div class="quick-access">
+          <h2>📦 Quick Access</h2>
+          <p>Jump to the full report, explore the analysis notebook, or browse the source code on GitHub.</p>
+          <div class="quick-access-btns">
+            <a href="report/" class="btn btn-report" id="qa-report-btn">
+              📄 Full Report (PDF)
+            </a>
+            <a
+              href="https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization/blob/main/v3.ipynb"
+              class="btn btn-primary"
+              target="_blank"
+              rel="noopener"
+              id="qa-notebook-btn"
+            >
+              📓 View Notebook
+            </a>
+            <a
+              href="https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization"
+              class="btn btn-secondary"
+              target="_blank"
+              rel="noopener"
+              id="qa-github-btn"
+            >
+              ⭐ Star on GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Footer ═══ -->
+    <footer class="footer">
+      <ul class="footer-links">
+        <li><a href="https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="report/">Report</a></li>
+        <li><a href="docs/">Documentation</a></li>
+        <li><a href="https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization/blob/main/v3.ipynb" target="_blank" rel="noopener">Notebook</a></li>
+      </ul>
+      <p>
+        Data: de Assis, de Paula Ferreira &amp; Ouhimmou (2025), CC BY 4.0 ·
+        Analysis: <strong>Shreyas</strong>, MBA (2026–28), IIM Mumbai ·
+        Code: MIT
+      </p>
+    </footer>
+
+    <!-- ═══ Charts Script ═══ -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        /* ── Smooth-scroll for nav links ── */
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+          link.addEventListener('click', e => {
+            const target = document.querySelector(link.getAttribute('href'));
+            if (target) {
+              e.preventDefault();
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          });
+        });
+
+        /* ── Active nav on scroll ── */
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const observer = new IntersectionObserver(
+          entries => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                navLinks.forEach(l => l.classList.remove('active'));
+                const active = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+                if (active) active.classList.add('active');
+              }
+            });
+          },
+          { rootMargin: '-20% 0px -60% 0px' }
+        );
+        sections.forEach(s => observer.observe(s));
+
+        /* ── Animate-in on scroll ── */
+        const animObserver = new IntersectionObserver(
+          entries => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.style.animationPlayState = 'running';
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+        document.querySelectorAll('.animate-in').forEach(el => {
+          el.style.animationPlayState = 'paused';
+          animObserver.observe(el);
+        });
+
+        /* ── Wait for Chart.js to load ── */
+        if (typeof Chart === 'undefined') {
+          const check = setInterval(() => {
+            if (typeof Chart !== 'undefined') {
+              clearInterval(check);
+              initCharts();
+            }
+          }, 100);
+        } else {
+          initCharts();
+        }
+      });
+
+      function initCharts() {
+        /* Global chart defaults */
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.borderColor = 'rgba(148, 163, 184, 0.08)';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.font.size = 12;
+        Chart.defaults.plugins.legend.labels.usePointStyle = true;
+        Chart.defaults.plugins.legend.labels.pointStyleWidth = 10;
+
+        /* ── 1. Walking Distance Bar Chart ── */
+        new Chart(document.getElementById('chart-distance'), {
+          type: 'bar',
+          data: {
+            labels: ['AS-IS\n(WMS)', 'Random', 'Dedicated', 'Class-\nBased', 'Hybrid', 'Optimised-\nFAMILY'],
+            datasets: [{
+              label: 'Mean Walk (m)',
+              data: [166, 162, 163, 132, 122, 67],
+              backgroundColor: [
+                'rgba(239, 68, 68, 0.7)',
+                'rgba(245, 158, 11, 0.7)',
+                'rgba(245, 158, 11, 0.7)',
+                'rgba(59, 130, 246, 0.7)',
+                'rgba(34, 197, 94, 0.7)',
+                'rgba(20, 184, 166, 0.9)'
+              ],
+              borderColor: [
+                'rgba(239, 68, 68, 1)',
+                'rgba(245, 158, 11, 1)',
+                'rgba(245, 158, 11, 1)',
+                'rgba(59, 130, 246, 1)',
+                'rgba(34, 197, 94, 1)',
+                'rgba(20, 184, 166, 1)'
+              ],
+              borderWidth: 2,
+              borderRadius: 8,
+              maxBarThickness: 48
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: '#1a2235',
+                titleColor: '#f1f5f9',
+                bodyColor: '#94a3b8',
+                borderColor: 'rgba(148,163,184,0.15)',
+                borderWidth: 1,
+                padding: 12,
+                cornerRadius: 8,
+                callbacks: {
+                  label: ctx => `${ctx.parsed.y} metres`
+                }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 200,
+                grid: { color: 'rgba(148,163,184,0.06)' },
+                ticks: { callback: v => v + ' m' }
+              },
+              x: {
+                grid: { display: false }
+              }
+            }
+          }
+        });
+
+        /* ── 2. Saving Decomposition Doughnut ── */
+        new Chart(document.getElementById('chart-decomposition'), {
+          type: 'doughnut',
+          data: {
+            labels: ['Routing Improvement', 'Slotting Improvement'],
+            datasets: [{
+              data: [14.6, 44.9],
+              backgroundColor: [
+                'rgba(59, 130, 246, 0.8)',
+                'rgba(20, 184, 166, 0.8)'
+              ],
+              borderColor: [
+                'rgba(59, 130, 246, 1)',
+                'rgba(20, 184, 166, 1)'
+              ],
+              borderWidth: 2,
+              hoverOffset: 8
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '65%',
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: { padding: 20 }
+              },
+              tooltip: {
+                backgroundColor: '#1a2235',
+                titleColor: '#f1f5f9',
+                bodyColor: '#94a3b8',
+                borderColor: 'rgba(148,163,184,0.15)',
+                borderWidth: 1,
+                padding: 12,
+                cornerRadius: 8,
+                callbacks: {
+                  label: ctx => `${ctx.label}: ${ctx.parsed}% of total saving`
+                }
+              }
+            }
+          }
+        });
+
+        /* ── 3. Time Breakdown Stacked Bar ── */
+        new Chart(document.getElementById('chart-time'), {
+          type: 'bar',
+          data: {
+            labels: ['AS-IS (WMS)', 'AS-IS (Optimised Route)', 'Optimised-FAMILY + Route'],
+            datasets: [
+              {
+                label: 'Walking',
+                data: [166, 142, 67],
+                backgroundColor: 'rgba(239, 68, 68, 0.7)',
+                borderColor: 'rgba(239, 68, 68, 1)',
+                borderWidth: 1,
+                borderRadius: 4
+              },
+              {
+                label: 'Stop Time',
+                data: [175, 175, 175],
+                backgroundColor: 'rgba(245, 158, 11, 0.6)',
+                borderColor: 'rgba(245, 158, 11, 1)',
+                borderWidth: 1,
+                borderRadius: 4
+              },
+              {
+                label: 'Pick Time',
+                data: [120, 120, 120],
+                backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 1,
+                borderRadius: 4
+              },
+              {
+                label: 'Setup',
+                data: [60, 60, 60],
+                backgroundColor: 'rgba(148, 163, 184, 0.4)',
+                borderColor: 'rgba(148, 163, 184, 0.6)',
+                borderWidth: 1,
+                borderRadius: 4
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: { padding: 16 }
+              },
+              tooltip: {
+                backgroundColor: '#1a2235',
+                titleColor: '#f1f5f9',
+                bodyColor: '#94a3b8',
+                borderColor: 'rgba(148,163,184,0.15)',
+                borderWidth: 1,
+                padding: 12,
+                cornerRadius: 8,
+                callbacks: {
+                  label: ctx => `${ctx.dataset.label}: ${ctx.parsed.x}s`
+                }
+              }
+            },
+            scales: {
+              x: {
+                stacked: true,
+                grid: { color: 'rgba(148,163,184,0.06)' },
+                ticks: { callback: v => v + 's' }
+              },
+              y: {
+                stacked: true,
+                grid: { display: false }
+              }
+            }
+          }
+        });
+
+        /* ── 4. Economics Bar Chart ── */
+        new Chart(document.getElementById('chart-economics'), {
+          type: 'bar',
+          data: {
+            labels: ['Picker-hours\nsaved/day', 'FTE\nreduction', 'Annual\nCAD saved'],
+            datasets: [{
+              label: 'Value',
+              data: [1.4, 0.19, 8983],
+              backgroundColor: [
+                'rgba(20, 184, 166, 0.7)',
+                'rgba(59, 130, 246, 0.7)',
+                'rgba(245, 158, 11, 0.7)'
+              ],
+              borderColor: [
+                'rgba(20, 184, 166, 1)',
+                'rgba(59, 130, 246, 1)',
+                'rgba(245, 158, 11, 1)'
+              ],
+              borderWidth: 2,
+              borderRadius: 8,
+              maxBarThickness: 56
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: '#1a2235',
+                titleColor: '#f1f5f9',
+                bodyColor: '#94a3b8',
+                borderColor: 'rgba(148,163,184,0.15)',
+                borderWidth: 1,
+                padding: 12,
+                cornerRadius: 8
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(148,163,184,0.06)' }
+              },
+              x: {
+                grid: { display: false }
+              }
+            }
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
