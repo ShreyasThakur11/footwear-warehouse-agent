@@ -1,0 +1,25 @@
+check,file,count,detail,action_taken
+Exact duplicate rows in Picking_Wave,Picking_Wave.csv,102201,quantityToPick values: {1: 215192},KEPT - each row is one unit picked (qty=1); removing them would undercount work
+Waves above trolley capacity,Picking_Wave.csv,74,cap=27 units; max observed=30,"kept, flagged"
+Size encoded without decimal point (e.g. 85 = 8.5),Customer_Order.csv,41549,sizes > 20 in Customer_Order,divided by 10
+Missing size in orders,Customer_Order.csv,16,,kept; reference-level matching
+Customer IDs with leading/trailing spaces,Customer_Order.csv,0,,trimmed
+Unparseable creationDate,Customer_Order.csv,0,,excluded from time analyses
+Waves in orders but not in picking,Customer_Order.csv,77,"[33219, 33448, 33591, 33600, 33628, 33679, 33693, 33695, 33709, 33711]",excluded from routing
+Waves in picking but not in orders,Picking_Wave.csv,0,[],routed; no dates
+Waves where ordered units != picked units,orders vs picking,2313,of 9707 common waves,informational
+Picked references not in Product.csv,Picking_Wave.csv,0,[],kept; ABC computed from demand
+Ordered references not in Product.csv,Customer_Order.csv,0,[],kept
+Empty storage slots,Random_Storage.csv,0,,ignored
+Stored references not in Product.csv,Random_Storage.csv,0,[],kept as stock (they occupy space)
+Empty storage slots,Class_Based_Storage.csv,0,,ignored
+Stored references not in Product.csv,Class_Based_Storage.csv,109,"['10090TO', '102SP', '12123XPJ', '12133XPJ', '12261XP', '12314XP', '14010TO', '2002XP']",kept as stock (they occupy space)
+Empty storage slots,Dedicated_Storage.csv,0,,ignored
+Stored references not in Product.csv,Dedicated_Storage.csv,0,[],kept as stock (they occupy space)
+Empty storage slots,Hybrid_Storage.csv,0,,ignored
+Stored references not in Product.csv,Hybrid_Storage.csv,0,[],kept as stock (they occupy space)
+Level in code differs from z coordinate,Storage_Location.csv,1,['K-23-40'],level taken from the location code
+"Different locations sharing identical (x, y, z)",Storage_Location.csv,2,"['K-23-30', 'K-23-40']",kept; flagged for validation
+Locations used in policies/picking but absent from Storage_Location,all,65,"47 imputed from sibling bay positions, 18 unresolved",imputed coordinates flagged in 'coord_source'; unresolved picks excluded
+Historical pick rows whose location cannot be placed on the map,Picking_Wave.csv,23559,"{'RC-01': 22979, 'RC-04': 361, 'RC-05': 100, 'C-102': 31, 'C-026': 27}",excluded from AS-IS routing
+Pick rows whose exact SKU exists in baseline storage,picking vs storage,190837,88.7%,match key = sku
