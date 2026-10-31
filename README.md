@@ -234,6 +234,26 @@ jupyter notebook v3.ipynb
 ```
 Full run takes ~6–7 minutes. For quick trial, set `MAX_WAVES=1500` in the `CONFIG` dictionary in Cell 0.
 
+### 4. Launch Autonomous Supervisor Copilot Dashboard
+Launch the interactive multi-agent Streamlit operations cockpit:
+```bash
+make app
+# or directly:
+streamlit run app/streamlit_app.py
+```
+
+Features 8 dedicated operations control centers:
+1. **Daily Plan**: Target date selection, autonomous multi-agent daily planning cycle, 5 KPI tiles, and hourly workload vs operator capacity dispatch curves.
+2. **Labor & Staffing**: Historical recommended vs actual scheduled operators, $118,500 CAD payroll savings, and real-time what-if sensitivity sliders (productivity, absenteeism, risk quantile).
+3. **Demand Forecast**: 14-day rolling projection with P10/P50/P90 prediction intervals and backtest accuracy metrics.
+4. **Replenishment**: Multi-echelon stock directives with human-in-the-loop Approve/Reject governance sign-off.
+5. **Slotting & Storage**: Policy comparison benchmarks, 2D warehouse picking intensity floor map, and prioritized SKU-size box relocation proposals.
+6. **Operational Exceptions**: Multi-dimensional filtering across 21k integrity checks and IsolationForest anomalies.
+7. **Supervisor Copilot**: Conversational AI assistant with full tool execution tracing.
+8. **Governance & Audit Log**: SQLite audit trail, pending approvals, and learning feedback loop.
+
+![Supervisor Dashboard](docs/screenshots/dashboard_daily_plan.png)
+
 ---
 
 ## 📜 Credits & Licence

@@ -51,7 +51,7 @@
   - [x] Paired Wilcoxon signed-rank significance testing (p < 0.001 across all comparisons)
   - [x] End-to-end optimization runner script (`scripts/run_optimization.py` -> `reports/slotting_and_routing.md`)
 
-- [ ] **Milestone 7: Digital Twin Simulation & Agentic Orchestration**
+- [x] **Milestone 7: Digital Twin Simulation & Agentic Orchestration**
   - [x] Wave cycle time & engineered labor standard (`src/warehouse_ai/models/labor.py`)
   - [x] Empirical shift calibration & daily staffing gap analysis (`reports/labor.md` & `docs/model_cards/labor.md`)
   - [x] Macro daily workload forecasting regression ($R^2 = 0.9746$, MAE = 0.85 h)
@@ -70,7 +70,7 @@
   - [x] Autonomous specialist agents (ForecastAgent, LaborAgent, ReplenishmentAgent, SlottingAgent, WaveAgent, ExceptionAgent, CopilotAgent)
   - [x] LangGraph daily cycle orchestrator (`src/warehouse_ai/agents/orchestrator.py`, `src/warehouse_ai/run_daily.py`, conflict check & governance gate, 9 tests)
   - [x] Governance approval workflow & SQLite audit log (`src/warehouse_ai/governance/`, `configs/governance.yaml`, submit/approve/reject/execute lifecycle, `@audit_logged` decorator, learning feedback loop, 10 tests, 149 total passing)
-  - [ ] Interactive Streamlit visualizer & scenario comparison dashboard
+  - [x] Interactive Streamlit supervisor copilot dashboard (`app/streamlit_app.py`, 8 operational pages, Makefile, 6 tests, 155 total passing)
 
 ---
 
@@ -99,6 +99,7 @@
 - **Provider-Agnostic LLM Layer & Tool Registry (client.py, tools.py)**: 13 standardized tools registered with JSON schemas, read-only guarantees, and DuckDB sandboxed SQL queries. Mock client enables deterministic, zero-network, offline end-to-end testing with keyword-based tool calling.
 - **LangGraph Multi-Agent Orchestration (orchestrator.py, run_daily.py)**: Sequential StateGraph executing ForecastAgent → LaborAgent → ReplenishmentAgent → WaveAgent → SlottingAgent → ExceptionAgent → Cross-Agent Conflict Resolution (forklift replenishment vs morning picking) → Governance Safety Gate. CLI runner produces full `reports/daily_plan_<date>.md` and `.json` in under 7 seconds. 139 total tests passing.
 - **Governance Approval Workflow & Audit Trail (governance/)**: SQLite-backed audit log with 3 tables (`actions`, `executed_actions`, `learning_feedback`). Configurable YAML approval policies for headcount changes (>2 workers), Class A replenishment, re-slotting moves, and high-severity exceptions. `@audit_logged` decorator auto-logs all tool calls. Learning loop tracks recommended vs actual outcomes. 149 total tests passing.
+- **Interactive Streamlit Supervisor Copilot Dashboard (app/streamlit_app.py)**: Full 8-page operations control center (Daily Plan, Labor & Staffing, Demand Forecast, Replenishment, Slotting & Storage, Exceptions, Copilot Chat, Governance Audit Log). Features live MILP sensitivity simulator, human-in-the-loop approval actions, 2D warehouse picking intensity map, tool execution tracing, cached loaders (`@st.cache_data`), Makefile runner (`make app`), and headless screenshot verification. 155 total tests passing.
 
 ---
 
@@ -138,12 +139,11 @@
 | 2026-11-01 | Wave Planning & Batching Module | models/waves.py (FCFS/Seed+Savings/Aisle-Cluster + LPT), reports/waves.md (−29.5% travel via Seed+Savings), tests/test_waves_model.py (30 tests), 107 tests total passing | Done |
 | 2026-11-01 | Anomaly Detection, Tool Registry & LangGraph Daily Cycle | models/anomaly.py, reports/exceptions.md (21k exceptions), llm/client.py, agents/tools.py (13 tools), 7 specialist agents, orchestrator.py, run_daily.py CLI, 139 tests total passing | Done |
 | 2026-11-01 | Governance Approval Workflow & Audit Log | governance/audit.py (SQLite 3-table audit), governance/policy.py (YAML rule evaluator), configs/governance.yaml, @audit_logged decorator, learning feedback loop, 10 governance tests, 149 tests total passing | Done |
+| 2026-11-01 | Streamlit Supervisor Copilot Dashboard | app/streamlit_app.py (8 operational pages), Makefile (make app), tests/test_dashboard.py (6 tests), docs/screenshots/ (headless capture), 155 tests total passing | Done |
 
 ---
 
 ## 6. Next Steps
-1. Build interactive Streamlit visualization and ROI scenario dashboard (`src/warehouse_ai/dashboard/`):
-   - Executive warehouse KPI overview & demand heatmap
-   - Warehouse digital twin 2D/3D layout with picker routes
-   - Multi-agent daily plan explorer & supervisor copilot chat UI
-   - Re-slotting and staffing what-if scenario simulators
+1. Deploy Streamlit supervisor dashboard to staging/production environment (e.g. Docker / Streamlit Community Cloud / Cloud Run).
+2. Wire real live WMS API connectors to replace simulated execution when on-site warehouse management system integration becomes available.
+3. Conduct operational pilot with facility warehouse supervisor to refine Copilot prompt templates and governance approval thresholds.
