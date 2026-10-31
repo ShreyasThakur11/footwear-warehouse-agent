@@ -62,3 +62,16 @@ def test_get_llm_client_factory():
     assert isinstance(client, MockLLMClient)
     assert client.provider == "mock"
 
+
+def test_get_llm_client_openai_and_anthropic_fallback_without_keys(monkeypatch):
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+
+    # Should gracefully fall back to MockLLMClient when keys are absent
+    c_openai = get_llm_client(provider="openai")
+    assert isinstance(c_openai, MockLLMClient)
+
+    c_anthropic = get_llm_client(provider="anthropic")
+    assert isinstance(c_anthropic, MockLLMClient)
+

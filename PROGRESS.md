@@ -153,6 +153,7 @@
 | 2026-11-01 | Governance Approval Workflow & Audit Log | governance/audit.py (SQLite 3-table audit), governance/policy.py (YAML rule evaluator), configs/governance.yaml, @audit_logged decorator, learning feedback loop, 10 governance tests, 149 tests total passing | Done |
 | 2026-11-01 | Streamlit Supervisor Copilot Dashboard | app/streamlit_app.py (8 operational pages), Makefile (make app), tests/test_dashboard.py (6 tests), docs/screenshots/ (headless capture), 155 tests total passing | Done |
 | 2026-11-01 | Presentation-Ready System, Backtesting, CI & Documentation | scripts/backtest.py, reports/backtest.md & figures, docs/architecture.md, 8 model cards, .github/workflows/ci.yml, README.md rewrite, run_dashboard.command, 155 tests passing | Done |
+| 2026-11-01 | Multi-LLM Support (OpenAI/Anthropic/Gemini) & Headcount Clarifications | Fix plotly categorical vline TypeError, add OpenAILLMClient (GPT-4o) & AnthropicLLMClient, clarify picking vs whole-facility staffing, 156 tests passing | Done |
 
 ---
 

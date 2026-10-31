@@ -324,6 +324,282 @@ class GeminiLLMClient(LLMClient):
 # Factory Function
 # ---------------------------------------------------------------------------
 
+class OpenAILLMClient(LLMClient):
+    """Client for OpenAI models (GPT-4o, GPT-4o-mini, GPT-4-turbo) via REST API."""
+
+    def __init__(self, model: str = "gpt-4o", temperature: float = 0.1, max_tokens: int = 4096):
+        super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
+        self.provider = "openai"
+        self.api_key = os.getenv("OPENAI_API_KEY")
+        if not self.api_key:
+            raise ValueError("OPENAI_API_KEY not found in environment or .env file.")
+
+    def chat(
+        self,
+        messages: list[LLMMessage],
+        tools: list[dict[str, Any]] | None = None,
+        tool_choice: str = "auto",
+    ) -> LLMResponse:
+        import requests
+
+        t0 = time.perf_counter()
+
+        # Format messages
+        openai_messages: list[dict[str, Any]] = []
+        for m in messages:
+            msg: dict[str, Any] = {"role": m.role}
+            if m.content is not None:
+                msg["content"] = m.content
+            if m.tool_calls:
+                msg["tool_calls"] = [
+                    {
+                        "id": tc.id,
+                        "type": "function",
+                        "function": {
+                            "name": tc.name,
+                            "arguments": json.dumps(tc.arguments) if isinstance(tc.arguments, dict) else str(tc.arguments),
+                        },
+                    }
+                    for tc in m.tool_calls
+                ]
+            if m.role == "tool" and m.tool_call_id:
+                msg["tool_call_id"] = m.tool_call_id
+                if m.name:
+                    msg["name"] = m.name
+            openai_messages.append(msg)
+
+        # Format tools
+        openai_tools = None
+        if tools:
+            openai_tools = [
+                {
+                    "type": "function",
+                    "function": {
+                        "name": t["name"],
+                        "description": t.get("description", ""),
+                        "parameters": t.get("parameters", {"type": "object", "properties": {}}),
+                    },
+                }
+                for t in tools
+            ]
+
+        payload: dict[str, Any] = {
+            "model": self.model,
+            "messages": openai_messages,
+            "temperature": self.temperature,
+            "max_tokens": self.max_tokens,
+        }
+        if openai_tools:
+            payload["tools"] = openai_tools
+            payload["tool_choice"] = tool_choice
+
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+        }
+
+        # Retries with exponential backoff
+        max_retries = 3
+        backoff = 1.0
+        data = None
+
+        for attempt in range(max_retries):
+            try:
+                resp = requests.post(
+                    "https://api.openai.com/v1/chat/completions",
+                    headers=headers,
+                    json=payload,
+                    timeout=60,
+                )
+                if resp.status_code == 200:
+                    data = resp.json()
+                    break
+                else:
+                    logger.warning("OpenAI API returned %s: %s", resp.status_code, resp.text)
+                    if attempt == max_retries - 1:
+                        resp.raise_for_status()
+            except Exception as e:
+                logger.warning("OpenAI API call failed (attempt %d/%d): %s", attempt + 1, max_retries, e)
+                if attempt == max_retries - 1:
+                    raise
+            time.sleep(backoff)
+            backoff *= 2.0
+
+        elapsed = time.perf_counter() - t0
+
+        if not data:
+            raise RuntimeError("Failed to receive valid response from OpenAI API.")
+
+        choice = data["choices"][0]
+        msg = choice.get("message", {})
+        out_content = msg.get("content")
+        tool_calls: list[ToolCall] = []
+
+        if "tool_calls" in msg and msg["tool_calls"]:
+            for tc in msg["tool_calls"]:
+                func = tc.get("function", {})
+                args = {}
+                try:
+                    args = json.loads(func.get("arguments", "{}"))
+                except Exception:
+                    args = {"raw": func.get("arguments", "")}
+                tool_calls.append(
+                    ToolCall(
+                        id=tc.get("id", f"call_{func.get('name')}"),
+                        name=func.get("name", ""),
+                        arguments=args,
+                    )
+                )
+
+        raw_usage = data.get("usage", {})
+        usage = {
+            "prompt_tokens": raw_usage.get("prompt_tokens", 0),
+            "completion_tokens": raw_usage.get("completion_tokens", 0),
+            "total_tokens": raw_usage.get("total_tokens", 0),
+        }
+
+        return LLMResponse(
+            content=out_content,
+            tool_calls=tool_calls,
+            usage=usage,
+            provider="openai",
+            model=self.model,
+            latency_s=round(elapsed, 3),
+        )
+
+
+class AnthropicLLMClient(LLMClient):
+    """Client for Anthropic Claude models (Claude 3.5 Sonnet, Haiku) via REST API."""
+
+    def __init__(self, model: str = "claude-3-5-sonnet-20241022", temperature: float = 0.1, max_tokens: int = 4096):
+        super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
+        self.provider = "anthropic"
+        self.api_key = os.getenv("ANTHROPIC_API_KEY")
+        if not self.api_key:
+            raise ValueError("ANTHROPIC_API_KEY not found in environment or .env file.")
+
+    def chat(
+        self,
+        messages: list[LLMMessage],
+        tools: list[dict[str, Any]] | None = None,
+        tool_choice: str = "auto",
+    ) -> LLMResponse:
+        import requests
+
+        t0 = time.perf_counter()
+
+        system_prompt = ""
+        anthropic_messages: list[dict[str, Any]] = []
+
+        for m in messages:
+            if m.role == "system":
+                system_prompt = m.content
+            elif m.role in ("user", "assistant"):
+                anthropic_messages.append({"role": m.role, "content": m.content or ""})
+            elif m.role == "tool":
+                anthropic_messages.append({
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "tool_result",
+                            "tool_use_id": m.tool_call_id or "tool_call",
+                            "content": m.content,
+                        }
+                    ],
+                })
+
+        anthropic_tools = None
+        if tools:
+            anthropic_tools = [
+                {
+                    "name": t["name"],
+                    "description": t.get("description", ""),
+                    "input_schema": t.get("parameters", {"type": "object", "properties": {}}),
+                }
+                for t in tools
+            ]
+
+        payload: dict[str, Any] = {
+            "model": self.model,
+            "messages": anthropic_messages,
+            "max_tokens": self.max_tokens,
+            "temperature": self.temperature,
+        }
+        if system_prompt:
+            payload["system"] = system_prompt
+        if anthropic_tools:
+            payload["tools"] = anthropic_tools
+
+        headers = {
+            "x-api-key": self.api_key,
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json",
+        }
+
+        # Retries with exponential backoff
+        max_retries = 3
+        backoff = 1.0
+        data = None
+
+        for attempt in range(max_retries):
+            try:
+                resp = requests.post(
+                    "https://api.anthropic.com/v1/messages",
+                    headers=headers,
+                    json=payload,
+                    timeout=60,
+                )
+                if resp.status_code == 200:
+                    data = resp.json()
+                    break
+                else:
+                    logger.warning("Anthropic API returned %s: %s", resp.status_code, resp.text)
+                    if attempt == max_retries - 1:
+                        resp.raise_for_status()
+            except Exception as e:
+                logger.warning("Anthropic API call failed (attempt %d/%d): %s", attempt + 1, max_retries, e)
+                if attempt == max_retries - 1:
+                    raise
+            time.sleep(backoff)
+            backoff *= 2.0
+
+        elapsed = time.perf_counter() - t0
+
+        if not data:
+            raise RuntimeError("Failed to receive valid response from Anthropic API.")
+
+        out_content_parts = []
+        tool_calls: list[ToolCall] = []
+
+        for item in data.get("content", []):
+            if item.get("type") == "text":
+                out_content_parts.append(item.get("text", ""))
+            elif item.get("type") == "tool_use":
+                tool_calls.append(
+                    ToolCall(
+                        id=item.get("id", ""),
+                        name=item.get("name", ""),
+                        arguments=item.get("input", {}),
+                    )
+                )
+
+        usage_raw = data.get("usage", {})
+        usage = {
+            "prompt_tokens": usage_raw.get("input_tokens", 0),
+            "completion_tokens": usage_raw.get("output_tokens", 0),
+            "total_tokens": usage_raw.get("input_tokens", 0) + usage_raw.get("output_tokens", 0),
+        }
+
+        return LLMResponse(
+            content="\n".join(out_content_parts) if out_content_parts else None,
+            tool_calls=tool_calls,
+            usage=usage,
+            provider="anthropic",
+            model=self.model,
+            latency_s=round(elapsed, 3),
+        )
+
+
 def get_llm_client(
     provider: str | None = None,
     model: str | None = None,
@@ -344,6 +620,20 @@ def get_llm_client(
             return GeminiLLMClient(model=chosen_model, temperature=chosen_temp, max_tokens=chosen_max_tokens)
         except Exception as e:
             logger.warning("Failed to initialize GeminiLLMClient (%s). Falling back to MockLLMClient.", e)
+            return MockLLMClient(model="mock-fallback", temperature=0.0)
+    elif chosen_provider in ("openai", "gpt"):
+        try:
+            m = chosen_model if ("gpt" in chosen_model or "o1" in chosen_model) else "gpt-4o"
+            return OpenAILLMClient(model=m, temperature=chosen_temp, max_tokens=chosen_max_tokens)
+        except Exception as e:
+            logger.warning("Failed to initialize OpenAILLMClient (%s). Falling back to MockLLMClient.", e)
+            return MockLLMClient(model="mock-fallback", temperature=0.0)
+    elif chosen_provider in ("anthropic", "claude"):
+        try:
+            m = chosen_model if "claude" in chosen_model else "claude-3-5-sonnet-20241022"
+            return AnthropicLLMClient(model=m, temperature=chosen_temp, max_tokens=chosen_max_tokens)
+        except Exception as e:
+            logger.warning("Failed to initialize AnthropicLLMClient (%s). Falling back to MockLLMClient.", e)
             return MockLLMClient(model="mock-fallback", temperature=0.0)
     else:
         logger.warning("Unsupported LLM provider '%s'. Defaulting to MockLLMClient.", chosen_provider)

@@ -252,7 +252,12 @@ selected_page = st.sidebar.radio("Navigate", PAGE_OPTIONS, index=0)
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("### ⚙️ Engine Settings")
-provider_choice = st.sidebar.selectbox("LLM Provider", ["mock", "gemini"], index=0)
+provider_choice = st.sidebar.selectbox(
+    "LLM Provider",
+    ["mock", "openai", "gemini", "anthropic"],
+    index=0,
+    help="Select the AI reasoning provider: 'mock' for local offline testing, 'openai' for GPT-4o, 'gemini' for Google Gemini, or 'anthropic' for Claude.",
+)
 st.sidebar.caption("Depot: `CC-08` (403.0, 631.0)")
 st.sidebar.caption("Layout: 17 Aisles | 2,293 Shelves")
 
@@ -400,6 +405,7 @@ if selected_page == "📋 Daily Plan":
                 unsafe_allow_html=True,
             )
 
+        st.caption("💡 **Staffing Scope Note**: Headcount shown is **Dedicated Order Pickers** (sized for ~12.4h daily wave travel & shoe retrieval). Total building roster = Recommended Pickers + Indirect support (Packing, Staging, Forklift Replenishment: typically +3 to +4 staff = ~5 to 6 total facility staff).")
         st.write("")
 
         # Hourly Workload vs Operator Capacity Chart
@@ -453,7 +459,25 @@ if selected_page == "📋 Daily Plan":
             line=dict(color="#10b981", width=3, dash="dash"),
             marker=dict(size=7),
         ))
-        fig_hourly.add_vline(x="17:00", line_width=2, line_dash="dot", line_color="#ef4444", annotation_text="Carrier Outbound Cutoff (17:00)")
+        fig_hourly.add_shape(
+            type="line",
+            x0="17:00",
+            x1="17:00",
+            y0=0,
+            y1=1,
+            yref="paper",
+            line=dict(color="#ef4444", width=2, dash="dot"),
+        )
+        fig_hourly.add_annotation(
+            x="17:00",
+            y=1.0,
+            yref="paper",
+            text="Carrier Outbound Cutoff (17:00)",
+            showarrow=False,
+            font=dict(color="#ef4444", size=11),
+            xanchor="center",
+            yanchor="bottom",
+        )
         fig_hourly.update_layout(
             height=320,
             margin=dict(l=20, r=20, t=30, b=20),
@@ -546,6 +570,18 @@ elif selected_page == "👥 Labor & Staffing":
         )
 
     st.write("")
+
+    with st.expander("🏭 Warehouse Manager Guide: Dedicated Pickers vs Whole-Facility Staffing", expanded=True):
+        st.markdown("""
+        **Why does the model recommend ~2.1 pickers when you typically schedule 6–7 operators?**
+        - **Pure Picking Standard**: Actual physical wave picking (walking aisles, verifying shoe size/box, picking, and cart drop-off) requires an average of **12.4 productive labor-hours per day** across 2023 (~1.66 to 2.11 full-time pickers).
+        - **Facility Overhead**: The historical 6.5 operators (49.0 hours/day) performed both picking and unmeasured indirect warehouse duties:
+          1. **Packing & Shipping Prep**: Boxing pairs, taping cartons, applying carrier shipping labels (1–2 staff)
+          2. **Forklift Replenishment**: Lowering reserve pallets from Levels 3–4 to ground pick-face (1 staff)
+          3. **Inbound Receiving / QA**: Unloading morning supplier containers and staging (1 staff)
+          4. **Idle Waiting Time**: Long gaps between morning EDI wave drops and 17:00 carrier cutoff
+        - **Real-World Roster Action**: Schedule **2–3 dedicated pickers** (flexed to volume) + **3–4 fixed indirect operators** = **5–7 total building headcount**, rather than paying 7 full-time pickers on days with low order volume.
+        """)
 
     # Historical Time Series: Actual vs P50 vs P90
     st.subheader("📈 Historical Staffing: Actual Active Operators vs MILP Optimization")
