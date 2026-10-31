@@ -11,3 +11,4 @@ inventory health, slotting efficiency, routing performance, and active operation
 
 ## Allowed Tools
 You have access to all registered warehouse AI tools (`*`).
+

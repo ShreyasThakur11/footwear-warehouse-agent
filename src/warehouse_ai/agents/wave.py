@@ -51,3 +51,4 @@ class WaveAgent(BaseAgent):
             summary=res.get("summary", f"Planned {len(data)} waves on {target_date}."),
             assumptions=assumptions,
         )
+

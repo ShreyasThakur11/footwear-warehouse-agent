@@ -14,3 +14,4 @@ identify intra-day arrival dynamics, and project critical SKU-size requirements.
 - `get_hourly_profile`: Provides intra-day release distributions for specific weekdays.
 - `get_sku_size_forecast`: Projects intermittent / fast-moving SKU-size demand.
 - `query_data`: Safe read-only inspection of historical patterns.
+

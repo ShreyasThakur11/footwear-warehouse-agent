@@ -27,6 +27,7 @@ CSV/
 # Generated outputs
 outputs/
 models_store/
+data/governance.db
 
 # OS
 .DS_Store

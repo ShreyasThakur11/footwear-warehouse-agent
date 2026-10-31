@@ -1,0 +1,25 @@
+# ──────────────────────────────────────────────
+#  warehouse_ai – Governance & Approval Policies
+# ──────────────────────────────────────────────
+
+governance:
+  db_path: "data/governance.db"
+
+  headcount:
+    max_delta_without_approval: 2      # delta vs baseline/prev day > 2 workers requires approval
+    baseline_operators: 2              # core permanent warehouse staff
+
+  replenishment:
+    require_approval_class_a: true     # any replenishment move for Class A SKU requires approval
+    max_qty_auto_approved: 50          # replenishment qty > 50 units requires approval
+    auto_approve_class_c: true         # small Class C moves auto-approved
+
+  slotting:
+    require_approval_all_moves: true   # any physical box re-slotting proposal requires approval
+    min_weekly_savings_threshold_m: 100.0
+
+  exceptions:
+    alert_severity:
+      - "HIGH"                         # high severity exceptions trigger immediate alerts
+    require_supervisor_signoff: true
+

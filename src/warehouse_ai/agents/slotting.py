@@ -35,3 +35,4 @@ class SlottingAgent(BaseAgent):
             summary=res.get("summary", f"Proposed top {len(moves)} re-slotting moves."),
             assumptions=assumptions,
         )
+

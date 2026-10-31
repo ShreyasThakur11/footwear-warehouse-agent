@@ -70,3 +70,4 @@ class LaborAgent(BaseAgent):
             recommendation=expl,
             assumptions=assumptions,
         )
+

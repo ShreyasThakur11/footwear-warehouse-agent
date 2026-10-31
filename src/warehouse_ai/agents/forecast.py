@@ -59,3 +59,4 @@ class ForecastAgent(BaseAgent):
             summary=res.get("summary", f"Forecast generated for {target_date}."),
             assumptions=assumptions,
         )
+

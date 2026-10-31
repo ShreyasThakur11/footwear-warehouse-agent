@@ -69,6 +69,7 @@
   - [x] Provider-agnostic LLM client & tool registry (`src/warehouse_ai/llm/client.py`, `src/warehouse_ai/agents/tools.py`, 13 registered tools, 15 tests)
   - [x] Autonomous specialist agents (ForecastAgent, LaborAgent, ReplenishmentAgent, SlottingAgent, WaveAgent, ExceptionAgent, CopilotAgent)
   - [x] LangGraph daily cycle orchestrator (`src/warehouse_ai/agents/orchestrator.py`, `src/warehouse_ai/run_daily.py`, conflict check & governance gate, 9 tests)
+  - [x] Governance approval workflow & SQLite audit log (`src/warehouse_ai/governance/`, `configs/governance.yaml`, submit/approve/reject/execute lifecycle, `@audit_logged` decorator, learning feedback loop, 10 tests, 149 total passing)
   - [ ] Interactive Streamlit visualizer & scenario comparison dashboard
 
 ---
@@ -97,6 +98,7 @@
 - **Operational Anomaly Detection & Exceptions Audit (anomaly.py)**: Scanned 21,582 operational exceptions across 122,370 order lines and 215,192 picks: 494 High-severity incidents (fulfillment shortfalls and 22 non-standard pick staging bays), 16,132 policy location mismatches, 5,242 short/over picks, 98 multi-aisle statistical wave outliers via IsolationForest, and 80 operator productivity deviations.
 - **Provider-Agnostic LLM Layer & Tool Registry (client.py, tools.py)**: 13 standardized tools registered with JSON schemas, read-only guarantees, and DuckDB sandboxed SQL queries. Mock client enables deterministic, zero-network, offline end-to-end testing with keyword-based tool calling.
 - **LangGraph Multi-Agent Orchestration (orchestrator.py, run_daily.py)**: Sequential StateGraph executing ForecastAgent → LaborAgent → ReplenishmentAgent → WaveAgent → SlottingAgent → ExceptionAgent → Cross-Agent Conflict Resolution (forklift replenishment vs morning picking) → Governance Safety Gate. CLI runner produces full `reports/daily_plan_<date>.md` and `.json` in under 7 seconds. 139 total tests passing.
+- **Governance Approval Workflow & Audit Trail (governance/)**: SQLite-backed audit log with 3 tables (`actions`, `executed_actions`, `learning_feedback`). Configurable YAML approval policies for headcount changes (>2 workers), Class A replenishment, re-slotting moves, and high-severity exceptions. `@audit_logged` decorator auto-logs all tool calls. Learning loop tracks recommended vs actual outcomes. 149 total tests passing.
 
 ---
 
@@ -110,6 +112,7 @@
 - **Labor Standards**: Walk speed = 1.0 m/s (loaded cart), setup = 60s, stop = 10s, pick = 6s, vertical penalty = 5s/tier. Calibrated with scale factor $k = 1.5853$ to match a 7.5-hour full shift for top-volume operator-days.
 - **Quebec Statutory Holidays**: Facility observes Canadian/Quebec statutory holidays (Good Friday, Easter Monday, Patriots' Day, Saint-Jean-Baptiste, Labour Day, Thanksgiving) on which picking operations are zero.
 - **Multi-Tier Inventory Architecture**: Forward pick face encompasses shelf Levels 1–2 (30,456 storage slots); Reserve replenishment encompasses Levels 3–4 (10,800 storage slots). Pick face replenishment triggers dynamically when on-hand stock falls below `pick_face_min`.
+- **Governance Thresholds**: Approval policy thresholds (headcount change >2, Class A replenishment, any re-slotting, high-severity exceptions) are configurable industrial defaults in `configs/governance.yaml`; real deployment should tune these to facility-specific operating procedures.
 
 ---
 
@@ -134,6 +137,7 @@
 | 2026-11-01 | Storage Policy Simulator & COI Re-Slotting API | models/slotting.py (5 policies), reports/slotting.md (−70.9% travel under COI), tests/test_slotting_model.py (22 tests), 77 tests total passing | Done |
 | 2026-11-01 | Wave Planning & Batching Module | models/waves.py (FCFS/Seed+Savings/Aisle-Cluster + LPT), reports/waves.md (−29.5% travel via Seed+Savings), tests/test_waves_model.py (30 tests), 107 tests total passing | Done |
 | 2026-11-01 | Anomaly Detection, Tool Registry & LangGraph Daily Cycle | models/anomaly.py, reports/exceptions.md (21k exceptions), llm/client.py, agents/tools.py (13 tools), 7 specialist agents, orchestrator.py, run_daily.py CLI, 139 tests total passing | Done |
+| 2026-11-01 | Governance Approval Workflow & Audit Log | governance/audit.py (SQLite 3-table audit), governance/policy.py (YAML rule evaluator), configs/governance.yaml, @audit_logged decorator, learning feedback loop, 10 governance tests, 149 tests total passing | Done |
 
 ---
 

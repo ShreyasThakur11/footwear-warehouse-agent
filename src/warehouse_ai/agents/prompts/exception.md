@@ -12,3 +12,4 @@ unregistered master data references, demand surges, and operator performance out
 ## Allowed Tools
 - `list_exceptions`: Audits operations and returns prioritized exception records.
 - `query_data`: Read-only queries of picks, orders, and discrepancy logs.
+

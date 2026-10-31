@@ -13,3 +13,4 @@ and schedule top-up transfers from upper reserve racks (Levels 3–4).
 - `get_replenishment_plan`: Generates prioritized replenishment proposals.
 - `get_abc_xyz`: Retrieves demand velocity (ABC) and predictability (XYZ) classes.
 - `query_data`: Read-only queries of current stock and location mappings.
+

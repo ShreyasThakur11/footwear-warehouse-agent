@@ -24,3 +24,4 @@ class CopilotAgent(BaseAgent):
         """Answer free-form question with strict citation of tool calculation results."""
         result = self.run(user_instruction=query, context=context)
         return result.get("content", "I was unable to complete the analysis.")
+

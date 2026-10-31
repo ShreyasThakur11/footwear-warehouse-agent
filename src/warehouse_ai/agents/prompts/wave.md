@@ -12,3 +12,4 @@ warehouse aisles, enforce trolley capacity limits, and assign waves across opera
 ## Allowed Tools
 - `plan_waves`: Batches open orders into pick waves and assigns operators.
 - `query_data`: Read-only queries of wave histories and order lines.
+

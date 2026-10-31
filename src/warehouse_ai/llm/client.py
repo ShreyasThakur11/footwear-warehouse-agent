@@ -348,3 +348,4 @@ def get_llm_client(
     else:
         logger.warning("Unsupported LLM provider '%s'. Defaulting to MockLLMClient.", chosen_provider)
         return MockLLMClient(model="mock-fallback", temperature=0.0)
+

@@ -255,3 +255,4 @@ def run_daily_cycle(
     )
     result_dict = graph.invoke(initial_state)
     return DailyPlanState(**result_dict)
+

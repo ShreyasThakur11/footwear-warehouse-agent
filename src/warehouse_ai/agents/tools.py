@@ -128,11 +128,26 @@ class ToolRegistry:
         try:
             res = tool.func(**kwargs)
             if not isinstance(res, dict) or "summary" not in res or "assumptions" not in res:
-                return {
+                res = {
                     "data": res,
                     "summary": f"Executed tool '{name}'.",
                     "assumptions": ["Model execution based on default warehouse parameters."],
                 }
+
+            # Record tool call in governance audit trail
+            try:
+                from warehouse_ai.governance.audit import submit
+                submit(
+                    agent="ToolRegistry",
+                    tool=name,
+                    proposed_action=f"Execute {name}",
+                    inputs=kwargs,
+                    outputs={"summary": res.get("summary")},
+                    details=kwargs,
+                )
+            except Exception as audit_err:
+                logger.debug("Audit logging skipped: %s", audit_err)
+
             return res
         except Exception as e:
             logger.error("Error executing tool %s: %s", name, e, exc_info=True)

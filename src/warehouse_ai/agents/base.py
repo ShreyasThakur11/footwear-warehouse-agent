@@ -96,3 +96,4 @@ class BaseAgent:
             "tool_outputs": last_tool_outputs,
             "agent": self.name,
         }
+

@@ -84,3 +84,4 @@ def test_full_weekly_cycle_orchestration():
     assert state.slotting.top_n_moves > 0
     assert state.final_plan is not None
     assert state.final_plan["slotting"] is not None
+

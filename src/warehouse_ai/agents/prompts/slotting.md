@@ -15,3 +15,4 @@ to minimize picker walking distances.
 - `recommend_reslotting`: Generates high-ROI SKU relocation proposals.
 - `get_abc_xyz`: Retrieves SKU ABC-XYZ classifications.
 - `query_data`: Read-only queries of storage and location files.
+
