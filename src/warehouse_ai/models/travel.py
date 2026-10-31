@@ -353,12 +353,38 @@ def route_length(
 
     if method == "nearest_neighbor":
         return _route_nearest_neighbor(unique_locs, depot, G=G, dist_matrix=dist_matrix)
+    elif method in ("nearest_neighbor_2opt", "nn_2opt", "nn2opt"):
+        return _route_nn_2opt(unique_locs, depot, G=G, dist_matrix=dist_matrix)
     elif method == "s_shape":
         return _route_s_shape(unique_locs, depot, G=G, dist_matrix=dist_matrix)
     elif method == "largest_gap":
         return _route_largest_gap(unique_locs, depot, G=G, dist_matrix=dist_matrix)
     else:
-        raise ValueError(f"Unknown routing method: {method}. Choose from: 's_shape', 'largest_gap', 'nearest_neighbor'")
+        raise ValueError(
+            f"Unknown routing method: {method}. Choose from: 's_shape', 'largest_gap', 'nearest_neighbor', 'nn_2opt'"
+        )
+
+
+def _route_nn_2opt(
+    locations: list[str],
+    depot: str,
+    G: nx.Graph,
+    dist_matrix: pd.DataFrame | None = None,
+    max_passes: int = 10,
+) -> float:
+    """Nearest Neighbor with 2-opt local search refinement from depot returning to depot."""
+    nodes = [depot] + locations
+    n = len(nodes)
+    D = np.zeros((n, n), dtype=float)
+    for i in range(n):
+        for j in range(i + 1, n):
+            d = shortest_distance(nodes[i], nodes[j], G=G)
+            D[i, j] = d
+            D[j, i] = d
+
+    from warehouse_ai.optimization.routing import tour_len, tour_nn_2opt
+    tour = tour_nn_2opt(D, max_passes=max_passes)
+    return tour_len(D, tour)
 
 
 def _route_nearest_neighbor(

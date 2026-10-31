@@ -39,15 +39,17 @@
   - [x] Picking wave travel distance report (`reports/travel.md`) detailing distance distributions and top 10 longest waves
   - [x] Synthetic 2-aisle analytical unit test suite (`tests/test_travel.py`)
 
-- [ ] **Milestone 5: Storage Allocation Optimization (Reslotting)**
-  - [ ] Demand profiling, Pareto ABC, and COI (Cube-per-Order Index) calculation
-  - [ ] Family-based co-location model (Optimised-FAMILY)
-  - [ ] Re-slotting simulation & stock relocation matrix
+- [x] **Milestone 5: Storage Allocation Optimization (Reslotting)**
+  - [x] Demand profiling, Pareto ABC, and COI (Cube-per-Order Index) calculation (`src/warehouse_ai/optimization/slotting.py`)
+  - [x] Family-based co-location model (Optimised-FAMILY) co-locating size runs on Level 1-2
+  - [x] Re-slotting simulation & stock relocation matrix (6,736 moves, 16.3% stock moved, two-phase move plan)
 
-- [ ] **Milestone 6: Pick Routing & TSP Optimization**
-  - [ ] 2-opt local search heuristic refinement
-  - [ ] Out-of-sample test wave benchmarking (2,549 unseen waves)
-  - [ ] Re-routing quick win estimation (-14.6% travel saving)
+- [x] **Milestone 6: Pick Routing & TSP Optimization**
+  - [x] 2-opt local search heuristic refinement (`tour_nn_2opt` in `src/warehouse_ai/optimization/routing.py`)
+  - [x] Out-of-sample test wave benchmarking (2,549 unseen waves, 58.7% walking distance reduction)
+  - [x] Re-routing quick win estimation (-14.6% travel saving without stock movement)
+  - [x] Paired Wilcoxon signed-rank significance testing (p < 0.001 across all comparisons)
+  - [x] End-to-end optimization runner script (`scripts/run_optimization.py` -> `reports/slotting_and_routing.md`)
 
 - [ ] **Milestone 7: Digital Twin Simulation & Agentic Orchestration**
   - [ ] Wave cycle time model (travel time + pick setup + handling)
@@ -63,9 +65,12 @@
 - **Workload Release Shock**: Over 90% of daily orders arrive instantaneously in the 07:00 AM morning wave.
 - **Physical Layout Geometry**: 17 aisles (A–Q), 25 racks, 5 vertical levels (Levels 1–2 manual picking zone, Levels 3–4 replenishment reserve).
 - **Navigation Network**: 44 corridor waypoints across Left Corridor (x≈66), Center Corridor (x≈403, I/O depot at CC-08), and Right Corridor (x≈686).
-- **Travel Distance Benchmark**: Across 9,784 waves, mean travel distance is 3,901.2 units (median 4,117.0 units, ~165 m).
-- **Routing Comparison**: Nearest Neighbor achieves 4,566.5 mean travel distance (-1.6% vs S-Shape 4,640.6 and Largest Gap 4,700.9).
-- **Synthetic Test Layout**: Exact analytical tour length of 60.0 units verified across S-Shape, NN, and Largest Gap.
+- **Routing Optimization (Free Win)**: NN + 2-opt achieves -14.6% travel reduction (166.2 m to 142.0 m per wave) on AS-IS pick lists without moving a single box; 71.5% of individual waves improve.
+- **Slotting Optimization (Optimised-FAMILY)**: Co-locating shoe families and full size runs near depot CC-08 slashes walking distance by **59.8% to 64.7%** (166.2 m down to 58.7–65.4 m) and cycle time by **26.2% to 29.0%** (7.84 min down to 5.57–5.75 min), driving labor throughput up from 169 to 237 units/hour (+40%).
+- **Practical Stock Relocation**: 6,736 total unit moves (16.3% of stock) into 186 forward-zone shelf locations. Phase 1 targets Class A items (3,818 moves = 1,909 swaps), unlocking 80% of travel gains in 64–127 labor hours (payback in 80–155 working days).
+- **Out-of-Sample Stability**: On 2,549 unseen test waves (after July 17, 2023), walking saving remains identical at **58.7%**.
+- **Statistical Robustness**: Wilcoxon signed-rank tests confirm $p < 0.001$ across all scenario pairs.
+- **Synthetic Test Layout**: Exact analytical tour length of 60.0 units verified across S-Shape, NN, and Largest Gap; 40.0 units verified for 2-opt uncrossing.
 
 ---
 
@@ -94,10 +99,12 @@
 | 2026-10-31 | Data Cleaning & Processed Tables | Size decoding algorithm, location parsing, parquet builds, validation report | Done |
 | 2026-10-31 | EDA & Workload Drivers | Reusable EDA modules, visualizer script, 7 charts, eda.md | Done |
 | 2026-10-31 | Warehouse Graph & Travel Model | NetworkX graph, Dijkstra distance matrix, S-Shape/NN/Largest Gap heuristics, layout doc & plot, travel report, synthetic tests | Done |
+| 2026-10-31 | Storage Allocation & Pick Routing | Demand profiling, COI/FAMILY slotting, minimum-move swap engine, 2-opt TSP routing, scenario evaluation, Wilcoxon tests, unit tests | Done |
 
 ---
 
 ## 6. Next Steps
-1. Implement Milestone 5: Storage Allocation Optimization (Pareto ABC classification, COI, and Optimised-FAMILY slotting algorithm).
-2. Implement Milestone 6: Pick Routing & TSP Optimization (2-opt local search heuristic refinement and out-of-sample benchmarking).
-3. Implement Milestone 7: Digital Twin Simulation & Agentic Orchestration via LangGraph.
+1. Implement Milestone 7: Digital Twin Simulation & Agentic Orchestration via LangGraph:
+   - Pick cycle duration digital twin simulation (simulating stock depletion and replenishment dynamics).
+   - Multi-agent orchestration system using LangGraph and LLM reasoning (Planner, Analyst, Slotting Specialist, Routing Optimizer).
+   - Interactive Streamlit dashboard for real-time scenario simulation, 2D/3D layout rendering, and ROI sensitivity analysis.
