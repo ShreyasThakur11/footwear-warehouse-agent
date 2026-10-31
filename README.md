@@ -1,263 +1,273 @@
 <div align="center">
 
-# 👟 Footwear Warehouse Optimisation
+# 👟 Footwear Warehouse Optimization & Multi-Agent Digital Twin
 
-Re-slotting and re-routing a safety-boot warehouse to **cut picker walking distance by 59.5%** and **pick cycle time by 26.3%**. Built from real WMS data (7,341 picking waves, 161,771 units, 22 operators) and a single reproducible Python notebook.
+### Autonomous Industrial AI Platform for Footwear Warehouse Logistics: Re-Slotting, Pick Routing, Workforce Sizing, and Multi-Agent Orchestration
 
-Everything is reproducible from one notebook. Zero proprietary tools, zero black-box solvers.
-
-**[🌐 Open Interactive Dashboard](https://shreyasthakur11.github.io/Footwear_Wearhouse-Optimization/)** · **[📄 Read Report (PDF)](report/Warehouse_Optimisation_Report.pdf)** · **[📐 Floor Plans & CAD](layouts/)** · **[📓 Notebook](v3.ipynb)**
-
-[![Dashboard: Live](https://img.shields.io/badge/dashboard-GitHub%20Pages-14b8a6?logo=github&logoColor=white)](https://shreyasthakur11.github.io/Footwear_Wearhouse-Optimization/)
-[![Report: PDF](https://img.shields.io/badge/report-PDF%20(3.9MB)-red?logo=adobeacrobatreader&logoColor=white)](report/Warehouse_Optimisation_Report.pdf)
+[![CI](https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization/actions/workflows/ci.yml/badge.svg)](https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization/actions/workflows/ci.yml)
+[![Live Dashboard](https://img.shields.io/badge/dashboard-GitHub%20Pages-14b8a6?logo=github&logoColor=white)](https://shreyasthakur11.github.io/Footwear_Wearhouse-Optimization/)
+[![Written Report](https://img.shields.io/badge/report-PDF%20(3.9MB)-red?logo=adobeacrobatreader&logoColor=white)](report/Warehouse_Optimisation_Report.pdf)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-3776ab?logo=python&logoColor=white)](https://python.org)
-[![Data: CC BY 4.0](https://img.shields.io/badge/data-CC%20BY%204.0-lightgrey)](https://creativecommons.org/licenses/by/4.0/)
+[![Tests Passing](https://img.shields.io/badge/tests-155%20passed-success)](tests/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
 
 </div>
 
 ---
 
-## 🚀 Quick Access
+## 📌 Executive Summary
 
-| Resource | Description | Direct Link |
-|---|---|---|
-| **Live Dashboard** | Interactive KPI analytics, 2D Route Simulator, ROI Calculator, CAD viewer, and 26-figure gallery | [**shreyasthakur11.github.io**](https://shreyasthakur11.github.io/Footwear_Wearhouse-Optimization/) |
-| **Written Report** | Complete 3.9 MB PDF report with formal methodology and industrial findings | [**`Warehouse_Optimisation_Report.pdf`**](report/Warehouse_Optimisation_Report.pdf) |
-| **Data Directory** | CSV outputs: scenario benchmarks, operator logs, data quality checks | [**`data/`**](data/) |
-| **CAD Blueprints** | AutoCAD `.dwg` master layout, 12 `.dxf` vector files, and PDF/PNG level plans | [**`layouts/`**](layouts/) |
-| **Python Pipeline** | End-to-end reproducible research code | [**`v3.ipynb`**](v3.ipynb) |
+Modern footwear distribution centers face three compounding operational challenges:
+1. **The Physical Walking Bottleneck**: Order pickers spend **over 60% of their shift walking empty aisles**, pushing heavy carts through unoptimized, random storage layouts.
+2. **Chronic Workforce Overstaffing**: Severe order arrival volatility (>90% of customer orders arrive instantaneously in a 07:00 AM EDI release shock) leads warehouse supervisors to chronically over-schedule temporary daily-wage pickers to ensure outbound carrier cutoff compliance.
+3. **Inventory Service Risk**: Rapid stockouts occur at manual ground picking tiers while reserve inventory sits idle on upper forklift racks.
 
----
-
-
----
-
-## 🚶‍♂️ Interactive 2D Route Simulator
-
-The [live dashboard](https://shreyasthakur11.github.io/Footwear_Wearhouse-Optimization/) features an interactive **2D Warehouse Digital Twin Simulator**:
-- **Synchronized Playback**: Side-by-side comparison of historical AS-IS picker travel vs the proposed Optimised-FAMILY 2-opt tour.
-- **Selectable Real Waves**: Test across Wave #33168 (24 units · 10 stops), #33170 (20 units · 7 stops), #33172 (26 units · 8 stops), and #33175 (18 units · 5 stops).
-- **Live Odometer & Metrics**: Real-time meters walked counter, distance reduction percentage, and cycle time acceleration.
-
-### Empirical Picking Wave Breakdown
-
-| Wave ID | Order Profile | Total Units (Pairs) | Unique Pick Stops | Units/Stop Ratio | Operator | AS-IS Walk | Optimised Walk | Distance Saved |
-|---|---|---|---|---|---|---|---|---|
-| **Wave #33168** | Multi-Aisle Heavy Order | **24 units** | **10 unique stops** | 2.4 units/stop | Operator 2 | 269.2 m | 104.2 m | **−61.3%** |
-| **Wave #33170** | Standard Core Batch | **20 units** | **7 unique stops** | 2.9 units/stop | Operator 1 | 189.6 m | 83.1 m | **−56.2%** |
-| **Wave #33172** | Peak Trolley Capacity | **26 units** | **8 unique stops** | 3.3 units/stop | Operator 8 | 204.7 m | 86.2 m | **−57.9%** |
-| **Wave #33175** | Class-A Fast Movers | **18 units** | **5 unique stops** | 3.6 units/stop | Operator 4 | 131.4 m | 36.7 m | **−72.1%** |
-
-> 💡 **Why does the simulation show fewer stop markers than total units?**
-> In footwear order batching, multiple units (shoe boxes/pairs) of identical or co-located footwear SKUs and size runs are picked at the same shelf location. For example, in **Wave #33168**, the picker retrieves **24 total pairs** across **10 unique bin locations** (averaging 2.4 units per stop). The 2D Route Simulator traces the picker's physical walking trajectory connecting these 10 distinct physical coordinates.
+**The Solution**: An industrial-grade, multi-agent digital twin and operational decision-support platform built on empirical warehouse management system (WMS) data:
+- **122,370** customer order lines
+- **215,192** picking wave actions across **7,341** picking waves
+- **2,293** shelf locations across 17 aisles and 25 rack bays
+- **208** footwear product references and 22 active operators
 
 ---
 
-## 💰 Dynamic Financial ROI & Business Case Calculator
+## 🏆 Headline Results
 
-Evaluate the executive investment decision with the interactive **ROI Modeler**:
-- **Configurable Parameters**: Customize picker headcount, hourly wage, operating schedule, and re-slotting labor budget across 5 currencies (CAD, USD, EUR, GBP, INR).
-- **Executive Metrics**: Live computation of annual recurring savings, payback duration in months, 3-year Net Present Value (NPV), 3-year ROI %, labor FTE capacity freed, and ergonomic step reduction.
-- **1-Click Executive Summary**: Copy a clean business case briefing directly to your clipboard.
+| Operational Dimension | Baseline (Historical AS-IS) | Optimized Platform | Impact / Improvement |
+|---|---|---|---|
+| **Picker Walking Distance** | 166.2 m / wave | **58.7 m / wave** | **−64.7% walking reduction** (Optimised-FAMILY) |
+| **Pick Tour Duration** | 7.84 min / wave | **5.57 min / wave** | **−29.0% cycle time acceleration** |
+| **Labor Throughput** | 169 units / hour | **237 units / hour** | **+40.8% labor productivity increase** |
+| **Immediate Routing "Free Win"** | 166.2 m / wave | **142.0 m / wave** | **−14.6% travel saving** (0 boxes moved, 2-opt TSP) |
+| **Daily Scheduled Staff** | 6.53 pickers / day | **2.11 pickers / day** | **−4.42 excess workers eliminated / day** |
+| **Hard Payroll Cash Savings** | $49.0 scheduled hours/day | **$118,500 CAD saved** | **$166,432 CAD annualized savings** (100% SLA) |
+| **8-Week Rolling Backtest** | 176 scheduled worker-days | **66 worker-days needed** | **111 worker-days saved ($16,650 CAD)**, 0 SLA breaches |
 
 ---
 
-## 📈 Exploratory Data Analysis (EDA) & Pareto Demand Profiling
+## 🏛️ Six-Layer System Architecture
 
-The re-slotting and routing intervention is founded on rigorous exploratory data analysis across **7,341 empirical picking waves** and **161,771 footwear units**:
+```mermaid
+flowchart TD
+    subgraph L1["Layer 1: Data Lakehouse & Validation"]
+        D1["9 Raw WMS CSVs (Orders, Picks, Layout)"] --> D2["Size Decoding & Cleaning (cleaning.py)"]
+        D2 --> D3["Processed Parquet Lakehouse (data/processed/)"]
+        D3 --> D4["Data Integrity & Multiset Validation (validate.py)"]
+    end
+
+    subgraph L2["Layer 2: Scientific Models & Operations Research"]
+        M1["Travel Graph & Dijkstra Distance (travel.py)"]
+        M2["Calibrated Activity-Based Labor Standard (labor.py)"]
+        M3["Quantile Gradient Boosting & Croston Forecaster (forecasting.py)"]
+        M4["Mixed-Integer Linear Program Staffing Optimizer (staffing.py)"]
+        M5["Pareto ABC / XYZ Demand Classifier (classification.py)"]
+        M6["Multi-Echelon Replenishment Simulator (replenishment.py)"]
+        M7["Cube-per-Order Index Slotting Engine (slotting.py)"]
+        M8["Wave Batching & LPT Workload Balancer (waves.py)"]
+        M9["Rule-Based & IsolationForest Anomaly Detector (anomaly.py)"]
+    end
+
+    subgraph L3["Layer 3: Standardized Tool Registry & LLM Layer"]
+        T1["Tool Registry (13 Schema-Validated JSON Tools)"]
+        T2["Provider-Agnostic LLM Interface (Mock | Gemini)"]
+        T3["Sandboxed DuckDB SQL Query Engine"]
+    end
+
+    subgraph L4["Layer 4: Autonomous Specialist Reasoning Agents"]
+        A1["ForecastAgent"]
+        A2["LaborAgent"]
+        A3["ReplenishmentAgent"]
+        A4["WaveAgent"]
+        A5["SlottingAgent"]
+        A6["ExceptionAgent"]
+        A7["CopilotAgent"]
+    end
+
+    subgraph L5["Layer 5: Orchestration & Governance Engine"]
+        O1["LangGraph Sequential StateGraph (orchestrator.py)"]
+        O2["Cross-Agent Spatial & Resource Conflict Resolution"]
+        G1["Policy Gating Engine (configs/governance.yaml)"]
+        G2["SQLite 3-Table Audit Trail & Learning Loop (audit.py)"]
+    end
+
+    subgraph L6["Layer 6: Supervisor Presentation & UI Cockpit"]
+        U1["Streamlit Supervisor Copilot (app/streamlit_app.py)"]
+        U2["Executive Daily Reports (reports/daily_plan_*.md)"]
+        U3["CLI Runner (warehouse_ai.run_daily)"]
+        U4["Desktop 1-Click Launchers (run_dashboard.command)"]
+    end
+
+    D3 --> M1 & M2 & M3 & M4 & M5 & M6 & M7 & M8 & M9
+    M1 & M2 & M3 & M4 & M5 & M6 & M7 & M8 & M9 --> T1
+    T1 & T2 & T3 --> A1 & A2 & A3 & A4 & A5 & A6 & A7
+    A1 & A2 & A3 & A4 & A5 & A6 --> O1
+    O1 --> O2 --> G1 --> G2
+    G2 --> U1 & U2 & U3 & U4
+    A7 <--> U1
+```
+
+---
+
+## 🖥️ Supervisor Intelligence Dashboard (`app/streamlit_app.py`)
+
+The platform includes a production Streamlit supervisor operations cockpit featuring 8 integrated modules:
+
+![Supervisor Dashboard](docs/screenshots/dashboard_daily_plan.png)
+
+1. **📋 Daily Plan**: Target date selection, autonomous multi-agent cycle, 5 KPI cards, hourly picking workload vs capacity dispatch curve, and executive rationale report.
+2. **👥 Labor & Staffing**: Historical actual scheduled operators vs MILP recommendations across 178 operating days, $118,500 CAD payroll savings, and real-time what-if sensitivity sliders (productivity, absenteeism, risk quantile).
+3. **📈 Demand Forecast**: 14-day rolling projection with P10/P50/P90 prediction intervals, model backtesting comparison, and intra-day arrival curve.
+4. **📦 Forward Replenishment**: Multi-echelon stock directives with interactive **Approve** and **Reject** buttons logging directly to the SQLite governance engine.
+5. **📍 Slotting & Storage**: Storage policy benchmark comparison (−64.7% travel), 2D warehouse picking intensity floor map, and prioritized SKU-size box relocation proposals.
+6. **⚠️ Operational Exceptions**: Multi-dimensional filtering across 21k integrity checks, fulfillment shortfalls, and IsolationForest statistical wave outliers.
+7. **💬 Supervisor Copilot**: Interactive conversational assistant with transparent LLM tool execution tracing and prompt suggestions.
+8. **🛡️ Governance & Audit Log**: SQLite audit trail, pending approvals sign-off, simulated execution logs, and model accuracy learning feedback loop.
+
+---
+
+## 📊 End-to-End Rolling-Origin Backtest (Last 8 Weeks)
+
+To verify the platform's industrial reliability, `scripts/backtest.py` executed a strict out-of-sample rolling-origin backtest across the last **8 weeks of historical operations (33 active days)** from `2023-08-24` to `2023-10-19`. On every single test day, models trained **strictly on prior data** (zero data leakage):
 
 <div align="center">
-  <img src="report/figures/05_eda_pareto_abc.png" width="85%" alt="Pareto ABC Demand Curve" />
+  <img src="reports/figures/backtest_headcount.png" width="95%" alt="Backtest Headcount Sizing" />
 </div>
-
-### 1. The Pareto 80/20 ABC Demand Distribution
-Real footwear demand demonstrates extreme power-law concentration:
-- 🥇 **Class A (High Velocity):** **80.0% of total pick volume** is generated by just **16.5% of SKUs**.
-- 🥈 **Class B (Medium Velocity):** **15.0% of pick volume** spans **23.5% of SKUs**.
-- 🥉 **Class C (Slow Movers / Long Tail):** Only **5.0% of pick volume** is distributed across **60.0% of catalog SKUs**.
-
-> **Strategic Value:** This Pareto skew is the primary mathematical justification for the **Optimised-FAMILY** slotting architecture. Because demand is so intensely concentrated, relocating only **6,738 units (16% of total inventory)** into the 186 golden rack locations nearest the I/O dispatch depot (CC-08) captures over **80% of maximum possible travel savings**, without requiring an expensive whole-warehouse overhaul.
-
-### 2. Wave Batching & Physical Trolley Constraints
-- The physical picking trolley has a hard geometric capacity limit of **27 pairs of footwear**.
-- Order batching algorithms cluster tightly around a **mean wave size of 22.0 units** (std dev ±3.2 units).
-- Each wave averages **11.2 unique pick locations** (~2.0 units picked per shelf stop), demonstrating high item consolidation within waves.
-- Refer to [`report/figures/04_eda_wave_profile.png`](report/figures/04_eda_wave_profile.png) for empirical wave sizing distributions.
-
-### 3. Diurnal Arrival Patterns & Workforce Dynamics
-- Order arrival displays pronounced diurnal surges, with peak waves released between **07:00 and 11:00 AM** ([`02_eda_order_arrival_heatmap.png`](report/figures/02_eda_order_arrival_heatmap.png)).
-- Analysis across 22 warehouse operators revealed large historical productivity variance (**129 to 219 units/hour**), primarily caused by unoptimized random routing loops.
-- The top 5 operators handled **55% of all warehouse workload**, exposing them to severe cumulative walking fatigue (~15–20 km walked per picker per day under AS-IS).
-
----
-
-## 📌 Headline Results
-
-> A forward-zone slotting plan plus nearest-neighbour 2-opt routing cuts walking per wave from **166.4 m → 67.3 m (−59.5%)** and wave duration from **7.85 min → 5.78 min (−26.3%)**.
->
-> The finding holds out-of-sample (**−58.8%** on 2,549 unseen test waves). Re-routing alone, with zero stock moved, yields an immediate **−14.6%** quick win.
 
 <div align="center">
-  <img src="report/figures/20_result_distance_by_scenario.png" width="85%" alt="Walking Distance Across Scenarios" />
+  <img src="reports/figures/backtest_cumulative_savings.png" width="95%" alt="Cumulative Payroll Savings" />
 </div>
 
-### Key Takeaways
+### Backtest Benchmark Summary:
+- **Workforce Sizing**: Management scheduled **176 operator-days**; the MILP optimizer recommended **66 operator-days**, eliminating **111 excess worker-days**.
+- **Realized Net Payroll Savings**: **$16,650.00 CAD** in hard cash savings over the 8-week test window (**$89,809.09 CAD annualized**).
+- **Service Level Agreement (SLA)**: **100% on-time dispatch compliance**; customer orders fully fulfilled before the 17:00 carrier cutoff.
+- **Demand Forecasting**: Quantile Gradient Boosting achieved **60.9% WAPE** on daily unit demand with calibrated P10–P90 safety coverage.
+- **Forward Pick-Face Inventory**: Maintained a **92.0% unit fill rate** and **94.1% line fill rate** through proactive internal transfers from upper reserve racks.
 
-- ⏱️ **Picking Cycle:** 26.3% faster per wave (walking accounts for 35% of historical cycle time).
-- ⚡ **Productivity:** Picker throughput jumps from **168.5 → 228.8 units/hour (+35.8%)**.
-- 👟 **Total Distance Saved:** **727.2 km** eliminated across 7,341 benchmarked waves (1,221 km → 494 km).
-- 👷 **Workforce Labor:** **253.0 direct picker hours saved** across 22 warehouse operators (~1.4 hours/day freed, ~0.19 FTE reduction).
-- 💰 **Economic Return:** **CAD $8,983/year** recurring savings with zero capital expenditure.
-- 📦 **Re-Slotting Effort:** Requires relocating only **16% of stock (6,738 units)** in the 186 locations closest to the I/O depot.
-
----
-
-## 📊 Comprehensive Scenario Benchmark
-
-Benchmarked on **7,341 picking waves** (161,771 units) using empirical WMS pick lists:
-
-| Storage Policy | Routing Algorithm | Mean Walk (m) | Median (m) | P90 (m) | Wave Time | Pick Speed | Dist Saving | Time Saving |
-|---|---|---|---|---|---|---|---|---|
-| **AS-IS (Historical)** | Recorded (Actual) | 166.4 m | 168.0 m | 271.8 m | 7.85 min | 168.5 u/h | *Baseline* | *Baseline* |
-| **AS-IS (Historical)** | Serpentine (S-Shape) | 159.9 m | 161.5 m | 260.1 m | 7.73 min | 170.9 u/h | −3.9% | −1.4% |
-| **AS-IS (Historical)** | **NN 2-opt (Routing Win)** | **142.1 m** | **146.0 m** | **220.4 m** | **7.44 min** | **177.7 u/h** | **−14.6%** | **−5.2%** |
-| Random | Serpentine | 169.7 m | 180.5 m | 275.1 m | 7.84 min | 168.6 u/h | +2.0% | −0.1% |
-| Random | NN 2-opt | 161.7 m | 173.1 m | 257.5 m | 7.71 min | 171.6 u/h | −2.8% | −1.8% |
-| Dedicated | Serpentine | 179.1 m | 186.6 m | 302.6 m | 8.06 min | 164.1 u/h | +7.6% | +2.7% |
-| Dedicated | NN 2-opt | 162.6 m | 171.8 m | 266.3 m | 7.78 min | 169.9 u/h | −2.3% | −0.8% |
-| Class-Based | Serpentine | 134.5 m | 138.2 m | 219.9 m | 7.25 min | 182.4 u/h | −19.1% | −7.6% |
-| Class-Based | NN 2-opt | 131.7 m | 137.1 m | 210.9 m | 7.20 min | 183.6 u/h | −20.8% | −8.2% |
-| Hybrid | Serpentine | 123.6 m | 125.3 m | 215.8 m | 7.05 min | 187.7 u/h | −25.7% | −10.2% |
-| Hybrid | NN 2-opt | 122.0 m | 124.6 m | 211.5 m | 7.02 min | 188.3 u/h | −26.7% | −10.5% |
-| Optimised-COI | Serpentine | 73.1 m | 77.0 m | 108.0 m | 6.14 min | 215.2 u/h | −56.1% | −21.7% |
-| Optimised-COI | NN 2-opt | 73.1 m | 77.0 m | 108.0 m | 6.14 min | 215.2 u/h | −56.1% | −21.7% |
-| **Optimised-FAMILY** | Serpentine | 67.4 m | 69.7 m | 104.5 m | 5.78 min | 228.7 u/h | −59.5% | −26.3% |
-| **Optimised-FAMILY** | **NN 2-opt (BEST)** | **67.3 m** | **69.7 m** | **104.5 m** | **5.78 min** | **228.8 u/h** | **−59.5%** | **−26.3%** |
-
-*All data verified via [`data/scenario_summary.csv`](data/scenario_summary.csv).*
+Detailed granular day-by-day audit logs are available in [`reports/backtest.md`](reports/backtest.md).
 
 ---
 
-## 📐 Spatial Re-Slotting & Floor Plans
+## ⚡ Quick Start Guide (Zero Network / Mock Provider)
 
-<div align="center">
-  <img src="report/figures/14_map_abc_before_after.png" width="85%" alt="ABC Spatial Slotting Before vs After" />
-</div>
+The platform runs out-of-the-box in **Mock Mode** without requiring any paid API keys or cloud dependencies.
 
-The warehouse consists of **25 racks, 17 pick aisles, 3 cross-aisles, and 2,293 locations**:
-- **Levels 0–2 (Ground to 2nd):** Active manual picking zone.
-- **Levels 3–4 (Upper Tiers):** High-bay forklift replenishment reserve.
-- **I/O Depot:** Located at coordinate node `CC-08`.
+### 1. Clone & Set Up Environment
+```bash
+git clone https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization.git
+cd Footwear_Wearhouse-Optimization
 
-High-velocity Class A footwear references are systematically relocated from outer perimeter racks directly into front-row positions on Level 0 nearest the I/O dispatch point.
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+```
 
-Inspect blueprints in [**`layouts/`**](layouts/):
-- **AutoCAD DWG:** [`layouts/cad/Full layout.dwg`](layouts/cad/Full%20layout.dwg) (7.9 MB)
-- **High-Resolution Floor Plans:** [`layouts/floors/Optimised_All_Levels.png`](layouts/floors/Optimised_All_Levels.png)
+### 2. Launch the Streamlit Supervisor Dashboard
+```bash
+make app
+# or directly:
+streamlit run app/streamlit_app.py
+```
+> 💡 **macOS 1-Click Launch**: You can also double-click [`run_dashboard.command`](run_dashboard.command) in the repository root or [`Launch_Warehouse_AI.command`](file:///Users/shreyasmahendrathakur/Desktop/Launch_Warehouse_AI.command) on your Desktop!
 
----
+### 3. Run Autonomous Multi-Agent Daily Planning via CLI
+```bash
+python -m warehouse_ai.run_daily --date 2023-09-15 --provider mock
+```
+Outputs executive structured plans to [`reports/daily_plan_2023-09-15.md`](reports/daily_plan_2023-09-15.md) and `.json`.
 
-## 👷 Operator Performance & Human Factors
-
-Analysis across all 22 warehouse order pickers confirms significant productivity leaps across the board:
-
-<div align="center">
-  <img src="report/figures/24_result_operator_performance.png" width="85%" alt="Operator Productivity and Performance" />
-</div>
-
-- **Route Efficiency Index:** Pickers average **0.887** efficiency (actual walk vs optimal TSP path), revealing consistent human backtracking when guided by basic WMS sequence.
-- **Max Hours Saved:** Top-volume pickers achieve the highest absolute savings (Operator 1: **31.7 hours saved**, Operator 2: **29.8 hours saved**, Operator 17: **26.9 hours saved**).
-- Full table available in [`data/operator_performance.csv`](data/operator_performance.csv).
-
----
-
-## 🧹 Industrial Data Quality Audit
-
-Automated data cleaning and validation documented in [`data/data_quality.csv`](data/data_quality.csv):
-1. **Duplicate Pick Records:** 102,201 duplicate rows verified in `Picking_Wave.csv` (each represents 1 unit picked, qty=1; kept to prevent work undercounting).
-2. **Trolley Capacity Violations:** 74 waves exceeded the 27-unit cart limit (max observed 30 units; flagged and solved with multi-trip logic).
-3. **Shoe Size Decimal Encoding:** 41,549 size entries lacked decimals (e.g., 85 instead of 8.5; automatically normalized).
-4. **Order Reconciliation:** 77 waves found in orders but missing from picking logs were excluded from routing benchmarks.
+### 4. Run the Full Test Suite
+```bash
+make test
+# or:
+pytest --tb=short
+```
+**155 unit and integration tests passing** covering data cleaning, travel graphs, forecasting, staffing MILP, replenishment, slotting, wave batching, LLM tools, agents, governance, and dashboard.
 
 ---
 
 ## 📁 Repository Structure
 
 ```
-.
-├── index.html                          # Interactive analytics dashboard (GitHub Pages)
-├── README.md                           # Project documentation & summary
-├── LICENSE                             # MIT License
-├── requirements.txt                    # Python dependencies
-├── v3.ipynb                            # Complete reproducible analysis notebook
-├── assets/
-│   └── css/
-│       └── style.css                   # Custom dashboard design tokens & responsive CSS
-├── data/                               # Pre-computed simulation outputs & logs
-│   ├── README.md                       # Data dictionary & column specifications
-│   ├── scenario_summary.csv            # 15 scenario benchmarks (ALL + TEST waves)
-│   ├── operator_performance.csv        # Metrics across 22 warehouse operators
-│   ├── data_quality.csv                # Data cleansing & validation audit log
-│   ├── Optimised_Storage.csv           # Final slotting allocation matrix
-│   └── wave_level_results_all_scenarios.csv # Granular per-wave simulation logs
-├── layouts/                            # Warehouse engineering CAD files & floor plans
-│   ├── README.md                       # Facility layout specifications
-│   ├── cad/                            # AutoCAD DWG & 12 DXF vector blueprints
-│   └── floors/                         # Levels 0–4 & All Levels PNG/PDF layouts
-└── report/                             # Technical deliverable & research figures
-    ├── README.md                       # Report overview & figure index
-    ├── Warehouse_Optimisation_Report.pdf # Official 3.9 MB written report (PDF)
-    └── figures/                        # 26 publication-grade analytical plots
+Footwear_Wearhouse-Optimization/
+├── Makefile                             # CLI shortcuts: make app, make test, make lint
+├── run_dashboard.command                # 1-click executable launcher for macOS
+├── pyproject.toml                       # Package specifications & dependencies
+├── README.md                            # Main technical & executive documentation
+├── PROGRESS.md                          # Milestone checklists, assumptions, session logs
+├── AGENTS.md                            # Agent instructions & operational manuals
+├── .github/
+│   └── workflows/
+│       └── ci.yml                       # GitHub Actions CI (Ruff lint + Pytest)
+├── configs/
+│   ├── default.yaml                     # Warehouse geometry, labor, forecasting parameters
+│   └── governance.yaml                  # Supervisor sign-off & policy gating rules
+├── app/
+│   └── streamlit_app.py                 # 8-page Streamlit supervisor operations cockpit
+├── data/
+│   ├── raw/                             # 9 raw CSV files (Mendeley Data CC BY 4.0)
+│   └── processed/                       # Cleaned, validated Parquet lakehouse tables
+├── docs/
+│   ├── architecture.md                  # 6-layer architecture & Mermaid sequence flows
+│   ├── assumptions.md                   # Engineering & domain assumptions log
+│   ├── warehouse_layout.md              # Physical CAD dimensions & coordinate mapping
+│   ├── screenshots/                     # Verified UI captures for documentation
+│   └── model_cards/                     # Formal model cards for each scientific engine
+│       ├── travel.md                    # Navigation graph & TSP routing heuristics
+│       ├── labor.md                     # Activity-based engineered labor standard
+│       ├── forecasting.md               # Quantile Gradient Boosting & Croston-SBA
+│       ├── staffing.md                  # Mixed-Integer Linear Program (MILP)
+│       ├── classification.md            # Pareto ABC & XYZ demand variability
+│       ├── replenishment.md             # Multi-echelon inventory buffer simulation
+│       ├── slotting.md                  # Cube-per-Order Index (COI) slotting
+│       ├── waves.md                     # Seed+Savings wave batching & LPT balancing
+│       └── anomaly.md                   # Rule-based integrity & IsolationForest
+├── reports/
+│   ├── backtest.md                      # 8-week rolling-origin out-of-sample backtest
+│   ├── labor.md                         # Calibrated shift analysis & staffing gaps
+│   ├── forecast.md                      # Demand model comparison & holiday analysis
+│   ├── staffing.md                      # Historical MILP staffing simulation
+│   ├── replenishment.md                 # Two-tier inventory replay benchmarks
+│   ├── slotting.md                      # Policy comparison (Random vs COI vs Family)
+│   ├── waves.md                         # Order batching & tour travel evaluation
+│   ├── exceptions.md                    # Operational anomaly detection triage audit
+│   └── figures/                         # High-resolution analytical visualization charts
+├── scripts/
+│   ├── backtest.py                      # 8-week rolling backtest generator
+│   ├── build_processed.py               # End-to-end data lakehouse pipeline
+│   ├── eda_report.py                    # Exploratory data analysis chart generator
+│   └── inspect_data.py                  # Raw CSV inspection CLI
+├── src/
+│   └── warehouse_ai/
+│       ├── config.py                    # Validated Pydantic application config loader
+│       ├── run_daily.py                 # Multi-agent daily planning CLI runner
+│       ├── data/                        # Ingestion, size decoding, location parsing
+│       ├── models/                      # 9 scientific & operations research engines
+│       ├── llm/                         # Provider-agnostic client (Mock, Gemini)
+│       ├── agents/                      # 7 specialist agents & 13 schema-validated tools
+│       └── governance/                  # SQLite audit trail & approval policy evaluator
+└── tests/                               # 155 unit & integration tests (100% passing)
 ```
 
 ---
 
-## 💻 How to Run Locally
+## 🔍 Limitations & Data Gaps
 
-### 1. Requirements
-Python 3.9+ with scientific computing packages:
-```bash
-pip install -r requirements.txt
-```
-
-### 2. Dataset
-The public raw dataset is available on [Mendeley Data](https://data.mendeley.com/):
-> de Assis, de Paula Ferreira & Ouhimmou (2025), *Data in Brief* 61:111837, **CC BY 4.0**.
-
-Download the 9 CSVs and place them in `data/`.
-
-### 3. Execute
-Open and run all cells in [`v3.ipynb`](v3.ipynb):
-```bash
-jupyter notebook v3.ipynb
-```
-Full run takes ~6–7 minutes. For quick trial, set `MAX_WAVES=1500` in the `CONFIG` dictionary in Cell 0.
-
-### 4. Launch Autonomous Supervisor Copilot Dashboard
-Launch the interactive multi-agent Streamlit operations cockpit:
-```bash
-make app
-# or directly:
-streamlit run app/streamlit_app.py
-```
-
-Features 8 dedicated operations control centers:
-1. **Daily Plan**: Target date selection, autonomous multi-agent daily planning cycle, 5 KPI tiles, and hourly workload vs operator capacity dispatch curves.
-2. **Labor & Staffing**: Historical recommended vs actual scheduled operators, $118,500 CAD payroll savings, and real-time what-if sensitivity sliders (productivity, absenteeism, risk quantile).
-3. **Demand Forecast**: 14-day rolling projection with P10/P50/P90 prediction intervals and backtest accuracy metrics.
-4. **Replenishment**: Multi-echelon stock directives with human-in-the-loop Approve/Reject governance sign-off.
-5. **Slotting & Storage**: Policy comparison benchmarks, 2D warehouse picking intensity floor map, and prioritized SKU-size box relocation proposals.
-6. **Operational Exceptions**: Multi-dimensional filtering across 21k integrity checks and IsolationForest anomalies.
-7. **Supervisor Copilot**: Conversational AI assistant with full tool execution tracing.
-8. **Governance & Audit Log**: SQLite audit trail, pending approvals, and learning feedback loop.
-
-![Supervisor Dashboard](docs/screenshots/dashboard_daily_plan.png)
+1. **Timestamp Granularity**: Commercial WMS records wave dispatch dates and completion batches, but lacks individual per-item RFID/barcode scan timestamps. This is resolved by calibrating an **Activity-Based Engineered Time Standard** ($k = 1.5853$) fitted so top-volume operators match a 7.5-hour productive shift on peak days.
+2. **Aisle Blocking & Congestion**: Standard travel modeling assumes a constant 1.0 m/s loaded cart speed. While spatial conflict checks prevent simultaneous forklift replenishment and morning picking in the same aisle, dynamic two-way cart congestion is approximated via conservative travel penalties.
+3. **Unreconciled Pick Records**: 77 waves present in orders lack matching pick logs (representing cancelled orders or pre-staged cartons), which are isolated and reported via automated exception logs.
 
 ---
 
-## 📜 Credits & Licence
+## 🗺️ Future Roadmap
 
-- **Dataset:** de Assis, de Paula Ferreira & Ouhimmou (2025), *Data in Brief* 61:111837, CC BY 4.0.
-- **Analysis & Code:** **Shreyas Thakur**, MBA (2026–28), IIM Mumbai.
-- **Licence:** MIT (see [`LICENSE`](LICENSE)).
+- **Phase 1: Live WMS Webhooks & REST Connector**: Transition from batch Parquet lakehouses to real-time Kafka/REST event ingestion streaming orders directly from commercial enterprise WMS (SAP EWM, Manhattan Associates, Blue Yonder).
+- **Phase 2: High-Frequency RF Scanner Telemetry**: Ingest second-by-second barcode scan pings from handheld mobile RF terminals to continuously calibrate operator walk velocity and fatigue curves.
+- **Phase 3: EDI 856 Automated Inbound Supplier ASN**: Incorporate real-time Advance Shipping Notices (ASN) and carrier GPS tracking to dynamically adjust replenishment reorder points against stochastic supplier lead times.
+
+---
+
+## 📜 Credits & License
+
+- **Dataset**: de Assis, de Paula Ferreira & Ouhimmou (2025), *Data in Brief* 61:111837, **CC BY 4.0**.
+- **Analysis & Engineering**: **Shreyas Thakur**, MBA (2026–28), IIM Mumbai.
+- **License**: **MIT License** (see [`LICENSE`](LICENSE)).

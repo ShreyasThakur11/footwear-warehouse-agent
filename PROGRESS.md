@@ -72,6 +72,15 @@
   - [x] Governance approval workflow & SQLite audit log (`src/warehouse_ai/governance/`, `configs/governance.yaml`, submit/approve/reject/execute lifecycle, `@audit_logged` decorator, learning feedback loop, 10 tests, 149 total passing)
   - [x] Interactive Streamlit supervisor copilot dashboard (`app/streamlit_app.py`, 8 operational pages, Makefile, 6 tests, 155 total passing)
 
+- [x] **Milestone 8: Presentation-Ready System, Out-of-Sample Backtesting & Production Hardening**
+  - [x] End-to-end rolling-origin backtest script (`scripts/backtest.py`) across final 8 weeks (33 active days)
+  - [x] Industrial backtest audit report (`reports/backtest.md`) with charts (`reports/figures/backtest_*.png`): 111 worker-days saved, $16,650 CAD savings, 92.0% fill rate
+  - [x] System architecture documentation (`docs/architecture.md`) with 6-layer Mermaid flowchart and daily cycle sequence diagram
+  - [x] Complete model card suite (`docs/model_cards/`): travel, forecasting, staffing, classification, replenishment, slotting, waves, anomaly, labor
+  - [x] GitHub Actions CI workflow (`.github/workflows/ci.yml`) running ruff and pytest across Python 3.9 and 3.11
+  - [x] Executive-ready `README.md` with problem/solution, architecture, headline metrics table, dashboard previews, and zero-key quickstart
+  - [x] 1-click macOS launcher scripts (`run_dashboard.command` and Desktop shortcut)
+
 ---
 
 ## 2. Key Results & Benchmarks
@@ -100,6 +109,7 @@
 - **LangGraph Multi-Agent Orchestration (orchestrator.py, run_daily.py)**: Sequential StateGraph executing ForecastAgent → LaborAgent → ReplenishmentAgent → WaveAgent → SlottingAgent → ExceptionAgent → Cross-Agent Conflict Resolution (forklift replenishment vs morning picking) → Governance Safety Gate. CLI runner produces full `reports/daily_plan_<date>.md` and `.json` in under 7 seconds. 139 total tests passing.
 - **Governance Approval Workflow & Audit Trail (governance/)**: SQLite-backed audit log with 3 tables (`actions`, `executed_actions`, `learning_feedback`). Configurable YAML approval policies for headcount changes (>2 workers), Class A replenishment, re-slotting moves, and high-severity exceptions. `@audit_logged` decorator auto-logs all tool calls. Learning loop tracks recommended vs actual outcomes. 149 total tests passing.
 - **Interactive Streamlit Supervisor Copilot Dashboard (app/streamlit_app.py)**: Full 8-page operations control center (Daily Plan, Labor & Staffing, Demand Forecast, Replenishment, Slotting & Storage, Exceptions, Copilot Chat, Governance Audit Log). Features live MILP sensitivity simulator, human-in-the-loop approval actions, 2D warehouse picking intensity map, tool execution tracing, cached loaders (`@st.cache_data`), Makefile runner (`make app`), and headless screenshot verification. 155 total tests passing.
+- **End-to-End Rolling 8-Week Backtest (`scripts/backtest.py`, `reports/backtest.md`)**: Evaluated autonomous daily cycle across 33 unseen operational days under strict no-leakage rolling origins. Saved **111 worker-days** (3.36 FTE/day reduction), unlocking **$16,650 CAD in direct 8-week savings** ($89,809 annualized) while maintaining **92.0% unit fill rate** and **94.1% line fill rate**. Quantile forecast achieved 60.9% WAPE, with 10 days requiring P90 surge buffer.
 
 ---
 
@@ -114,6 +124,7 @@
 - **Quebec Statutory Holidays**: Facility observes Canadian/Quebec statutory holidays (Good Friday, Easter Monday, Patriots' Day, Saint-Jean-Baptiste, Labour Day, Thanksgiving) on which picking operations are zero.
 - **Multi-Tier Inventory Architecture**: Forward pick face encompasses shelf Levels 1–2 (30,456 storage slots); Reserve replenishment encompasses Levels 3–4 (10,800 storage slots). Pick face replenishment triggers dynamically when on-hand stock falls below `pick_face_min`.
 - **Governance Thresholds**: Approval policy thresholds (headcount change >2, Class A replenishment, any re-slotting, high-severity exceptions) are configurable industrial defaults in `configs/governance.yaml`; real deployment should tune these to facility-specific operating procedures.
+- **Backtest Rolling Origin**: For each test day $t$, models are fitted strictly using observations prior to $t$ (orders, picks, waves $< t$). Inventory state and replenishment orders propagate forward without lookahead bias.
 
 ---
 
@@ -121,6 +132,7 @@
 - Operator picking speed variance: actual pick duration has no individual per-item timestamps; total daily units vs active operators serves as empirical productivity proxy.
 - Unreconciled pick records: 77 waves present in orders lack matching pick logs (cancelled orders or pre-staged batches). Handled gracefully with audit logging.
 - 22 pick locations are non-rack staging areas (`ZN-COR`, `EX-01`, etc.) outside the standard 2,292 rack locations; mapped directly to closest corridor nodes in the network graph.
+- Legacy Jupyter notebooks (`v3.ipynb`) contain prototype exploratory code and are excluded from ruff linting via `pyproject.toml`.
 
 ---
 
@@ -140,10 +152,11 @@
 | 2026-11-01 | Anomaly Detection, Tool Registry & LangGraph Daily Cycle | models/anomaly.py, reports/exceptions.md (21k exceptions), llm/client.py, agents/tools.py (13 tools), 7 specialist agents, orchestrator.py, run_daily.py CLI, 139 tests total passing | Done |
 | 2026-11-01 | Governance Approval Workflow & Audit Log | governance/audit.py (SQLite 3-table audit), governance/policy.py (YAML rule evaluator), configs/governance.yaml, @audit_logged decorator, learning feedback loop, 10 governance tests, 149 tests total passing | Done |
 | 2026-11-01 | Streamlit Supervisor Copilot Dashboard | app/streamlit_app.py (8 operational pages), Makefile (make app), tests/test_dashboard.py (6 tests), docs/screenshots/ (headless capture), 155 tests total passing | Done |
+| 2026-11-01 | Presentation-Ready System, Backtesting, CI & Documentation | scripts/backtest.py, reports/backtest.md & figures, docs/architecture.md, 8 model cards, .github/workflows/ci.yml, README.md rewrite, run_dashboard.command, 155 tests passing | Done |
 
 ---
 
 ## 6. Next Steps
-1. Deploy Streamlit supervisor dashboard to staging/production environment (e.g. Docker / Streamlit Community Cloud / Cloud Run).
-2. Wire real live WMS API connectors to replace simulated execution when on-site warehouse management system integration becomes available.
-3. Conduct operational pilot with facility warehouse supervisor to refine Copilot prompt templates and governance approval thresholds.
+1. Conduct user acceptance testing (UAT) with facility warehouse supervisor using the Streamlit dashboard.
+2. Connect production ERP/WMS webhooks to trigger `run_daily` autonomously on morning EDI arrival.
+3. Package application into containerized service (Dockerfile / Cloud Run) with persistent SQLite audit storage.
