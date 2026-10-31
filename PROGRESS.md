@@ -55,6 +55,10 @@
   - [x] Wave cycle time & engineered labor standard (`src/warehouse_ai/models/labor.py`)
   - [x] Empirical shift calibration & daily staffing gap analysis (`reports/labor.md` & `docs/model_cards/labor.md`)
   - [x] Macro daily workload forecasting regression ($R^2 = 0.9746$, MAE = 0.85 h)
+  - [x] Predictive demand forecasting suite (`src/warehouse_ai/models/forecasting.py`, rolling-origin backtesting, Croston-SBA, Quantile Gradient Boosting, `reports/forecast.md`)
+  - [x] Dynamic workforce staffing optimization (`src/warehouse_ai/models/staffing.py`, MILP headcount sizing, historical what-if simulation, `reports/staffing.md`)
+  - [x] Inventory classification & catalog audit (`src/warehouse_ai/models/classification.py`, Pareto ABC 80/15/5, demand variability XYZ, catalog reconciliation)
+  - [x] Multi-echelon replenishment simulation & planning (`src/warehouse_ai/models/replenishment.py`, forward pick-face min/max, periodic/continuous supplier review, `reports/replenishment.md`)
   - [ ] Multi-agent orchestration via LangGraph (Planner, Data Analyst, Slotting Specialist, Routing Optimizer)
   - [ ] Interactive Streamlit visualizer & scenario comparison dashboard
 
@@ -75,6 +79,10 @@
 - **Synthetic Test Layout**: Exact analytical tour length of 60.0 units verified across S-Shape, NN, and Largest Gap; 40.0 units verified for 2-opt uncrossing.
 - **Engineered Labor Standard & Staffing**: Pure order picking requires an average of **12.4 calibrated labor-hours per day** (1.66 FTE), while the facility schedules an average of **49.0 operator-hours per day** (6.53 operators). Mean pure-picking utilization is **24.1%**, with 173 of 178 active days classified as over-staffed, revealing 7,320 excess annual scheduled hours for daily-wage workforce right-sizing.
 - **Predictive Workload Forecaster**: Daily required labor hours projected from morning EDI order volume with **$R^2 = 0.9746$** and MAE of 0.85 hours.
+- **Demand Forecasting Suite**: Quantile Histogram Gradient Boosting achieves lowest rolling 8-week out-of-sample error across all targets (Units WAPE 93.2%, Lines WAPE 91.9%) with calibrated P10/P90 coverage (73.5%–75.5%). Croston SBA handles 69.8% intermittent SKU-size series.
+- **Dynamic Staffing Optimization (MILP)**: Sizing daily-wage workers using SciPy MILP requires an average of **2.11 total operators/day** (2 permanent core + 0.11 temp) vs actual 6.53 scheduled operators, unlocking **$118,500 CAD in annual payroll savings** while guaranteeing full order dispatch before 17:00 cutoff.
+- **Master Data Catalog Audit**: Reconciling Product.ABCCOD reveals only **53.8% agreement** with actual order demand; 19 hidden fast-moving products classified as C in master data account for top picking traffic.
+- **Multi-Echelon Replenishment Simulation**: The ABC-XYZ Optimized policy achieves **92.0% unit fill rate** and **94.1% line fill rate** with 35,181 on-hand units, freeing up ~5,000 units of working capital vs High Service while cutting internal transfers by **26.8% vs Lean JIT** (28,443 moves vs 38,866).
 
 ---
 
@@ -86,6 +94,8 @@
 - **Depot Location**: Default routing depot is `CC-01` at $(403.0, -29.0)$ (lowest-$y$ support point in the center corridor), configurable to `CC-08` at $(403.0, 631.0)$.
 - **Vertical Level Penalty**: Upper shelf levels ($z > 1$) incur a configurable reach/ladder time penalty (+5.0 sec/level default) without increasing horizontal travel distance.
 - **Labor Standards**: Walk speed = 1.0 m/s (loaded cart), setup = 60s, stop = 10s, pick = 6s, vertical penalty = 5s/tier. Calibrated with scale factor $k = 1.5853$ to match a 7.5-hour full shift for top-volume operator-days.
+- **Quebec Statutory Holidays**: Facility observes Canadian/Quebec statutory holidays (Good Friday, Easter Monday, Patriots' Day, Saint-Jean-Baptiste, Labour Day, Thanksgiving) on which picking operations are zero.
+- **Multi-Tier Inventory Architecture**: Forward pick face encompasses shelf Levels 1–2 (30,456 storage slots); Reserve replenishment encompasses Levels 3–4 (10,800 storage slots). Pick face replenishment triggers dynamically when on-hand stock falls below `pick_face_min`.
 
 ---
 
@@ -106,6 +116,7 @@
 | 2026-10-31 | Warehouse Graph & Travel Model | NetworkX graph, Dijkstra distance matrix, S-Shape/NN/Largest Gap heuristics, layout doc & plot, travel report, synthetic tests | Done |
 | 2026-10-31 | Storage Allocation & Pick Routing | Demand profiling, COI/FAMILY slotting, minimum-move swap engine, 2-opt TSP routing, scenario evaluation, Wilcoxon tests, unit tests | Done |
 | 2026-10-31 | Engineered Labor Standard & Workload Forecaster | LaborModel standard, shift calibration, daily OLS regression, staffing gap report, model card, unit tests | Done |
+| 2026-10-31 | Forecasting, Staffing & Replenishment Suite | QuantileGradientBoosting, Croston SBA, MILP Staffing ($118.5k savings), ABC-XYZ catalog audit, multi-echelon replenishment simulation, 55 tests passed | Done |
 
 ---
 
@@ -115,5 +126,4 @@
    - Data Analyst agent (workload profiling & reconciliation)
    - Slotting Specialist agent (COI / FAMILY layout generation)
    - Routing Optimizer agent (TSP routing & scenario evaluator)
-2. Implement chronological stock depletion and replenishment simulation.
-3. Build interactive Streamlit visualization and ROI scenario dashboard.
+2. Build interactive Streamlit visualization and ROI scenario dashboard.

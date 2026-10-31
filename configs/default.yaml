@@ -30,6 +30,31 @@ labor:
   m_per_unit_along: 0.0732        # metres per raw coordinate unit along aisles (x-axis)
   m_per_unit_cross: 0.03222       # metres per raw coordinate unit across aisles (y-axis)
 
+forecasting:
+  horizon_days: 14
+  backtest_weeks: 8
+  alpha_croston: 0.1
+  intermittent_threshold: 0.70
+
+staffing:
+  permanent_operators: 2          # core fixed warehouse employees
+  shift_hours: 7.5                # standard shift length in hours
+  productive_ratio: 0.85          # productive time efficiency (breaks, briefings, fatigue)
+  absenteeism_rate: 0.05          # expected daily absenteeism rate
+  daily_wage_rate: 150.0          # CAD $ per daily-wage worker per shift
+  permanent_daily_rate: 180.0     # CAD $ per permanent operator per shift
+  overtime_hourly_rate: 35.0      # CAD $ per overtime hour
+  cutoff_hour: 17                 # outbound dispatch cutoff hour (5:00 PM)
+
+replenishment:
+  lead_time_days: 7               # supplier replenishment lead time
+  review_period_days: 7           # periodic inventory review cycle
+  service_level_a: 0.98           # Class A items target fill rate (z = 2.05)
+  service_level_b: 0.95           # Class B items target fill rate (z = 1.65)
+  service_level_c: 0.90           # Class C items target fill rate (z = 1.28)
+  pick_face_min_units: 2          # forward pick-face safety threshold (pairs)
+  pick_face_max_units: 6          # forward pick-face top-up capacity (pairs)
+
 llm:
   provider: mock                # gemini | anthropic | mock
   model: gemini-2.0-flash

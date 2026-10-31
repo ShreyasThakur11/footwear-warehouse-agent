@@ -45,6 +45,34 @@ class LaborConfig(BaseModel):
     m_per_unit_cross: float = 0.03222
 
 
+class ForecastingConfig(BaseModel):
+    horizon_days: int = 14
+    backtest_weeks: int = 8
+    alpha_croston: float = 0.1
+    intermittent_threshold: float = 0.70
+
+
+class StaffingConfig(BaseModel):
+    permanent_operators: int = 2
+    shift_hours: float = 7.5
+    productive_ratio: float = 0.85
+    absenteeism_rate: float = 0.05
+    daily_wage_rate: float = 150.0
+    permanent_daily_rate: float = 180.0
+    overtime_hourly_rate: float = 35.0
+    cutoff_hour: int = 17
+
+
+class ReplenishmentConfig(BaseModel):
+    lead_time_days: int = 7
+    review_period_days: int = 7
+    service_level_a: float = 0.98
+    service_level_b: float = 0.95
+    service_level_c: float = 0.90
+    pick_face_min_units: int = 2
+    pick_face_max_units: int = 6
+
+
 class LLMConfig(BaseModel):
     provider: str = "mock"
     model: str = "gemini-2.0-flash"
@@ -57,6 +85,9 @@ class AppConfig(BaseModel):
     random_seed: int = 42
     warehouse: WarehouseConfig = Field(default_factory=WarehouseConfig)
     labor: LaborConfig = Field(default_factory=LaborConfig)
+    forecasting: ForecastingConfig = Field(default_factory=ForecastingConfig)
+    staffing: StaffingConfig = Field(default_factory=StaffingConfig)
+    replenishment: ReplenishmentConfig = Field(default_factory=ReplenishmentConfig)
     llm: LLMConfig = Field(default_factory=LLMConfig)
 
 
