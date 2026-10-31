@@ -20,6 +20,16 @@ warehouse:
   pick_levels: [0, 1, 2]        # manual picking levels
   reserve_levels: [3, 4]        # forklift replenishment levels
 
+labor:
+  walk_speed_mps: 1.0             # m/s, trolley-loaded (literature: 0.8–1.2 m/s)
+  setup_per_wave_s: 60.0          # take pick list + trolley, drop at staging (s)
+  per_location_stop_s: 10.0       # stop, read label, position at shelf (s per distinct location)
+  per_unit_handling_s: 6.0         # grab one box, place on trolley (s per picked unit)
+  level_penalty_s: 5.0            # extra retrieval time per vertical tier above level 1 (s)
+  shift_hours: 7.5                # productive picking hours per FTE per day
+  m_per_unit_along: 0.0732        # metres per raw coordinate unit along aisles (x-axis)
+  m_per_unit_cross: 0.03222       # metres per raw coordinate unit across aisles (y-axis)
+
 llm:
   provider: mock                # gemini | anthropic | mock
   model: gemini-2.0-flash

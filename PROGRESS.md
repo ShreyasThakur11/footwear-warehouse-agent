@@ -52,7 +52,9 @@
   - [x] End-to-end optimization runner script (`scripts/run_optimization.py` -> `reports/slotting_and_routing.md`)
 
 - [ ] **Milestone 7: Digital Twin Simulation & Agentic Orchestration**
-  - [ ] Wave cycle time model (travel time + pick setup + handling)
+  - [x] Wave cycle time & engineered labor standard (`src/warehouse_ai/models/labor.py`)
+  - [x] Empirical shift calibration & daily staffing gap analysis (`reports/labor.md` & `docs/model_cards/labor.md`)
+  - [x] Macro daily workload forecasting regression ($R^2 = 0.9746$, MAE = 0.85 h)
   - [ ] Multi-agent orchestration via LangGraph (Planner, Data Analyst, Slotting Specialist, Routing Optimizer)
   - [ ] Interactive Streamlit visualizer & scenario comparison dashboard
 
@@ -71,6 +73,8 @@
 - **Out-of-Sample Stability**: On 2,549 unseen test waves (after July 17, 2023), walking saving remains identical at **58.7%**.
 - **Statistical Robustness**: Wilcoxon signed-rank tests confirm $p < 0.001$ across all scenario pairs.
 - **Synthetic Test Layout**: Exact analytical tour length of 60.0 units verified across S-Shape, NN, and Largest Gap; 40.0 units verified for 2-opt uncrossing.
+- **Engineered Labor Standard & Staffing**: Pure order picking requires an average of **12.4 calibrated labor-hours per day** (1.66 FTE), while the facility schedules an average of **49.0 operator-hours per day** (6.53 operators). Mean pure-picking utilization is **24.1%**, with 173 of 178 active days classified as over-staffed, revealing 7,320 excess annual scheduled hours for daily-wage workforce right-sizing.
+- **Predictive Workload Forecaster**: Daily required labor hours projected from morning EDI order volume with **$R^2 = 0.9746$** and MAE of 0.85 hours.
 
 ---
 
@@ -81,6 +85,7 @@
 - **Productivity Proxy**: Daily units processed divided by active operators on duty serves as empirical proxy for labor productivity in the absence of per-item timestamps.
 - **Depot Location**: Default routing depot is `CC-01` at $(403.0, -29.0)$ (lowest-$y$ support point in the center corridor), configurable to `CC-08` at $(403.0, 631.0)$.
 - **Vertical Level Penalty**: Upper shelf levels ($z > 1$) incur a configurable reach/ladder time penalty (+5.0 sec/level default) without increasing horizontal travel distance.
+- **Labor Standards**: Walk speed = 1.0 m/s (loaded cart), setup = 60s, stop = 10s, pick = 6s, vertical penalty = 5s/tier. Calibrated with scale factor $k = 1.5853$ to match a 7.5-hour full shift for top-volume operator-days.
 
 ---
 
@@ -100,11 +105,15 @@
 | 2026-10-31 | EDA & Workload Drivers | Reusable EDA modules, visualizer script, 7 charts, eda.md | Done |
 | 2026-10-31 | Warehouse Graph & Travel Model | NetworkX graph, Dijkstra distance matrix, S-Shape/NN/Largest Gap heuristics, layout doc & plot, travel report, synthetic tests | Done |
 | 2026-10-31 | Storage Allocation & Pick Routing | Demand profiling, COI/FAMILY slotting, minimum-move swap engine, 2-opt TSP routing, scenario evaluation, Wilcoxon tests, unit tests | Done |
+| 2026-10-31 | Engineered Labor Standard & Workload Forecaster | LaborModel standard, shift calibration, daily OLS regression, staffing gap report, model card, unit tests | Done |
 
 ---
 
 ## 6. Next Steps
-1. Implement Milestone 7: Digital Twin Simulation & Agentic Orchestration via LangGraph:
-   - Pick cycle duration digital twin simulation (simulating stock depletion and replenishment dynamics).
-   - Multi-agent orchestration system using LangGraph and LLM reasoning (Planner, Analyst, Slotting Specialist, Routing Optimizer).
-   - Interactive Streamlit dashboard for real-time scenario simulation, 2D/3D layout rendering, and ROI sensitivity analysis.
+1. Implement LangGraph multi-agent orchestration architecture:
+   - Planner agent (workflow supervisor)
+   - Data Analyst agent (workload profiling & reconciliation)
+   - Slotting Specialist agent (COI / FAMILY layout generation)
+   - Routing Optimizer agent (TSP routing & scenario evaluator)
+2. Implement chronological stock depletion and replenishment simulation.
+3. Build interactive Streamlit visualization and ROI scenario dashboard.

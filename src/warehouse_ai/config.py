@@ -34,6 +34,17 @@ class WarehouseConfig(BaseModel):
     reserve_levels: list[int] = Field(default_factory=lambda: [3, 4])
 
 
+class LaborConfig(BaseModel):
+    walk_speed_mps: float = 1.0
+    setup_per_wave_s: float = 60.0
+    per_location_stop_s: float = 10.0
+    per_unit_handling_s: float = 6.0
+    level_penalty_s: float = 5.0
+    shift_hours: float = 7.5
+    m_per_unit_along: float = 0.0732
+    m_per_unit_cross: float = 0.03222
+
+
 class LLMConfig(BaseModel):
     provider: str = "mock"
     model: str = "gemini-2.0-flash"
@@ -45,6 +56,7 @@ class AppConfig(BaseModel):
     paths: PathsConfig = Field(default_factory=PathsConfig)
     random_seed: int = 42
     warehouse: WarehouseConfig = Field(default_factory=WarehouseConfig)
+    labor: LaborConfig = Field(default_factory=LaborConfig)
     llm: LLMConfig = Field(default_factory=LLMConfig)
 
 
