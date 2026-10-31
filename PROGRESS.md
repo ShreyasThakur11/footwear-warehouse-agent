@@ -61,7 +61,10 @@
   - [x] Multi-echelon replenishment simulation & planning (`src/warehouse_ai/models/replenishment.py`, forward pick-face min/max, periodic/continuous supplier review, `reports/replenishment.md`)
   - [x] Storage policy simulator & COI re-slotting API (`src/warehouse_ai/models/slotting.py`): 5 policies × 300 waves, 70.9% travel reduction under Optimised-COI
   - [x] Policy comparison report (`reports/slotting.md`) with top-20 reslotting proposals
-  - [x] Slotting model tests (`tests/test_slotting_model.py`): 22 tests — 77 total passing
+  - [x] Slotting model tests (`tests/test_slotting_model.py`): 22 tests (co-picking, COI, simulator, reslotting API)
+  - [x] Wave planning & batching module (`src/warehouse_ai/models/waves.py`): FCFS, Seed+Savings, Aisle-Cluster algorithms + LPT operator assignment + historical replay
+  - [x] Wave evaluation report (`reports/waves.md`): Seed+Savings −29.5% travel, −21.8% labor vs historical on 5 busiest days
+  - [x] Wave model tests (`tests/test_waves_model.py`): 30 tests — 107 total passing
   - [ ] Multi-agent orchestration via LangGraph (Planner, Data Analyst, Slotting Specialist, Routing Optimizer)
   - [ ] Interactive Streamlit visualizer & scenario comparison dashboard
 
@@ -87,6 +90,7 @@
 - **Master Data Catalog Audit**: Reconciling Product.ABCCOD reveals only **53.8% agreement** with actual order demand; 19 hidden fast-moving products classified as C in master data account for top picking traffic.
 - **Multi-Echelon Replenishment Simulation**: The ABC-XYZ Optimized policy achieves **92.0% unit fill rate** and **94.1% line fill rate** with 35,181 on-hand units, freeing up ~5,000 units of working capital vs High Service while cutting internal transfers by **26.8% vs Lean JIT** (28,443 moves vs 38,866).
 - **Models-Layer Policy Simulator (slotting.py)**: Over 300 sample waves, Optimised-COI slotting reduces mean wave travel from **3,811 m → 1,109 m (−70.9%)** and total labor hours from **39.0 h → 26.4 h (−32.3%)** vs the Random baseline. Class-Based achieves −27.8% travel, Hybrid −16.3%, Dedicated regresses (−2.4%).
+- **Wave Planning & Batching (waves.py)**: Over the 5 busiest historical days (5 operators), Seed+Savings batching reduces total travel by **−29.5%** and estimated labor hours by **−21.8%** vs the historical record. FCFS achieves −11.5% travel with 132 waves/day vs 193 historical (−32% fewer waves). LPT operator assignment achieves near-perfect load balance (max/min hours ratio < 1.02 on the busiest day).
 
 ---
 
@@ -122,6 +126,7 @@
 | 2026-10-31 | Engineered Labor Standard & Workload Forecaster | LaborModel standard, shift calibration, daily OLS regression, staffing gap report, model card, unit tests | Done |
 | 2026-10-31 | Forecasting, Staffing & Replenishment Suite | QuantileGradientBoosting, Croston SBA, MILP Staffing ($118.5k savings), ABC-XYZ catalog audit, multi-echelon replenishment simulation, 55 tests passed | Done |
 | 2026-11-01 | Storage Policy Simulator & COI Re-Slotting API | models/slotting.py (5 policies), reports/slotting.md (−70.9% travel under COI), tests/test_slotting_model.py (22 tests), 77 tests total passing | Done |
+| 2026-11-01 | Wave Planning & Batching Module | models/waves.py (FCFS/Seed+Savings/Aisle-Cluster + LPT), reports/waves.md (−29.5% travel via Seed+Savings), tests/test_waves_model.py (30 tests), 107 tests total passing | Done |
 
 ---
 

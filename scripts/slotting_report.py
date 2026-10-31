@@ -169,3 +169,4 @@ if __name__ == "__main__":
     parser.add_argument("--max-waves", type=int, default=None, help="Limit waves per policy.")
     args = parser.parse_args()
     main(max_waves=args.max_waves)
+

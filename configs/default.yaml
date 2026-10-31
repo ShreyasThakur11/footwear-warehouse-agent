@@ -55,6 +55,12 @@ replenishment:
   pick_face_min_units: 2          # forward pick-face safety threshold (pairs)
   pick_face_max_units: 6          # forward pick-face top-up capacity (pairs)
 
+wave_planning:
+  max_units_per_wave: 27          # trolley capacity (pairs); mirrors warehouse.trolley_capacity
+  max_orders_per_wave: 24         # maximum customer orders batched per wave
+  default_algorithm: fcfs         # fcfs | seed_savings | aisle_cluster
+  storage_policy: random          # storage layout used for SKU→location resolution
+
 llm:
   provider: mock                # gemini | anthropic | mock
   model: gemini-2.0-flash

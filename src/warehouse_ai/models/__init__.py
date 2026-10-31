@@ -1,4 +1,4 @@
-"""Warehouse modeling modules for labor, travel, forecasting, staffing, classification, and replenishment."""
+"""Warehouse modeling modules for labor, travel, forecasting, staffing, classification, replenishment, and waves."""
 
 from warehouse_ai.models.classification import (
     audit_catalog_abc,
@@ -58,6 +58,16 @@ from warehouse_ai.models.travel import (
     shortest_distance,
     wave_travel,
 )
+from warehouse_ai.models.waves import (
+    DayEvaluation,
+    WavePlan,
+    batch_aisle_cluster,
+    batch_fcfs,
+    batch_seed_savings,
+    evaluate_on_historical_days,
+    plan_waves,
+    replay_historical_waves,
+)
 
 __all__ = [
     # Labor
@@ -111,4 +121,13 @@ __all__ = [
     "generate_coi_slotting",
     "simulate_storage_policy",
     "recommend_reslotting",
+    # Waves & batching
+    "WavePlan",
+    "DayEvaluation",
+    "replay_historical_waves",
+    "batch_fcfs",
+    "batch_seed_savings",
+    "batch_aisle_cluster",
+    "plan_waves",
+    "evaluate_on_historical_days",
 ]
