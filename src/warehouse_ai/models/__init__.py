@@ -1,5 +1,17 @@
-"""Warehouse modeling modules for labor, travel, forecasting, staffing, classification, replenishment, and waves."""
+"""Warehouse modeling modules for labor, travel, forecasting, staffing, classification, replenishment, waves, and anomaly."""
 
+from warehouse_ai.models.anomaly import (
+    AnomalyThresholds,
+    ExceptionRecord,
+    check_forecast_breaches,
+    check_operator_productivity_outliers,
+    check_policy_location_mismatch,
+    check_short_and_over_picks,
+    check_unknown_master_data,
+    detect_wave_statistical_anomalies,
+    exceptions_to_dataframe,
+    scan_all_exceptions,
+)
 from warehouse_ai.models.classification import (
     audit_catalog_abc,
     compute_abc,
@@ -130,4 +142,15 @@ __all__ = [
     "batch_aisle_cluster",
     "plan_waves",
     "evaluate_on_historical_days",
+    # Anomaly detection & exceptions
+    "ExceptionRecord",
+    "AnomalyThresholds",
+    "check_short_and_over_picks",
+    "check_policy_location_mismatch",
+    "check_unknown_master_data",
+    "check_forecast_breaches",
+    "check_operator_productivity_outliers",
+    "detect_wave_statistical_anomalies",
+    "scan_all_exceptions",
+    "exceptions_to_dataframe",
 ]

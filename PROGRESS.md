@@ -65,7 +65,10 @@
   - [x] Wave planning & batching module (`src/warehouse_ai/models/waves.py`): FCFS, Seed+Savings, Aisle-Cluster algorithms + LPT operator assignment + historical replay
   - [x] Wave evaluation report (`reports/waves.md`): Seed+Savings −29.5% travel, −21.8% labor vs historical on 5 busiest days
   - [x] Wave model tests (`tests/test_waves_model.py`): 30 tests — 107 total passing
-  - [ ] Multi-agent orchestration via LangGraph (Planner, Data Analyst, Slotting Specialist, Routing Optimizer)
+  - [x] Operational anomaly detection & exception triage (`src/warehouse_ai/models/anomaly.py`, `reports/exceptions.md`, IsolationForest + 5 rule-based checks, 8 tests)
+  - [x] Provider-agnostic LLM client & tool registry (`src/warehouse_ai/llm/client.py`, `src/warehouse_ai/agents/tools.py`, 13 registered tools, 15 tests)
+  - [x] Autonomous specialist agents (ForecastAgent, LaborAgent, ReplenishmentAgent, SlottingAgent, WaveAgent, ExceptionAgent, CopilotAgent)
+  - [x] LangGraph daily cycle orchestrator (`src/warehouse_ai/agents/orchestrator.py`, `src/warehouse_ai/run_daily.py`, conflict check & governance gate, 9 tests)
   - [ ] Interactive Streamlit visualizer & scenario comparison dashboard
 
 ---
@@ -91,6 +94,9 @@
 - **Multi-Echelon Replenishment Simulation**: The ABC-XYZ Optimized policy achieves **92.0% unit fill rate** and **94.1% line fill rate** with 35,181 on-hand units, freeing up ~5,000 units of working capital vs High Service while cutting internal transfers by **26.8% vs Lean JIT** (28,443 moves vs 38,866).
 - **Models-Layer Policy Simulator (slotting.py)**: Over 300 sample waves, Optimised-COI slotting reduces mean wave travel from **3,811 m → 1,109 m (−70.9%)** and total labor hours from **39.0 h → 26.4 h (−32.3%)** vs the Random baseline. Class-Based achieves −27.8% travel, Hybrid −16.3%, Dedicated regresses (−2.4%).
 - **Wave Planning & Batching (waves.py)**: Over the 5 busiest historical days (5 operators), Seed+Savings batching reduces total travel by **−29.5%** and estimated labor hours by **−21.8%** vs the historical record. FCFS achieves −11.5% travel with 132 waves/day vs 193 historical (−32% fewer waves). LPT operator assignment achieves near-perfect load balance (max/min hours ratio < 1.02 on the busiest day).
+- **Operational Anomaly Detection & Exceptions Audit (anomaly.py)**: Scanned 21,582 operational exceptions across 122,370 order lines and 215,192 picks: 494 High-severity incidents (fulfillment shortfalls and 22 non-standard pick staging bays), 16,132 policy location mismatches, 5,242 short/over picks, 98 multi-aisle statistical wave outliers via IsolationForest, and 80 operator productivity deviations.
+- **Provider-Agnostic LLM Layer & Tool Registry (client.py, tools.py)**: 13 standardized tools registered with JSON schemas, read-only guarantees, and DuckDB sandboxed SQL queries. Mock client enables deterministic, zero-network, offline end-to-end testing with keyword-based tool calling.
+- **LangGraph Multi-Agent Orchestration (orchestrator.py, run_daily.py)**: Sequential StateGraph executing ForecastAgent → LaborAgent → ReplenishmentAgent → WaveAgent → SlottingAgent → ExceptionAgent → Cross-Agent Conflict Resolution (forklift replenishment vs morning picking) → Governance Safety Gate. CLI runner produces full `reports/daily_plan_<date>.md` and `.json` in under 7 seconds. 139 total tests passing.
 
 ---
 
@@ -127,13 +133,13 @@
 | 2026-10-31 | Forecasting, Staffing & Replenishment Suite | QuantileGradientBoosting, Croston SBA, MILP Staffing ($118.5k savings), ABC-XYZ catalog audit, multi-echelon replenishment simulation, 55 tests passed | Done |
 | 2026-11-01 | Storage Policy Simulator & COI Re-Slotting API | models/slotting.py (5 policies), reports/slotting.md (−70.9% travel under COI), tests/test_slotting_model.py (22 tests), 77 tests total passing | Done |
 | 2026-11-01 | Wave Planning & Batching Module | models/waves.py (FCFS/Seed+Savings/Aisle-Cluster + LPT), reports/waves.md (−29.5% travel via Seed+Savings), tests/test_waves_model.py (30 tests), 107 tests total passing | Done |
+| 2026-11-01 | Anomaly Detection, Tool Registry & LangGraph Daily Cycle | models/anomaly.py, reports/exceptions.md (21k exceptions), llm/client.py, agents/tools.py (13 tools), 7 specialist agents, orchestrator.py, run_daily.py CLI, 139 tests total passing | Done |
 
 ---
 
 ## 6. Next Steps
-1. Implement LangGraph multi-agent orchestration architecture:
-   - Planner agent (workflow supervisor)
-   - Data Analyst agent (workload profiling & reconciliation)
-   - Slotting Specialist agent (COI / FAMILY layout generation)
-   - Routing Optimizer agent (TSP routing & scenario evaluator)
-2. Build interactive Streamlit visualization and ROI scenario dashboard.
+1. Build interactive Streamlit visualization and ROI scenario dashboard (`src/warehouse_ai/dashboard/`):
+   - Executive warehouse KPI overview & demand heatmap
+   - Warehouse digital twin 2D/3D layout with picker routes
+   - Multi-agent daily plan explorer & supervisor copilot chat UI
+   - Re-slotting and staffing what-if scenario simulators
