@@ -62,3 +62,4 @@ def test_recommend_headcount_api():
     assert rec.utilization > 0.0
     assert rec.utilization <= 1.05
     assert "dispatch before the 17:00 outbound cutoff" in rec.explanation
+

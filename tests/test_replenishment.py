@@ -57,3 +57,4 @@ def test_replenishment_plan_directives(synthetic_orders_fixture):
     transfers = plan["pick_face_transfers"]
     assert len(transfers) >= 1
     assert "SKU_FAST|10.0" in transfers["sku_size"].values
+

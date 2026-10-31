@@ -388,3 +388,4 @@ def run_staffing_sensitivity(
         })
 
     return pd.DataFrame(out)
+

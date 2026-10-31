@@ -78,3 +78,4 @@ def test_audit_catalog_abc(sample_orders_df):
     assert audit["agreement_rate"] < 1.0
     assert audit["hidden_fast_movers_count"] == 1  # prod_1
     assert audit["obsolete_fast_movers_count"] == 1  # prod_3
+

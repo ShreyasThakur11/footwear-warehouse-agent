@@ -34,6 +34,15 @@ from warehouse_ai.models.replenishment import (
     simulate_replenishment_policies,
     simulate_replenishment_policy,
 )
+from warehouse_ai.models.slotting import (
+    PolicySummary,
+    ReslottingProposal,
+    compare_all_policies,
+    compute_co_picking_pairs,
+    generate_coi_slotting,
+    recommend_reslotting,
+    simulate_storage_policy,
+)
 from warehouse_ai.models.staffing import (
     StaffingRecommendation,
     recommend_headcount,
@@ -94,4 +103,12 @@ __all__ = [
     "simulate_replenishment_policy",
     "simulate_replenishment_policies",
     "replenishment_plan",
+    # Slotting (models layer)
+    "PolicySummary",
+    "ReslottingProposal",
+    "compare_all_policies",
+    "compute_co_picking_pairs",
+    "generate_coi_slotting",
+    "simulate_storage_policy",
+    "recommend_reslotting",
 ]
