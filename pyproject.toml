@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "warehouse_ai"
+version = "0.1.0"
+description = "Agentic AI for footwear warehouse storage optimisation — re-slotting, routing, and simulation."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+authors = [
+    {name = "Shreyas Thakur"},
+]
+
+dependencies = [
+    "pandas>=2.1",
+    "numpy>=1.25",
+    "pyarrow>=14.0",
+    "pydantic>=2.5",
+    "pyyaml>=6.0",
+    "scikit-learn>=1.3",
+    "statsmodels>=0.14",
+    "lightgbm>=4.1",
+    "networkx>=3.2",
+    "ortools>=9.8",
+    "pulp>=2.7",
+    "langgraph>=0.2",
+    "langchain-core>=0.3",
+    "google-genai>=1.0",
+    "python-dotenv>=1.0",
+    "streamlit>=1.30",
+    "plotly>=5.18",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "ruff>=0.4",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP"]
+ignore = ["E402", "E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+

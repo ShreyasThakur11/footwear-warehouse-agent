@@ -1,0 +1,28 @@
+# ──────────────────────────────────────────────
+#  warehouse_ai – default configuration
+# ──────────────────────────────────────────────
+
+paths:
+  data_raw: data/raw
+  data_processed: data/processed
+  configs: configs
+  outputs: outputs
+
+random_seed: 42
+
+warehouse:
+  trolley_capacity: 27          # max shoe pairs per picking trolley
+  io_depot_node: CC-08          # dispatch depot node label
+  num_aisles: 17
+  num_racks: 25
+  num_locations: 2293
+  slots_per_location: 18        # bin slots per shelf location
+  pick_levels: [0, 1, 2]        # manual picking levels
+  reserve_levels: [3, 4]        # forklift replenishment levels
+
+llm:
+  provider: mock                # gemini | anthropic | mock
+  model: gemini-2.0-flash
+  temperature: 0.1
+  max_tokens: 4096
+

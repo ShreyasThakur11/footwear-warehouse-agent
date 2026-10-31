@@ -7,23 +7,36 @@ build/
 .eggs/
 *.egg
 
-# Jupyter
-.ipynb_checkpoints/
-
 # Virtual environments
 .venv/
 venv/
 env/
 
-# Data (download separately)
+# Environment
+.env
 
-# Generated outputs (reproducible from notebook)
+# Data
+data/raw/
+data/processed/
+CSV/
+*.parquet
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Generated outputs
 outputs/
 
 # OS
 .DS_Store
 Thumbs.db
 
-# IDE
-.vscode/
-.idea/
+# Local loose files
+Full layout.dwg
+Layout_Z*
+Link Colab.txt
+Order_Picking_dataset.ipynb
+Warehouse_Optimisation_Report.pdf
+Papers/
+Layour/
+warehouse_outputs*/
