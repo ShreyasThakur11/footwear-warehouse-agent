@@ -75,3 +75,4 @@ The facility features:
 2. **Reconciliation First**: Pick counts and order counts must be compared at the wave level. Discrepancies (missing picks, cancelled orders) must be flagged in `reports/data_quality.md`.
 3. **Reproducibility**: Use seed `42` where stochastic methods exist. All tests must pass with `pytest`.
 4. **Git Hygiene**: Pull origin before beginning, maintain clean commits, and log actions in `PROGRESS.md`.
+

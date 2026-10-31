@@ -44,3 +44,4 @@ This report details the reverse-engineering and empirical verification of footwe
 Comparing order item multisets with pick item multisets across all 59,007 co-occurring `(wave_number, reference)` groups gives:
 $$\text{Multiset Match Rate} = \frac{58,581}{59,007} = \mathbf{99.28\%}$$
 This confirms the validity of the decoding function across the full enterprise dataset.
+

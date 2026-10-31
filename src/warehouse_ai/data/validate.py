@@ -150,3 +150,4 @@ This report audits the integrity, completeness, and consistency of the footwear 
         out_path.write_text(report_content, encoding="utf-8")
 
     return results
+

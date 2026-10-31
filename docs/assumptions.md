@@ -46,3 +46,4 @@ Location codes follow the schema `AISLE-BAY-LEVEL_SLOT`:
 - Individual pick actions in `Picking_Wave.csv` do not record per-item timestamps.
 - Total daily units picked divided by the number of active operators serving on that day serves as our empirical proxy for workforce productivity.
 - Order arrival timestamps in `Customer_Order.csv` provide temporal distribution of demand.
+

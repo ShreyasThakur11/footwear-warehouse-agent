@@ -315,3 +315,4 @@ def build_storage_long(storage_dfs: dict[str, pd.DataFrame]) -> pd.DataFrame:
         "policy",
     ]
     return combined[cols]
+
