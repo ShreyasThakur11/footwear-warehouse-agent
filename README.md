@@ -208,6 +208,7 @@ Footwear_Wearhouse-Optimization/
 │   └── processed/                       # Cleaned, validated Parquet lakehouse tables
 ├── docs/
 │   ├── architecture.md                  # 6-layer architecture & Mermaid sequence flows
+│   ├── features_and_methods.md          # Technical manual: mathematical methods & algorithmic details
 │   ├── assumptions.md                   # Engineering & domain assumptions log
 │   ├── warehouse_layout.md              # Physical CAD dimensions & coordinate mapping
 │   ├── screenshots/                     # Verified UI captures for documentation
