@@ -173,9 +173,9 @@ def load_picks_df() -> pd.DataFrame:
 
 @st.cache_data
 def load_scenario_summary_df() -> pd.DataFrame:
-    p = DATA_PROCESSED / "scenario_summary.csv"
-    if p.exists():
-        return pd.read_csv(p)
+    for p in [DATA_PROCESSED / "scenario_summary.csv", PROJECT_ROOT / "data" / "scenario_summary.csv"]:
+        if p.exists():
+            return pd.read_csv(p)
     return pd.DataFrame()
 
 

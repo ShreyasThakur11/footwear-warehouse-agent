@@ -4,14 +4,38 @@
 
 ### Autonomous Industrial AI Platform for Footwear Warehouse Logistics: Re-Slotting, Pick Routing, Workforce Sizing, and Multi-Agent Orchestration
 
-[![CI](https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization/actions/workflows/ci.yml/badge.svg)](https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization/actions/workflows/ci.yml)
-[![Live Dashboard](https://img.shields.io/badge/dashboard-GitHub%20Pages-14b8a6?logo=github&logoColor=white)](https://shreyasthakur11.github.io/Footwear_Wearhouse-Optimization/)
+<!-- 🚀 PROFESSOR & EVALUATOR 1-CLICK LAUNCH BUTTONS -->
+<p align="center">
+  <a href="https://shreyasthakur11.github.io/footwear-warehouse-agent/" target="_blank">
+    <img src="https://img.shields.io/badge/🚀%20Live%20Interactive%20Simulator-Launch%20in%20Browser-0ea5e9?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Browser Simulator" height="38"/>
+  </a>
+  <a href="https://codespaces.new/ShreyasThakur11/footwear-warehouse-agent" target="_blank">
+    <img src="https://img.shields.io/badge/⚡%20GitHub%20Codespaces-1--Click%20Cloud%20Launch-2ea44f?style=for-the-badge&logo=github&logoColor=white" alt="Open in GitHub Codespaces" height="38"/>
+  </a>
+  <a href="https://colab.research.google.com/github/ShreyasThakur11/footwear-warehouse-agent/blob/main/v3.ipynb" target="_blank">
+    <img src="https://img.shields.io/badge/📓%20Google%20Colab-Open%20Notebook-f97316?style=for-the-badge&logo=googlecolab&logoColor=white" alt="Open In Colab" height="38"/>
+  </a>
+</p>
+
+[![CI](https://github.com/ShreyasThakur11/footwear-warehouse-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/ShreyasThakur11/footwear-warehouse-agent/actions/workflows/ci.yml)
+[![Live Dashboard](https://img.shields.io/badge/dashboard-GitHub%20Pages-14b8a6?logo=github&logoColor=white)](https://shreyasthakur11.github.io/footwear-warehouse-agent/)
 [![Written Report](https://img.shields.io/badge/report-PDF%20(3.9MB)-red?logo=adobeacrobatreader&logoColor=white)](report/Warehouse_Optimisation_Report.pdf)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-3776ab?logo=python&logoColor=white)](https://python.org)
 [![Tests Passing](https://img.shields.io/badge/tests-155%20passed-success)](tests/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
 
 </div>
+
+---
+
+## 🚀 Quick Launch Guide (For Evaluators & Professors)
+
+| Launch Method | Description | One-Click Action |
+|---|---|---|
+| **🌐 Instant Web Demo** *(Zero Install)* | Interactive 2D route simulator, CAD layout viewer, 15 scenario benchmarks, and ROI calculator in browser. | [**▶️ Launch Browser Simulator**](https://shreyasthakur11.github.io/footwear-warehouse-agent/) |
+| **⚡ Cloud Codespace** *(Full Environment)* | Instant cloud container with Python, Streamlit, and all 155 test suites ready to run with zero local setup. | [**▶️ Open in GitHub Codespaces**](https://codespaces.new/ShreyasThakur11/footwear-warehouse-agent) |
+| **📓 Google Colab** *(Interactive Notebook)* | Full end-to-end data processing, exploratory data analysis, and mathematical modeling pipeline. | [**▶️ Open in Google Colab**](https://colab.research.google.com/github/ShreyasThakur11/footwear-warehouse-agent/blob/main/v3.ipynb) |
+| **🖥️ Local Desktop** *(macOS / Linux)* | Double-click [`run_dashboard.command`](run_dashboard.command) from Finder or run `./launch.sh` in terminal for the Streamlit Supervisor Cockpit. | `cd footwear-warehouse-agent && ./launch.sh` |
 
 ---
 
@@ -153,21 +177,21 @@ The platform runs out-of-the-box in **Mock Mode** without requiring any paid API
 
 ### 1. Clone & Set Up Environment
 ```bash
-git clone https://github.com/ShreyasThakur11/Footwear_Wearhouse-Optimization.git
-cd Footwear_Wearhouse-Optimization
+git clone https://github.com/ShreyasThakur11/footwear-warehouse-agent.git
+cd footwear-warehouse-agent
 
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
-### 2. Launch the Streamlit Supervisor Dashboard
+### 2. Launch
 ```bash
-make app
-# or directly:
+./launch.sh
+# or launch Streamlit directly:
 streamlit run app/streamlit_app.py
 ```
-> 💡 **macOS 1-Click Launch**: You can also double-click [`run_dashboard.command`](run_dashboard.command) in the repository root or [`Launch_Warehouse_AI.command`](file:///Users/shreyasmahendrathakur/Desktop/Launch_Warehouse_AI.command) on your Desktop!
+> 💡 **macOS 1-Click Launch**: Double-click [`run_dashboard.command`](run_dashboard.command) in the repository root from Finder!
 
 ### 3. Run Autonomous Multi-Agent Daily Planning via CLI
 ```bash
@@ -188,8 +212,9 @@ pytest --tb=short
 ## 📁 Repository Structure
 
 ```
-Footwear_Wearhouse-Optimization/
+footwear-warehouse-agent/
 ├── Makefile                             # CLI shortcuts: make app, make test, make lint
+├── launch.sh                            # Interactive terminal launcher menu
 ├── run_dashboard.command                # 1-click executable launcher for macOS
 ├── pyproject.toml                       # Package specifications & dependencies
 ├── README.md                            # Main technical & executive documentation
